@@ -21,6 +21,7 @@ export class NewUpdateDto {
 }
 
 export class NewResponseDto {
+  readonly id: number;
   readonly title: string;
   readonly description: string;
   readonly imageUrl?: string;

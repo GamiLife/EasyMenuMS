@@ -1,5 +1,5 @@
 import { AggregateRoot } from 'src/core/domain';
-import { CompanyResponseDto } from '../companies/company.dto';
+import { CompanyDomain } from '../companies/company.domain';
 
 export interface INewProps {
   title: string;
@@ -8,8 +8,7 @@ export interface INewProps {
   backgroundColor?: string;
   startDate: string;
   endDate: string;
-  company: CompanyResponseDto;
-  companyId: number;
+  company: CompanyDomain;
 }
 
 export class NewDomain extends AggregateRoot<INewProps> {

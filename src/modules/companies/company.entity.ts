@@ -7,7 +7,9 @@ import {
   PrimaryKey,
   AutoIncrement,
 } from 'sequelize-typescript';
+import { CategoryEntity } from '../categories/categories.entity';
 import { NewEntity } from '../news/news.entity';
+import { SauceEntity } from '../sauces/sauces.entity';
 import { UserEntity } from '../users/users.entity';
 
 @Table({
@@ -46,4 +48,18 @@ export class CompanyEntity extends Model<CompanyEntity> {
     as: 'new',
   })
   new: NewEntity;
+
+  @BelongsTo(() => CategoryEntity, {
+    targetKey: 'id',
+    foreignKey: 'companyId',
+    as: 'category',
+  })
+  category: CategoryEntity;
+
+  @BelongsTo(() => SauceEntity, {
+    targetKey: 'id',
+    foreignKey: 'sauceId',
+    as: 'sauce',
+  })
+  sauce: SauceEntity;
 }

@@ -10,9 +10,9 @@ import {
 import { CompanyEntity } from '../companies/company.entity';
 
 @Table({
-  tableName: 'news',
+  tableName: 'sauces',
 })
-export class NewEntity extends Model<NewEntity> {
+export class SauceEntity extends Model<SauceEntity> {
   @PrimaryKey
   @AutoIncrement
   @Column({
@@ -33,28 +33,16 @@ export class NewEntity extends Model<NewEntity> {
   description: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.FLOAT,
     allowNull: true,
+  })
+  price: number;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
   })
   imageUrl: string;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  backgroundColor: string;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  startDate: string;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  endDate: string;
 
   @Column({
     type: DataType.BIGINT,
