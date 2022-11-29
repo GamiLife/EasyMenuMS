@@ -1,14 +1,14 @@
-export class CompanyCreateDto {
+export class UserTypeCreateDto {
   readonly name: string;
   readonly description: string;
 }
 
-export class CompanyUpdateDto {
+export class UserTypeUpdateDto {
   readonly name: string;
   readonly description: string;
 }
 
-export class CompanyResponseDto {
+export class UserTypeResponseDto {
   readonly id?: number;
   readonly name: string;
   readonly description: string;

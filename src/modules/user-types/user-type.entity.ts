@@ -4,16 +4,15 @@ import {
   Model,
   DataType,
   BelongsTo,
-  PrimaryKey,
   AutoIncrement,
+  PrimaryKey,
 } from 'sequelize-typescript';
-import { NewEntity } from '../news/news.entity';
 import { UserEntity } from '../users/users.entity';
 
 @Table({
-  tableName: 'companies',
+  tableName: 'user_types',
 })
-export class CompanyEntity extends Model<CompanyEntity> {
+export class UserTypeEntity extends Model<UserTypeEntity> {
   @PrimaryKey
   @AutoIncrement
   @Column({
@@ -35,15 +34,8 @@ export class CompanyEntity extends Model<CompanyEntity> {
 
   @BelongsTo(() => UserEntity, {
     targetKey: 'id',
-    foreignKey: 'companyId',
+    foreignKey: 'userTypeId',
     as: 'user',
   })
   user: UserEntity;
-
-  @BelongsTo(() => NewEntity, {
-    targetKey: 'id',
-    foreignKey: 'companyId',
-    as: 'new',
-  })
-  new: NewEntity;
 }

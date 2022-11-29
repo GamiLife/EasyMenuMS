@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { companiesProviders } from './companies.providers';
-import { CompaniesService } from './companies.service';
-import { CompaniesController } from './companies.controller';
+import { companiesProviders } from './company.providers';
+import { CompaniesService } from './company.service';
+import { CompaniesController } from './company.controller';
 
 @Module({
   providers: [CompaniesService, ...companiesProviders],

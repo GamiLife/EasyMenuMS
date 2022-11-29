@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './config/database/database.module';
-import { CompaniesModule } from './modules/companies/companies.module';
+import { CompaniesModule } from './modules/companies/company.module';
 import { UserTypesModule } from './modules/user-types/user-types.module';
+import { UsersModule } from './modules/users/users.module';
+import { NewsModule } from './modules/news/news.module';
 
 @Module({
   imports: [
@@ -10,6 +12,8 @@ import { UserTypesModule } from './modules/user-types/user-types.module';
     ConfigModule.forRoot({ isGlobal: true }),
     CompaniesModule,
     UserTypesModule,
+    UsersModule,
+    NewsModule,
   ],
   controllers: [],
   providers: [],
