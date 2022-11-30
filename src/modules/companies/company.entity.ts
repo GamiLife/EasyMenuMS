@@ -8,6 +8,7 @@ import {
   AutoIncrement,
 } from 'sequelize-typescript';
 import { CategoryEntity } from '../categories/categories.entity';
+import { DishEntity } from '../dishes/entities/dishes.entity';
 import { NewEntity } from '../news/news.entity';
 import { SauceEntity } from '../sauces/sauces.entity';
 import { UserEntity } from '../users/users.entity';
@@ -62,4 +63,11 @@ export class CompanyEntity extends Model<CompanyEntity> {
     as: 'sauce',
   })
   sauce: SauceEntity;
+
+  @BelongsTo(() => DishEntity, {
+    targetKey: 'id',
+    foreignKey: 'dishId',
+    as: 'dish',
+  })
+  dish: DishEntity;
 }

@@ -6,8 +6,10 @@ import {
   AutoIncrement,
   PrimaryKey,
   HasOne,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { CompanyEntity } from '../companies/company.entity';
+import { DishEntity } from '../dishes/entities/dishes.entity';
 
 @Table({
   tableName: 'categories',
@@ -50,4 +52,11 @@ export class CategoryEntity extends Model<CategoryEntity> {
     as: 'company',
   })
   company: CompanyEntity;
+
+  @BelongsTo(() => DishEntity, {
+    targetKey: 'id',
+    foreignKey: 'dishId',
+    as: 'dish',
+  })
+  dish: DishEntity;
 }

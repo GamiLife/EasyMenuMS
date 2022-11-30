@@ -56,11 +56,11 @@ export class UsersService {
     return usersResponse;
   }
 
-  async update(userType: UserUpdateDto, id: number): Promise<UserResponseDto> {
-    await this.userRepository.update(userType, {
+  async update(user: UserUpdateDto, id: number): Promise<UserResponseDto> {
+    await this.userRepository.update(user, {
       where: { id },
     });
-    const userDomain = UserMapper.updateDtoToDomain(userType);
+    const userDomain = UserMapper.updateDtoToDomain(user);
     const userResponse = UserMapper.domainToResponse(userDomain);
 
     return userResponse;

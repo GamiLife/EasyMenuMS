@@ -1,6 +1,11 @@
 import { Sequelize } from 'sequelize-typescript';
 import { CategoryEntity } from 'src/modules/categories/categories.entity';
 import { CompanyEntity } from 'src/modules/companies/company.entity';
+import {
+  DishDishesEntity,
+  DishEntity,
+  DishSauceEntity,
+} from 'src/modules/dishes/entities';
 import { NewEntity } from 'src/modules/news/news.entity';
 import { SauceEntity } from 'src/modules/sauces/sauces.entity';
 import { UserTypeEntity } from 'src/modules/user-types/user-type.entity';
@@ -34,6 +39,9 @@ export const databaseProviders = [
         NewEntity,
         CategoryEntity,
         SauceEntity,
+        DishEntity,
+        DishDishesEntity,
+        DishSauceEntity,
       ]);
       await sequelize.sync();
       return sequelize;

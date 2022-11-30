@@ -1,26 +1,30 @@
-import { CompanyResponseDto } from '../companies/company.dto';
+import { CategoryResponseDto } from 'src/modules/categories/categories.dto';
+import { CompanyResponseDto } from 'src/modules/companies/company.dto';
 
-export class SauceCreateDto {
+export class DishCreateDto {
   readonly title: string;
   readonly description: string;
   readonly price: number;
   readonly imageUrl: string;
+  readonly categoryId: number;
   readonly companyId: number;
 }
 
-export class SauceUpdateDto {
+export class DishUpdateDto {
   readonly title: string;
   readonly description: string;
   readonly price: number;
   readonly imageUrl: string;
+  readonly categoryId: number;
   readonly companyId: number;
 }
 
-export class SauceResponseDto {
+export class DishResponseDto {
   readonly id?: number;
   readonly title: string;
   readonly description: string;
   readonly price: number;
   readonly imageUrl: string;
+  readonly category: CategoryResponseDto;
   readonly company: CompanyResponseDto;
 }

@@ -15,7 +15,10 @@ export class SauceMapper {
     return domains.map((domain) => SauceMapper.domainToResponse(domain));
   }
 
-  static entityToDomain(entity: SauceEntity): SauceDomain {
+  static entityToDomain(
+    entity: Pick<SauceEntity, 'title' | 'description' | 'price' | 'imageUrl'> &
+      Partial<Pick<SauceEntity, 'company'>>
+  ): SauceDomain {
     const companyDomain = CompanyMapper.entityToDomain(entity.company);
 
     const domain = new SauceDomain({

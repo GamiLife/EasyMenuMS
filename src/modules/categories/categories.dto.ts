@@ -15,7 +15,7 @@ export class CategoryUpdateDto {
 }
 
 export class CategoryResponseDto {
-  readonly id: number;
+  readonly id?: number;
   readonly title: string;
   readonly description: string;
   readonly iconId: string;

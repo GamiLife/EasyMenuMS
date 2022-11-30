@@ -15,7 +15,10 @@ export class CategoryMapper {
     return domains.map((domain) => CategoryMapper.domainToResponse(domain));
   }
 
-  static entityToDomain(entity: CategoryEntity): CategoryDomain {
+  static entityToDomain(
+    entity: Pick<CategoryEntity, 'title' | 'description' | 'iconId'> &
+      Partial<Pick<CategoryEntity, 'company'>>
+  ): CategoryDomain {
     const companyDomain = CompanyMapper.entityToDomain(entity.company);
 
     const domain = new CategoryDomain({
