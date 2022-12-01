@@ -11,12 +11,16 @@ module.exports = {
           price: 3,
           sauceId: 1,
           dishId: 1,
+          createdAt: '2022-11-11 00:00:00',
+          updatedAt: '2022-11-11 00:00:00',
         },
         {
           id: 2,
           price: 2,
           sauceId: 2,
           dishId: 1,
+          createdAt: '2022-11-11 00:00:00',
+          updatedAt: '2022-11-11 00:00:00',
         },
       ],
       {}

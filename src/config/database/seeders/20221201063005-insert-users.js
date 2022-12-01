@@ -14,6 +14,8 @@ module.exports = {
           phone: '987666432',
           userTypeId: 1,
           companyId: 1,
+          createdAt: '2022-11-11 00:00:00',
+          updatedAt: '2022-11-11 00:00:00',
         },
         {
           id: 2,
@@ -23,6 +25,8 @@ module.exports = {
           phone: '987666432',
           userTypeId: 2,
           companyId: 1,
+          createdAt: '2022-11-11 00:00:00',
+          updatedAt: '2022-11-11 00:00:00',
         },
       ],
       {}

@@ -11,6 +11,8 @@ module.exports = {
           price: 14,
           dishId: 1,
           dishSecondId: 2,
+          createdAt: '2022-11-11 00:00:00',
+          updatedAt: '2022-11-11 00:00:00',
         },
       ],
       {}

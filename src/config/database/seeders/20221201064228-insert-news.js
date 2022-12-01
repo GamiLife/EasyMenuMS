@@ -15,6 +15,8 @@ module.exports = {
           startDate: '2020-01-01T00:00:00',
           endDate: '2020-01-01T20:00:00',
           companyId: 1,
+          createdAt: '2022-11-11 00:00:00',
+          updatedAt: '2022-11-11 00:00:00',
         },
         {
           id: 2,
@@ -25,6 +27,8 @@ module.exports = {
           startDate: '2020-01-01T00:00:00',
           endDate: '2020-01-01T20:00:00',
           companyId: 1,
+          createdAt: '2022-11-11 00:00:00',
+          updatedAt: '2022-11-11 00:00:00',
         },
       ],
       {}
