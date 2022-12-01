@@ -6,7 +6,6 @@ import {
   AutoIncrement,
   PrimaryKey,
   HasOne,
-  BelongsTo,
   BelongsToMany,
 } from 'sequelize-typescript';
 import { CompanyEntity } from '../companies/company.entity';
