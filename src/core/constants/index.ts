@@ -1,3 +1,10 @@
+import { CategoryResponseDto } from 'src/modules/categories/categories.dto';
+export * from './message-decorators';
+
+export const dtosInMetadata = {
+  CategoryResponseDto: CategoryResponseDto,
+};
+
 export const SEQUELIZE = 'SEQUELIZE';
 export const DEVELOPMENT = 'development';
 export const TEST = 'test';
@@ -17,3 +24,5 @@ export const DISH_DISH_REPOSITORY = 'DISH_DISH_REPOSITORY';
 export const DISH_SERVCICE = 'DISH_SERVCICE';
 export const DISH_SAUCE_SERVCICE = 'DISH_SAUCE_SERVCICE';
 export const DISH_DISH_SERVICE = 'DISH_DISH_SERVICE';
+
+export const COMPANY_SERVICE = 'COMPANY_SERVICE';

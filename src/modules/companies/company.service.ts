@@ -1,5 +1,6 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { COMPANY_REPOSITORY } from 'src/core/constants';
+import { EmptyError } from 'src/core/exceptions';
 import {
   CompanyCreateDto,
   CompanyResponseDto,
@@ -29,6 +30,11 @@ export class CompaniesService {
     const companyGet = await this.companyRepository.findOne<CompanyEntity>({
       where: { id },
     });
+
+    if (!companyGet) {
+      throw new EmptyError('Company not found', HttpStatus.NOT_FOUND);
+    }
+
     const companyDomain = CompanyMapper.entityToDomain(companyGet);
     const companyResponse = CompanyMapper.domainToResponse(companyDomain);
 

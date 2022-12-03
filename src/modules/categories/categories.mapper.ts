@@ -17,15 +17,18 @@ export class CategoryMapper {
 
   static entityToDomain(
     entity: Pick<CategoryEntity, 'title' | 'description' | 'iconId'> &
-      Partial<Pick<CategoryEntity, 'company'>>
+      Partial<Pick<CategoryEntity, 'company' | 'id'>>
   ): CategoryDomain {
-    const companyDomain = CompanyMapper.entityToDomain(entity.company);
+    const companyDomain = entity.company
+      ? CompanyMapper.entityToDomain(entity.company)
+      : undefined;
 
     const domain = new CategoryDomain({
       title: entity.title,
       description: entity.description,
       iconId: entity.iconId,
       company: companyDomain,
+      id: entity.id,
     });
 
     return domain;
@@ -38,8 +41,8 @@ export class CategoryMapper {
   static updateDtoToDomain(dto: CategoryUpdateDto): CategoryDomain {
     const companyDomain = CompanyMapper.entityToDomain({
       id: dto.companyId,
-      name: '',
-      description: '',
+      name: undefined,
+      description: undefined,
     });
 
     const domain = new CategoryDomain({

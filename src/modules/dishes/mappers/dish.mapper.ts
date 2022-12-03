@@ -54,6 +54,7 @@ export class DishMapper {
       description: '',
     });
     const categoryDomain = CategoryMapper.entityToDomain({
+      id: dto.categoryId,
       title: '',
       description: '',
       iconId: '',

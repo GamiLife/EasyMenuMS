@@ -1,3 +1,4 @@
+import { Exclude, Expose, Type } from '@nestjs/class-transformer';
 import {
   Table,
   Column,
@@ -7,10 +8,12 @@ import {
   PrimaryKey,
   HasOne,
   BelongsTo,
+  Validate,
 } from 'sequelize-typescript';
 import { CompanyEntity } from '../companies/company.entity';
 import { DishEntity } from '../dishes/entities/dishes.entity';
 
+@Exclude()
 @Table({
   tableName: 'categories',
 })
@@ -46,6 +49,8 @@ export class CategoryEntity extends Model<CategoryEntity> {
   })
   companyId: number;
 
+  @Expose()
+  @Type(() => CompanyEntity)
   @HasOne(() => CompanyEntity, {
     sourceKey: 'companyId',
     foreignKey: 'id',
@@ -53,6 +58,8 @@ export class CategoryEntity extends Model<CategoryEntity> {
   })
   company: CompanyEntity;
 
+  @Expose()
+  @Type(() => DishEntity)
   @BelongsTo(() => DishEntity, {
     targetKey: 'id',
     foreignKey: 'dishId',

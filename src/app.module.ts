@@ -8,6 +8,7 @@ import { NewsModule } from './modules/news/news.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { SaucesModule } from './modules/sauces/sauces.module';
 import { DishesModule } from './modules/dishes/dishes.module';
+import { CoreModule } from './core/core.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { DishesModule } from './modules/dishes/dishes.module';
     CategoriesModule,
     SaucesModule,
     DishesModule,
+    CoreModule,
   ],
   controllers: [],
 })
