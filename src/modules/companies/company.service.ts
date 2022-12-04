@@ -1,13 +1,10 @@
+import { plainToClass } from '@nestjs/class-transformer';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { COMPANY_REPOSITORY } from 'src/core/constants';
-import { EmptyError } from 'src/core/exceptions';
-import {
-  CompanyCreateDto,
-  CompanyResponseDto,
-  CompanyUpdateDto,
-} from './company.dto';
+import { DBError, EmptyError } from 'src/core/exceptions';
+import { CompanyCreateDto, CompanyUpdateDto } from './company.dto';
+import { CompanyDomainV2 } from './company.domain';
 import { CompanyEntity } from './company.entity';
-import { CompanyMapper } from './company.mapper';
 
 @Injectable()
 export class CompaniesService {
@@ -16,50 +13,78 @@ export class CompaniesService {
     private readonly companyRepository: typeof CompanyEntity
   ) {}
 
-  async create(company: CompanyCreateDto): Promise<CompanyResponseDto> {
-    const companyCreated = await this.companyRepository.create<CompanyEntity>(
-      company
-    );
-    const companyDomain = CompanyMapper.entityToDomain(companyCreated);
-    const companyResponse = CompanyMapper.domainToResponse(companyDomain);
+  async create(company: CompanyCreateDto): Promise<CompanyDomainV2> {
+    const companyEntity = await this.companyRepository
+      .create<CompanyEntity>(company)
+      .catch((reason) => {
+        throw new DBError(
+          `Company query failed: ${reason}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
 
-    return companyResponse;
+    if (!companyEntity) {
+      throw new DBError('Company query failed', HttpStatus.BAD_REQUEST);
+    }
+
+    const companyDomain = plainToClass(CompanyDomainV2, companyEntity, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true,
+    });
+
+    return companyDomain;
   }
 
-  async findOneById(id: number): Promise<CompanyResponseDto> {
-    const companyGet = await this.companyRepository.findOne<CompanyEntity>({
+  async findOneById(id: number): Promise<CompanyDomainV2> {
+    const companyEntity = await this.companyRepository.findOne<CompanyEntity>({
       where: { id },
     });
 
-    if (!companyGet) {
+    if (!companyEntity) {
       throw new EmptyError('Company not found', HttpStatus.NOT_FOUND);
     }
 
-    const companyDomain = CompanyMapper.entityToDomain(companyGet);
-    const companyResponse = CompanyMapper.domainToResponse(companyDomain);
+    const companyDomain = plainToClass(CompanyDomainV2, companyEntity, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true,
+    });
 
-    return companyResponse;
+    return companyDomain;
   }
 
-  async findAll(): Promise<CompanyResponseDto[]> {
-    const companies = await this.companyRepository.findAll();
+  async findAll(): Promise<CompanyDomainV2[]> {
+    const companiesEntity = await this.companyRepository.findAll({});
 
-    const companiesDomain = CompanyMapper.entitiesToDomains(companies);
-    const companiesResponse = CompanyMapper.domainsToResponses(companiesDomain);
+    const companiesDomain = companiesEntity.map((companyEntity) =>
+      plainToClass(CompanyDomainV2, companyEntity, {
+        excludeExtraneousValues: true,
+        enableImplicitConversion: true,
+      })
+    );
 
-    return companiesResponse;
+    return companiesDomain;
   }
 
   async update(
     company: CompanyUpdateDto,
     id: number
-  ): Promise<CompanyResponseDto> {
-    await this.companyRepository.update(company, {
-      where: { id },
-    });
-    const companyDomain = CompanyMapper.updateDtoToDomain(company);
-    const companyResponse = CompanyMapper.domainToResponse(companyDomain);
+  ): Promise<CompanyDomainV2> {
+    await this.companyRepository
+      .update(company, {
+        where: { id },
+      })
+      .catch((reason) => {
+        throw new DBError(
+          `Company query failed: ${reason}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
 
-    return companyResponse;
+    const companyDomain = plainToClass(CompanyDomainV2, company, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true,
+    });
+
+    return companyDomain;
   }
 }

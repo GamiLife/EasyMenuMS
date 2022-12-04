@@ -1,7 +1,7 @@
-import { Expose, Type } from '@nestjs/class-transformer';
+import { Expose, Transform, Type } from '@nestjs/class-transformer';
 import { IsString, MaxLength, IsNumber } from 'class-validator';
 import { AggregateRoot } from 'src/core/domain';
-import { CompanyDomain } from '../companies/company.domain';
+import { CompanyDomain, CompanyDomainV2 } from '../companies/company.domain';
 
 export interface ICategoryProps {
   id?: number;
@@ -11,19 +11,9 @@ export interface ICategoryProps {
   company: CompanyDomain;
 }
 
-export class CompanyDomainV2 {
-  @Expose()
-  @IsNumber()
-  id: number;
-  @Expose()
-  @IsString()
-  @MaxLength(150, { message: 'This title is not valid' })
-  name: string;
-  @Expose()
-  @IsString()
-  description: string;
-}
-
+/**
+ * Category Domain
+ */
 export class CategoryDomainV2 {
   @Expose()
   @IsNumber()
@@ -39,6 +29,12 @@ export class CategoryDomainV2 {
   @IsString()
   iconId: string;
   @Expose()
+  @Transform(({ value, obj }) => {
+    if (!value) {
+      return { id: obj?.companyId };
+    }
+    return obj.company;
+  })
   @Type(() => CompanyDomainV2)
   company: CompanyDomainV2;
 }

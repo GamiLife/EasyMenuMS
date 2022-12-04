@@ -8,7 +8,6 @@ import {
   PrimaryKey,
   HasOne,
   BelongsTo,
-  Validate,
 } from 'sequelize-typescript';
 import { CompanyEntity } from '../companies/company.entity';
 import { DishEntity } from '../dishes/entities/dishes.entity';
@@ -18,6 +17,7 @@ import { DishEntity } from '../dishes/entities/dishes.entity';
   tableName: 'categories',
 })
 export class CategoryEntity extends Model<CategoryEntity> {
+  @Expose()
   @PrimaryKey
   @AutoIncrement
   @Column({
@@ -25,24 +25,28 @@ export class CategoryEntity extends Model<CategoryEntity> {
   })
   id: number;
 
+  @Expose()
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   title: string;
 
+  @Expose()
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   description: string;
 
+  @Expose()
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
   iconId: string;
 
+  @Expose()
   @Column({
     type: DataType.BIGINT,
     allowNull: false,

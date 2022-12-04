@@ -5,13 +5,8 @@ import { DBError, EmptyError } from 'src/core/exceptions';
 import { CompanyEntity } from '../companies/company.entity';
 import { CompaniesService } from '../companies/company.service';
 import { CategoryDomainV2 } from './categories.domain';
-import {
-  CategoryCreateDto,
-  CategoryResponseDto,
-  CategoryUpdateDto,
-} from './categories.dto';
+import { CategoryCreateDto, CategoryUpdateDto } from './categories.dto';
 import { CategoryEntity } from './categories.entity';
-import { CategoryMapper } from './categories.mapper';
 
 @Injectable()
 export class CategoriesService {
@@ -24,9 +19,15 @@ export class CategoriesService {
   async create(category: CategoryCreateDto): Promise<CategoryDomainV2> {
     await this.companyService.findOneById(category.companyId);
 
-    const categoryEntity = await this.categoryRepository.create<CategoryEntity>(
-      category
-    );
+    const categoryEntity = await this.categoryRepository
+      .create<CategoryEntity>(category)
+      .catch((reason) => {
+        throw new DBError(
+          `Category query failed: ${reason}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+
     if (!categoryEntity) {
       throw new DBError('Category query failed', HttpStatus.BAD_REQUEST);
     }
@@ -84,15 +85,27 @@ export class CategoriesService {
   }
 
   async update(
-    categoryToUpdate: CategoryUpdateDto,
+    category: CategoryUpdateDto,
     id: number
-  ): Promise<CategoryResponseDto> {
-    await this.categoryRepository.update(categoryToUpdate, {
-      where: { id },
-    });
-    const categoryDomain = CategoryMapper.updateDtoToDomain(categoryToUpdate);
-    const categoryResponse = CategoryMapper.domainToResponse(categoryDomain);
+  ): Promise<CategoryDomainV2> {
+    await this.companyService.findOneById(category.companyId);
 
-    return categoryResponse;
+    await this.categoryRepository
+      .update(category, {
+        where: { id },
+      })
+      .catch((reason) => {
+        throw new DBError(
+          `Category query failed: ${reason}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+
+    const categoryDomain = plainToClass(CategoryDomainV2, category, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true,
+    });
+
+    return categoryDomain;
   }
 }

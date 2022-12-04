@@ -1,3 +1,4 @@
+import { Expose, Type, Exclude } from '@nestjs/class-transformer';
 import {
   Table,
   Column,
@@ -13,10 +14,12 @@ import { NewEntity } from '../news/news.entity';
 import { SauceEntity } from '../sauces/sauces.entity';
 import { UserEntity } from '../users/users.entity';
 
+@Exclude()
 @Table({
   tableName: 'companies',
 })
 export class CompanyEntity extends Model<CompanyEntity> {
+  @Expose()
   @PrimaryKey
   @AutoIncrement
   @Column({
@@ -24,18 +27,22 @@ export class CompanyEntity extends Model<CompanyEntity> {
   })
   id: number;
 
+  @Expose()
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   name: string;
 
+  @Expose()
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
   description: string;
 
+  @Expose()
+  @Type(() => UserEntity)
   @BelongsTo(() => UserEntity, {
     targetKey: 'id',
     foreignKey: 'companyId',
@@ -43,6 +50,8 @@ export class CompanyEntity extends Model<CompanyEntity> {
   })
   user: UserEntity;
 
+  @Expose()
+  @Type(() => NewEntity)
   @BelongsTo(() => NewEntity, {
     targetKey: 'id',
     foreignKey: 'companyId',
@@ -50,6 +59,8 @@ export class CompanyEntity extends Model<CompanyEntity> {
   })
   new: NewEntity;
 
+  @Expose()
+  @Type(() => CategoryEntity)
   @BelongsTo(() => CategoryEntity, {
     targetKey: 'id',
     foreignKey: 'companyId',
@@ -57,6 +68,8 @@ export class CompanyEntity extends Model<CompanyEntity> {
   })
   category: CategoryEntity;
 
+  @Expose()
+  @Type(() => SauceEntity)
   @BelongsTo(() => SauceEntity, {
     targetKey: 'id',
     foreignKey: 'sauceId',
@@ -64,6 +77,8 @@ export class CompanyEntity extends Model<CompanyEntity> {
   })
   sauce: SauceEntity;
 
+  @Expose()
+  @Type(() => DishEntity)
   @BelongsTo(() => DishEntity, {
     targetKey: 'id',
     foreignKey: 'dishId',

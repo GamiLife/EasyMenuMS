@@ -1,3 +1,5 @@
+import { Exclude, Expose, Type } from '@nestjs/class-transformer';
+
 import {
   Table,
   Column,
@@ -12,10 +14,12 @@ import { CompanyEntity } from '../companies/company.entity';
 import { DishEntity } from '../dishes/entities';
 import { DishSauceEntity } from '../dishes/entities/dishes-sauces.entity';
 
+@Exclude()
 @Table({
   tableName: 'sauces',
 })
 export class SauceEntity extends Model<SauceEntity> {
+  @Expose()
   @PrimaryKey
   @AutoIncrement
   @Column({
@@ -23,36 +27,43 @@ export class SauceEntity extends Model<SauceEntity> {
   })
   id: number;
 
+  @Expose()
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   title: string;
 
+  @Expose()
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   description: string;
 
+  @Expose()
   @Column({
     type: DataType.FLOAT,
     allowNull: true,
   })
   price: number;
 
+  @Expose()
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   imageUrl: string;
 
+  @Expose()
   @Column({
     type: DataType.BIGINT,
     allowNull: false,
   })
   companyId: number;
 
+  @Expose()
+  @Type(() => CompanyEntity)
   @HasOne(() => CompanyEntity, {
     sourceKey: 'companyId',
     foreignKey: 'id',
@@ -60,6 +71,8 @@ export class SauceEntity extends Model<SauceEntity> {
   })
   company: CompanyEntity;
 
+  @Expose()
+  @Type(() => DishEntity)
   @BelongsToMany(() => DishEntity, {
     through: { model: () => DishSauceEntity },
   })

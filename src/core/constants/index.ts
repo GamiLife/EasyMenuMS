@@ -1,8 +1,20 @@
 import { CategoryResponseDto } from 'src/modules/categories/categories.dto';
+import { CompanyResponseDto } from 'src/modules/companies/company.dto';
+import { DishResponseDto } from 'src/modules/dishes/dtos';
+import { NewResponseDto } from 'src/modules/news/news.dto';
+import { SauceResponseDto } from 'src/modules/sauces/sauces.dto';
+import { UserTypeResponseDto } from 'src/modules/user-types/user-type.dto';
+import { UserResponseDto } from 'src/modules/users/users.dto';
 export * from './message-decorators';
 
 export const dtosInMetadata = {
   CategoryResponseDto: CategoryResponseDto,
+  CompanyResponseDto: CompanyResponseDto,
+  NewResponseDto: NewResponseDto,
+  UserTypeResponseDto: UserTypeResponseDto,
+  UserResponseDto: UserResponseDto,
+  SauceResponseDto: SauceResponseDto,
+  DishResponseDto: DishResponseDto,
 };
 
 export const SEQUELIZE = 'SEQUELIZE';

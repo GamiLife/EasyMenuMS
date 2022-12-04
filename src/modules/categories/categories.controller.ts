@@ -6,7 +6,7 @@ import {
   MESSAGE_RESPONSE_UPDATE_CATEGORY,
 } from 'src/core/constants';
 import { ResponseMessage, Transform } from 'src/core/decorators';
-import { ServerError } from 'src/core/exceptions';
+import { CatchControl } from 'src/core/exceptions';
 import { CategoryCreateDto, CategoryUpdateDto } from './categories.dto';
 import { CategoriesService } from './categories.service';
 
@@ -23,9 +23,7 @@ export class CategoriesController {
 
       return { finalResponse: categoriesDomain };
     } catch (error) {
-      const { message } = error;
-      const { message: customMessage, statusCode } = JSON.parse(message);
-      throw new ServerError(customMessage, statusCode);
+      CatchControl(error);
     }
   }
 
@@ -38,9 +36,7 @@ export class CategoriesController {
 
       return { finalResponse: categoryDomain };
     } catch (error) {
-      const { message } = error;
-      const { message: customMessage, statusCode } = JSON.parse(message);
-      throw new ServerError(customMessage, statusCode);
+      CatchControl(error);
     }
   }
 
@@ -53,9 +49,7 @@ export class CategoriesController {
 
       return { finalResponse: categoryDomain };
     } catch (error) {
-      const { message } = error;
-      const { message: customMessage, statusCode } = JSON.parse(message);
-      throw new ServerError(customMessage, statusCode);
+      CatchControl(error);
     }
   }
 
@@ -68,9 +62,7 @@ export class CategoriesController {
 
       return { finalResponse: categoryDomain };
     } catch (error) {
-      const { message } = error;
-      const { message: customMessage, statusCode } = JSON.parse(message);
-      throw new ServerError(customMessage, statusCode);
+      CatchControl(error);
     }
   }
 }

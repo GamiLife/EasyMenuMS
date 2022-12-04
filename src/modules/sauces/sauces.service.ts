@@ -1,27 +1,47 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { plainToClass } from '@nestjs/class-transformer';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { SAUCE_REPOSITORY } from 'src/core/constants';
+import { DBError, EmptyError } from 'src/core/exceptions';
 import { CompanyEntity } from '../companies/company.entity';
-import { SauceCreateDto, SauceResponseDto, SauceUpdateDto } from './sauces.dto';
+import { CompaniesService } from '../companies/company.service';
+import { SauceDomainV2 } from './sauces.domain';
+import { SauceCreateDto, SauceUpdateDto } from './sauces.dto';
 import { SauceEntity } from './sauces.entity';
-import { SauceMapper } from './sauces.mapper';
 
 @Injectable()
 export class SaucesService {
   constructor(
     @Inject(SAUCE_REPOSITORY)
-    private readonly sauceRepository: typeof SauceEntity
+    private readonly sauceRepository: typeof SauceEntity,
+    private readonly companyService: CompaniesService
   ) {}
 
-  async create(sauce: SauceCreateDto): Promise<SauceResponseDto> {
-    const sauceCreated = await this.sauceRepository.create<SauceEntity>(sauce);
-    const sauceDomain = SauceMapper.entityToDomain(sauceCreated);
-    const sauceResponse = SauceMapper.domainToResponse(sauceDomain);
+  async create(sauce: SauceCreateDto): Promise<SauceDomainV2> {
+    await this.companyService.findOneById(sauce.companyId);
 
-    return sauceResponse;
+    const sauceEntity = await this.sauceRepository
+      .create<SauceEntity>(sauce)
+      .catch((reason) => {
+        throw new DBError(
+          `Category query failed: ${reason}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+
+    if (!sauceEntity) {
+      throw new DBError('Sauce query failed', HttpStatus.BAD_REQUEST);
+    }
+
+    const sauceDomain = plainToClass(SauceDomainV2, sauceEntity, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true,
+    });
+
+    return sauceDomain;
   }
 
-  async findOneById(id: number): Promise<SauceResponseDto> {
-    const sauceGet = await this.sauceRepository.findOne<SauceEntity>({
+  async findOneById(id: number): Promise<SauceDomainV2> {
+    const sauceGetEntity = await this.sauceRepository.findOne<SauceEntity>({
       where: { id },
       include: [
         {
@@ -29,36 +49,62 @@ export class SaucesService {
         },
       ],
     });
-    const sauceDomain = SauceMapper.entityToDomain(sauceGet);
-    const sauceResponse = SauceMapper.domainToResponse(sauceDomain);
 
-    return sauceResponse;
+    if (!sauceGetEntity) {
+      throw new EmptyError('Sauce not found', HttpStatus.NOT_FOUND);
+    }
+
+    const sauceDomain = plainToClass(SauceDomainV2, sauceGetEntity, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true,
+    });
+
+    return sauceDomain;
   }
 
-  async findAll(): Promise<SauceResponseDto[]> {
-    const sauces = await this.sauceRepository.findAll({
+  async findAll(): Promise<SauceDomainV2[]> {
+    const saucesEntity = await this.sauceRepository.findAll({
       include: [
         {
           model: CompanyEntity,
+          attributes: ['id'],
+          required: true,
         },
       ],
     });
-    const saucesDomain = SauceMapper.entitiesToDomains(sauces);
-    const saucesResponse = SauceMapper.domainsToResponses(saucesDomain);
 
-    return saucesResponse;
+    const saucesDomain = saucesEntity.map((sauceEntity) =>
+      plainToClass(SauceDomainV2, sauceEntity, {
+        excludeExtraneousValues: true,
+        enableImplicitConversion: true,
+      })
+    );
+
+    return saucesDomain;
   }
 
   async update(
     sauceToUpdate: SauceUpdateDto,
     id: number
-  ): Promise<SauceResponseDto> {
-    await this.sauceRepository.update(sauceToUpdate, {
-      where: { id },
-    });
-    const sauceDomain = SauceMapper.updateDtoToDomain(sauceToUpdate);
-    const sauceResponse = SauceMapper.domainToResponse(sauceDomain);
+  ): Promise<SauceDomainV2> {
+    await this.companyService.findOneById(sauceToUpdate.companyId);
 
-    return sauceResponse;
+    await this.sauceRepository
+      .update(sauceToUpdate, {
+        where: { id },
+      })
+      .catch((reason) => {
+        throw new DBError(
+          `Sauce query failed: ${reason}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+
+    const categoryDomain = plainToClass(SauceDomainV2, sauceToUpdate, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true,
+    });
+
+    return categoryDomain;
   }
 }

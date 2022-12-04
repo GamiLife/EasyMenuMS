@@ -8,11 +8,14 @@ import {
   PrimaryKey,
 } from 'sequelize-typescript';
 import { UserEntity } from '../users/users.entity';
+import { Expose, Type, Exclude } from '@nestjs/class-transformer';
 
+@Exclude()
 @Table({
   tableName: 'user_types',
 })
 export class UserTypeEntity extends Model<UserTypeEntity> {
+  @Expose()
   @PrimaryKey
   @AutoIncrement
   @Column({
@@ -20,18 +23,22 @@ export class UserTypeEntity extends Model<UserTypeEntity> {
   })
   id: number;
 
+  @Expose()
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   name: string;
 
+  @Expose()
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
   description: string;
 
+  @Expose()
+  @Type(() => UserEntity)
   @BelongsTo(() => UserEntity, {
     targetKey: 'id',
     foreignKey: 'userTypeId',
