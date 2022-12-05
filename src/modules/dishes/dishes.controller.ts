@@ -6,12 +6,31 @@ import {
 } from 'src/core/constants';
 import { ResponseMessage, Transform } from 'src/core/decorators';
 import { CatchControl } from 'src/core/exceptions';
-import { DishPayloadCreateDto } from './dtos';
+import { DishPayloadCreateDto, PayloadPagination } from './dtos';
 import { DishesMainService } from './services';
 
 @Controller('dishes')
 export class DishesController {
   constructor(private dishesMainService: DishesMainService) {}
+
+  @Transform('DishResponseDto')
+  @ResponseMessage(MESSAGE_RESPONSE_GET_DISH_ALL)
+  @Post('/:categoryId')
+  async findAllByCategoryId(
+    @Param('categoryId') categoryId,
+    @Body() pagination: PayloadPagination
+  ) {
+    try {
+      const dishesDomain = await this.dishesMainService.findAllByCategoryId(
+        categoryId,
+        pagination
+      );
+
+      return { finalResponse: dishesDomain };
+    } catch (error) {
+      CatchControl(error);
+    }
+  }
 
   @Transform('DishResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_DISH_ALL)

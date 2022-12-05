@@ -1,3 +1,4 @@
+import { Exclude, Expose, Type } from '@nestjs/class-transformer';
 import {
   Table,
   Column,
@@ -14,10 +15,12 @@ import { CompanyEntity } from '../../companies/company.entity';
 import { DishDishesEntity } from './dishes-dishes.entity';
 import { DishSauceEntity } from './dishes-sauces.entity';
 
+@Exclude()
 @Table({
   tableName: 'dishes',
 })
 export class DishEntity extends Model<DishEntity> {
+  @Expose()
   @PrimaryKey
   @AutoIncrement
   @Column({
@@ -25,40 +28,48 @@ export class DishEntity extends Model<DishEntity> {
   })
   id: number;
 
+  @Expose()
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   title: string;
 
+  @Expose()
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   description: string;
 
+  @Expose()
   @Column({
     type: DataType.FLOAT,
     allowNull: true,
   })
   price: number;
 
+  @Expose()
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   imageUrl: string;
 
+  @Expose()
   @Column({
     type: DataType.BIGINT,
   })
   categoryId: number;
 
+  @Expose()
   @Column({
     type: DataType.BIGINT,
   })
   companyId: number;
 
+  @Expose()
+  @Type(() => CategoryEntity)
   @HasOne(() => CategoryEntity, {
     sourceKey: 'categoryId',
     foreignKey: 'id',
@@ -66,6 +77,8 @@ export class DishEntity extends Model<DishEntity> {
   })
   category: CategoryEntity;
 
+  @Expose()
+  @Type(() => CompanyEntity)
   @HasOne(() => CompanyEntity, {
     sourceKey: 'companyId',
     foreignKey: 'id',
@@ -73,17 +86,23 @@ export class DishEntity extends Model<DishEntity> {
   })
   company: CompanyEntity;
 
+  @Expose()
+  @Type(() => SauceEntity)
   @BelongsToMany(() => SauceEntity, {
     through: { model: () => DishSauceEntity },
   })
   sauces?: SauceEntity[];
 
+  @Expose()
+  @Type(() => DishEntity)
   @BelongsToMany(() => DishEntity, {
     through: { model: () => DishDishesEntity },
     as: 'dish',
   })
   dishesMain?: DishEntity[];
 
+  @Expose()
+  @Type(() => DishEntity)
   @BelongsToMany(() => DishEntity, {
     through: { model: () => DishDishesEntity },
     as: 'dishSecond',

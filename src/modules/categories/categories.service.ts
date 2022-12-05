@@ -63,6 +63,32 @@ export class CategoriesService {
     return categoryDomain;
   }
 
+  async findAllByCompanyId(companyId: number): Promise<CategoryDomainV2[]> {
+    await this.companyService.findOneById(companyId);
+
+    const categoriesEntity = await this.categoryRepository.findAll({
+      include: [
+        {
+          model: CompanyEntity,
+          attributes: ['id'],
+          required: true,
+          where: {
+            id: companyId,
+          },
+        },
+      ],
+    });
+
+    const categoriesDomain = categoriesEntity.map((categoryEntity) =>
+      plainToClass(CategoryDomainV2, categoryEntity, {
+        excludeExtraneousValues: true,
+        enableImplicitConversion: true,
+      })
+    );
+
+    return categoriesDomain;
+  }
+
   async findAll(): Promise<CategoryDomainV2[]> {
     const categoriesEntity = await this.categoryRepository.findAll({
       include: [

@@ -1,31 +1,47 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { plainToClass } from '@nestjs/class-transformer';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { DISH_DISH_REPOSITORY } from 'src/core/constants';
-import {
-  DishDishCreateDto,
-  DishDishResponseDto,
-  DishDishUpdateDto,
-} from '../dtos';
+import { DBError, EmptyError } from 'src/core/exceptions';
+import { DishDishDomainV2 } from '../domains';
+import { DishDishCreateDto, DishDishUpdateDto } from '../dtos';
 import { DishDishesEntity, DishEntity } from '../entities';
-import { DishDishMapper } from '../mappers';
+import { DishesService } from './dishes.service';
 
 @Injectable()
 export class DishesDishesService {
   constructor(
     @Inject(DISH_DISH_REPOSITORY)
-    private readonly dishDishesRepository: typeof DishDishesEntity
+    private readonly dishDishesRepository: typeof DishDishesEntity,
+    private readonly dishService: DishesService
   ) {}
 
-  async create(dishDish: DishDishCreateDto): Promise<DishDishResponseDto> {
-    const dishDishCreated =
-      await this.dishDishesRepository.create<DishDishesEntity>(dishDish);
-    const dishDishDomain = DishDishMapper.entityToDomain(dishDishCreated);
-    const dishDishResponse = DishDishMapper.domainToResponse(dishDishDomain);
+  async create(dishDish: DishDishCreateDto): Promise<DishDishDomainV2> {
+    await this.dishService.findOneById(dishDish.dishId);
+    await this.dishService.findOneById(dishDish.dishSecondId);
 
-    return dishDishResponse;
+    const dishDishEntity = await this.dishDishesRepository
+      .create<DishDishesEntity>(dishDish)
+      .catch((reason) => {
+        throw new DBError(
+          `DishDish query failed: ${reason}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+
+    if (!dishDishEntity) {
+      throw new DBError('DishDish query failed', HttpStatus.BAD_REQUEST);
+    }
+
+    const dishDishDomain = plainToClass(DishDishDomainV2, dishDishEntity, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true,
+    });
+
+    return dishDishDomain;
   }
 
-  async findAllByDishId(dishId: number): Promise<DishDishResponseDto[]> {
-    const dishDishesGet =
+  async findAllByDishId(dishId: number): Promise<DishDishDomainV2[]> {
+    const dishDishesGetEntity =
       await this.dishDishesRepository.findAll<DishDishesEntity>({
         where: { dishId },
         include: [
@@ -39,15 +55,25 @@ export class DishesDishesService {
           },
         ],
       });
-    const dishDishesDomain = DishDishMapper.entitiesToDomains(dishDishesGet);
-    const dishDishesResponse =
-      DishDishMapper.domainsToResponses(dishDishesDomain);
 
-    return dishDishesResponse;
+    if (!dishDishesGetEntity) {
+      throw new EmptyError('DishDish not found', HttpStatus.NOT_FOUND);
+    }
+
+    const dishDishesDomain = plainToClass(
+      DishDishDomainV2,
+      dishDishesGetEntity,
+      {
+        excludeExtraneousValues: true,
+        enableImplicitConversion: true,
+      }
+    );
+
+    return dishDishesDomain;
   }
 
-  async findOneById(id: number): Promise<DishDishResponseDto> {
-    const dishDishGet =
+  async findOneById(id: number): Promise<DishDishDomainV2> {
+    const dishDishGetEntity =
       await this.dishDishesRepository.findOne<DishDishesEntity>({
         where: { id },
         include: [
@@ -56,38 +82,63 @@ export class DishesDishesService {
           },
         ],
       });
-    const dishDishDomain = DishDishMapper.entityToDomain(dishDishGet);
-    const dishDishResponse = DishDishMapper.domainToResponse(dishDishDomain);
 
-    return dishDishResponse;
+    if (!dishDishGetEntity) {
+      throw new EmptyError('DishId not found', HttpStatus.NOT_FOUND);
+    }
+
+    const dishDishesDomain = plainToClass(DishDishDomainV2, dishDishGetEntity, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true,
+    });
+
+    return dishDishesDomain;
   }
 
-  async findAll(): Promise<DishDishResponseDto[]> {
-    const dishDishes = await this.dishDishesRepository.findAll({
+  async findAll(): Promise<DishDishDomainV2[]> {
+    const dishDishesEntity = await this.dishDishesRepository.findAll({
       include: [
         {
           model: DishEntity,
+          attributes: ['id'],
+          required: true,
         },
       ],
     });
-    const dishDishesDomain = DishDishMapper.entitiesToDomains(dishDishes);
-    const dishDishesResponse =
-      DishDishMapper.domainsToResponses(dishDishesDomain);
 
-    return dishDishesResponse;
+    const dishDishesDomain = dishDishesEntity.map((dishDishEntity) =>
+      plainToClass(DishDishDomainV2, dishDishEntity, {
+        excludeExtraneousValues: true,
+        enableImplicitConversion: true,
+      })
+    );
+
+    return dishDishesDomain;
   }
 
   async update(
-    dish: DishDishUpdateDto,
+    dishDish: DishDishUpdateDto,
     id: number
-  ): Promise<DishDishResponseDto> {
-    await this.dishDishesRepository.update(dish, {
-      where: { id },
-    });
-    const dishDishesDomain = DishDishMapper.updateDtoToDomain(dish);
-    const dishDishesResponse =
-      DishDishMapper.domainToResponse(dishDishesDomain);
+  ): Promise<DishDishDomainV2> {
+    await this.dishService.findOneById(dishDish.dishId);
+    await this.dishService.findOneById(dishDish.dishSecondId);
 
-    return dishDishesResponse;
+    await this.dishDishesRepository
+      .update(dishDish, {
+        where: { id },
+      })
+      .catch((reason) => {
+        throw new DBError(
+          `DishDish query failed: ${reason}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+
+    const dishDishesDomain = plainToClass(DishDishDomainV2, dishDish, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true,
+    });
+
+    return dishDishesDomain;
   }
 }

@@ -29,6 +29,21 @@ export class CategoriesController {
 
   @Transform('CategoryResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_CATEGORY_BY_ID)
+  @Get('companies/:companyId')
+  async findAllByCompany(@Param('companyId') companyId) {
+    try {
+      const categoryDomain = await this.categoryService.findAllByCompanyId(
+        companyId
+      );
+
+      return { finalResponse: categoryDomain };
+    } catch (error) {
+      CatchControl(error);
+    }
+  }
+
+  @Transform('CategoryResponseDto')
+  @ResponseMessage(MESSAGE_RESPONSE_GET_CATEGORY_BY_ID)
   @Get(':id')
   async findById(@Param('id') id) {
     try {

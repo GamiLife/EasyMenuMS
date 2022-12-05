@@ -1,3 +1,4 @@
+import { Exclude, Expose, Type } from '@nestjs/class-transformer';
 import {
   Table,
   Column,
@@ -10,10 +11,12 @@ import {
 } from 'sequelize-typescript';
 import { DishEntity } from './dishes.entity';
 
+@Exclude()
 @Table({
   tableName: 'dishes_dishes',
 })
 export class DishDishesEntity extends Model<DishDishesEntity> {
+  @Expose()
   @PrimaryKey
   @AutoIncrement
   @Column({
@@ -21,24 +24,29 @@ export class DishDishesEntity extends Model<DishDishesEntity> {
   })
   id: number;
 
+  @Expose()
   @Column({
     type: DataType.FLOAT,
     allowNull: true,
   })
   price: number;
 
+  @Expose()
   @ForeignKey(() => DishEntity)
   @Column({
     type: DataType.BIGINT,
   })
   dishId: number;
 
+  @Expose()
   @ForeignKey(() => DishEntity)
   @Column({
     type: DataType.BIGINT,
   })
   dishSecondId: number;
 
+  @Expose()
+  @Type(() => DishEntity)
   @HasMany(() => DishEntity, {
     sourceKey: 'dishId',
     foreignKey: 'id',
@@ -46,6 +54,8 @@ export class DishDishesEntity extends Model<DishDishesEntity> {
   })
   dish: DishEntity;
 
+  @Expose()
+  @Type(() => DishEntity)
   @HasMany(() => DishEntity, {
     sourceKey: 'dishSecondId',
     foreignKey: 'id',

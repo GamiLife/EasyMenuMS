@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { DishDishDomainV2, DishDomainV2, DishSauceDomainV2 } from '../domains';
+import { DishCreateResponseDto } from '../dtos';
 import {
-  DishDishResponseDto,
-  DishResponseDto,
-  DishSauceResponseDto,
-  DishCreateResponseDto,
-} from '../dtos';
-import { DishGetResponseDto, DishPayloadCreateDto } from '../dtos/main.dto';
+  DishGetResponseDto,
+  DishPayloadCreateDto,
+  PayloadPagination,
+} from '../dtos/main.dto';
 import { DishesDishesService } from './dishes-dishes.service';
 import { DishesSaucesService } from './dishes-sauces.service';
 import { DishesService } from './dishes.service';
@@ -23,15 +23,13 @@ export class DishesMainService {
   ): Promise<DishCreateResponseDto> {
     const { dishInfo, sauces, dishes } = dishPayload;
 
-    const dishResponse: DishResponseDto = await this.dishService.create(
-      dishInfo
-    );
+    const dishResponse: DishDomainV2 = await this.dishService.create(dishInfo);
     const { id: dishId } = dishResponse;
 
     if (!dishId) return;
 
-    const dishSaucesResponse: DishSauceResponseDto[] = [];
-    const dishDishesResponse: DishDishResponseDto[] = [];
+    const dishSaucesResponse: DishSauceDomainV2[] = [];
+    const dishDishesResponse: DishDishDomainV2[] = [];
 
     for (const { price, sauceId } of sauces) {
       const sauceCreateDto = {
@@ -71,8 +69,20 @@ export class DishesMainService {
     return { dishInfo: dishResponse, dishSauces, dishDishes };
   }
 
-  async findAll(): Promise<DishResponseDto[]> {
+  async findAll(): Promise<DishDomainV2[]> {
     const dishes = await this.dishService.findAll();
+
+    return dishes;
+  }
+
+  async findAllByCategoryId(
+    categoryId: number,
+    pagination: PayloadPagination
+  ): Promise<DishDomainV2[]> {
+    const dishes = await this.dishService.findAllByCategoryId(
+      categoryId,
+      pagination
+    );
 
     return dishes;
   }
