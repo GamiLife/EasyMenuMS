@@ -7,9 +7,8 @@ import { CompaniesService } from '../companies/company.service';
 import { UserTypeEntity } from '../user-types/user-type.entity';
 import { UserTypesService } from '../user-types/user-types.service';
 import { UserDomainV2 } from './users.domain';
-import { UserCreateDto, UserResponseDto, UserUpdateDto } from './users.dto';
+import { UserCreateDto, UserUpdateDto } from './users.dto';
 import { UserEntity } from './users.entity';
-import { UserMapper } from './users.mapper';
 
 @Injectable()
 export class UsersService {

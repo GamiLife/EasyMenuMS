@@ -1,11 +1,5 @@
 import { Expose } from '@nestjs/class-transformer';
 import { IsString, MaxLength, IsNumber } from 'class-validator';
-import { AggregateRoot } from 'src/core/domain';
-
-export interface IUserTypeProps {
-  name: string;
-  description: string;
-}
 
 /**
  * Category Domain
@@ -21,14 +15,4 @@ export class UserTypeDomainV2 {
   @Expose()
   @IsString()
   description: string;
-}
-
-export class UserTypeDomain extends AggregateRoot<IUserTypeProps> {
-  get name() {
-    return this.props.name;
-  }
-
-  get description() {
-    return this.props.description;
-  }
 }

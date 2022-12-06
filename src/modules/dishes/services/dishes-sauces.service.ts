@@ -4,13 +4,8 @@ import { DBError, EmptyError } from 'src/core/exceptions';
 import { SauceEntity } from 'src/modules/sauces/sauces.entity';
 import { SaucesService } from 'src/modules/sauces/sauces.service';
 import { DishSauceDomainV2 } from '../domains';
-import {
-  DishSauceCreateDto,
-  DishSauceResponseDto,
-  DishSauceUpdateDto,
-} from '../dtos';
+import { DishSauceCreateDto, DishSauceUpdateDto } from '../dtos';
 import { DishEntity, DishSauceEntity } from '../entities';
-import { DishSauceMapper } from '../mappers';
 import { DishesService } from './dishes.service';
 import { plainToClass } from '@nestjs/class-transformer';
 
@@ -53,9 +48,6 @@ export class DishesSaucesService {
       await this.dishSaucesRepository.findAll<DishSauceEntity>({
         where: { dishId },
         include: [
-          {
-            model: DishEntity,
-          },
           {
             model: SauceEntity,
           },

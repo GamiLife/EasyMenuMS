@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { EmptyError } from 'src/core/exceptions';
 import { DishDishDomainV2, DishDomainV2, DishSauceDomainV2 } from '../domains';
+import { DishesMainDomainV2 } from '../domains/dishes-main.domain';
 import { DishCreateResponseDto } from '../dtos';
-import {
-  DishGetResponseDto,
-  DishPayloadCreateDto,
-  PayloadPagination,
-} from '../dtos/main.dto';
+import { DishPayloadCreateDto, PayloadPagination } from '../dtos/main.dto';
 import { DishesDishesService } from './dishes-dishes.service';
 import { DishesSaucesService } from './dishes-sauces.service';
 import { DishesService } from './dishes.service';
@@ -26,7 +24,9 @@ export class DishesMainService {
     const dishResponse: DishDomainV2 = await this.dishService.create(dishInfo);
     const { id: dishId } = dishResponse;
 
-    if (!dishId) return;
+    if (!dishId) {
+      throw new EmptyError('Dish Created empty error');
+    }
 
     const dishSaucesResponse: DishSauceDomainV2[] = [];
     const dishDishesResponse: DishDishDomainV2[] = [];
@@ -61,12 +61,12 @@ export class DishesMainService {
     };
   }
 
-  async findOneById(id: number): Promise<DishGetResponseDto> {
-    const dishResponse = await this.dishService.findOneById(id);
+  async findOneById(id: number): Promise<DishesMainDomainV2> {
+    const dishInfo = await this.dishService.findOneById(id);
     const dishSauces = await this.dishSauceService.findAllByDishId(id);
     const dishDishes = await this.dishDishService.findAllByDishId(id);
 
-    return { dishInfo: dishResponse, dishSauces, dishDishes };
+    return { dishInfo, dishSauces, dishDishes };
   }
 
   async findAll(): Promise<DishDomainV2[]> {
@@ -79,11 +79,11 @@ export class DishesMainService {
     categoryId: number,
     pagination: PayloadPagination
   ): Promise<DishDomainV2[]> {
-    const dishes = await this.dishService.findAllByCategoryId(
+    const dishesDomain = await this.dishService.findAllByCategoryId(
       categoryId,
       pagination
     );
 
-    return dishes;
+    return dishesDomain;
   }
 }

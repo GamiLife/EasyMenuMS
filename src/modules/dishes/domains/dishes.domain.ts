@@ -1,21 +1,8 @@
 import { Expose, Transform, Type } from '@nestjs/class-transformer';
-import { IsString, MaxLength, IsNumber } from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
 
-import { AggregateRoot } from 'src/core/domain';
-import {
-  CategoryDomain,
-  CategoryDomainV2,
-} from '../../categories/categories.domain';
-import { CompanyDomain, CompanyDomainV2 } from '../../companies/company.domain';
-
-export interface IDishProps {
-  title: string;
-  description: string;
-  price: number;
-  imageUrl: string;
-  category: CategoryDomain;
-  company: CompanyDomain;
-}
+import { CategoryDomainV2 } from '../../categories/categories.domain';
+import { CompanyDomainV2 } from '../../companies/company.domain';
 
 /**
  * Dish Domain
@@ -54,30 +41,4 @@ export class DishDomainV2 {
   })
   @Type(() => CompanyDomainV2)
   company: CompanyDomainV2;
-}
-
-export class DishDomain extends AggregateRoot<IDishProps> {
-  get title() {
-    return this.props.title;
-  }
-
-  get description() {
-    return this.props.description;
-  }
-
-  get price() {
-    return this.props.price;
-  }
-
-  get imageUrl() {
-    return this.props.imageUrl;
-  }
-
-  get category() {
-    return this.props.category;
-  }
-
-  get company() {
-    return this.props.company;
-  }
 }

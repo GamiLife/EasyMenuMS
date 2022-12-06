@@ -1,6 +1,6 @@
 import { CategoryResponseDto } from 'src/modules/categories/categories.dto';
 import { CompanyResponseDto } from 'src/modules/companies/company.dto';
-import { DishResponseDto } from 'src/modules/dishes/dtos';
+import { DishGetResponseDto, DishResponseDto } from 'src/modules/dishes/dtos';
 import { NewResponseDto } from 'src/modules/news/news.dto';
 import { SauceResponseDto } from 'src/modules/sauces/sauces.dto';
 import { UserTypeResponseDto } from 'src/modules/user-types/user-type.dto';
@@ -15,6 +15,7 @@ export const dtosInMetadata = {
   UserResponseDto: UserResponseDto,
   SauceResponseDto: SauceResponseDto,
   DishResponseDto: DishResponseDto,
+  DishGetResponseDto: DishGetResponseDto,
 };
 
 export const SEQUELIZE = 'SEQUELIZE';

@@ -5,14 +5,8 @@ import { DBError, EmptyError } from 'src/core/exceptions';
 import { CategoryEntity } from '../../categories/categories.entity';
 import { CompanyEntity } from '../../companies/company.entity';
 import { DishDomainV2 } from '../domains';
-import {
-  DishCreateDto,
-  DishResponseDto,
-  DishUpdateDto,
-  PayloadPagination,
-} from '../dtos';
+import { DishCreateDto, DishUpdateDto, PayloadPagination } from '../dtos';
 import { DishEntity } from '../entities/dishes.entity';
-import { DishMapper } from '../mappers/dish.mapper';
 
 @Injectable()
 export class DishesService {
@@ -49,9 +43,13 @@ export class DishesService {
       include: [
         {
           model: CategoryEntity,
+          attributes: ['id'],
+          required: true,
         },
         {
           model: CompanyEntity,
+          attributes: ['id'],
+          required: true,
         },
       ],
     });
@@ -72,70 +70,60 @@ export class DishesService {
     categoryId: number,
     { page, size }: PayloadPagination
   ): Promise<DishDomainV2[]> {
-    try {
-      const dishsEntity = await this.dishRepository.findAll({
-        include: [
-          {
-            model: CategoryEntity,
-            attributes: ['id'],
-            required: true,
-            where: {
-              id: categoryId,
-            },
+    const dishsEntity = await this.dishRepository.findAll({
+      include: [
+        {
+          model: CategoryEntity,
+          attributes: ['id'],
+          required: true,
+          where: {
+            id: categoryId,
           },
-          {
-            model: CompanyEntity,
-            attributes: ['id'],
-            required: true,
-          },
-        ],
-        limit: size,
-        offset: page * size,
-      });
+        },
+        {
+          model: CompanyEntity,
+          attributes: ['id'],
+          required: true,
+        },
+      ],
+      limit: size,
+      offset: page * size,
+    });
 
-      const dishDomain = dishsEntity.map((dishEntity) =>
-        plainToClass(DishDomainV2, dishEntity, {
-          excludeExtraneousValues: true,
-          enableImplicitConversion: true,
-        })
-      );
+    const dishDomain = dishsEntity.map((dishEntity) =>
+      plainToClass(DishDomainV2, dishEntity, {
+        excludeExtraneousValues: true,
+        enableImplicitConversion: true,
+      })
+    );
 
-      return dishDomain;
-    } catch (error) {
-      console.log('test', error);
-      return [];
-    }
+    return dishDomain;
   }
 
   async findAll(): Promise<DishDomainV2[]> {
-    try {
-      const dishsEntity = await this.dishRepository.findAll({
-        include: [
-          {
-            model: CategoryEntity,
-            attributes: ['id'],
-            required: true,
-          },
-          {
-            model: CompanyEntity,
-            attributes: ['id'],
-            required: true,
-          },
-        ],
-      });
+    const dishsEntity = await this.dishRepository.findAll({
+      include: [
+        {
+          model: CategoryEntity,
+          attributes: ['id'],
+          required: true,
+        },
+        {
+          model: CompanyEntity,
+          attributes: ['id'],
+          required: true,
+        },
+      ],
+    });
 
-      const dishDomain = dishsEntity.map((dishEntity) =>
-        plainToClass(DishDomainV2, dishEntity, {
-          excludeExtraneousValues: true,
-          enableImplicitConversion: true,
-        })
-      );
+    const dishDomain = dishsEntity.map((dishEntity) =>
+      plainToClass(DishDomainV2, dishEntity, {
+        excludeExtraneousValues: true,
+        enableImplicitConversion: true,
+      })
+    );
 
-      return dishDomain;
-    } catch (error) {
-      console.log('test', error);
-      return [];
-    }
+    return dishDomain;
   }
 
   async update(dish: DishUpdateDto, id: number): Promise<DishDomainV2> {

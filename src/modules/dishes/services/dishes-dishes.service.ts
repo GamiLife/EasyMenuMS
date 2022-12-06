@@ -47,10 +47,6 @@ export class DishesDishesService {
         include: [
           {
             model: DishEntity,
-            as: 'dish',
-          },
-          {
-            model: DishEntity,
             as: 'dishSecond',
           },
         ],

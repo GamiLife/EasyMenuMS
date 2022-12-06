@@ -45,8 +45,5 @@ export class DishDishResponseDto {
   readonly price: number;
   @Expose()
   @Type(() => DishResponseDto)
-  readonly dish: DishResponseDto;
-  @Expose()
-  @Type(() => DishResponseDto)
   readonly dishSecond: DishResponseDto;
 }

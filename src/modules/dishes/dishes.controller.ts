@@ -45,7 +45,7 @@ export class DishesController {
     }
   }
 
-  @Transform('DishResponseDto')
+  @Transform('DishGetResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_DISH)
   @Get(':id')
   async findById(@Param('id') id) {

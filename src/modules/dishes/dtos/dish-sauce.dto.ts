@@ -2,7 +2,6 @@ import { Expose, Type } from '@nestjs/class-transformer';
 import { IsNumber, IsNotEmpty } from 'class-validator';
 
 import { SauceResponseDto } from 'src/modules/sauces/sauces.dto';
-import { DishResponseDto } from './dish.dto';
 
 /**
  * Request on create dishSauce
@@ -42,9 +41,6 @@ export class DishSauceResponseDto {
   @IsNotEmpty({ message: 'DishId required' })
   @IsNumber()
   readonly price: number;
-  @Expose()
-  @Type(() => DishResponseDto)
-  readonly dish: DishResponseDto;
   @Expose()
   @Type(() => SauceResponseDto)
   readonly sauce: SauceResponseDto;

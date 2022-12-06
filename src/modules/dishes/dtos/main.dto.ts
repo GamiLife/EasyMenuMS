@@ -1,10 +1,7 @@
 import { Expose, Type } from '@nestjs/class-transformer';
-import { isNumber, IsNumber } from 'class-validator';
-
-import { DishSauceResponseDto } from '.';
+import { IsNumber } from 'class-validator';
 import { DishDishDomainV2, DishDomainV2, DishSauceDomainV2 } from '../domains';
-import { DishDishResponseDto } from './dish-dish.dto';
-import { DishCreateDto, DishResponseDto } from './dish.dto';
+import { DishCreateDto, } from './dish.dto';
 
 export type TOperation = 'delete' | 'update' | 'none' | 'create';
 
