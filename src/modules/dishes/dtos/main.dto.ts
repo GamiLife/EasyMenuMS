@@ -1,7 +1,8 @@
 import { Expose, Type } from '@nestjs/class-transformer';
 import { IsNumber } from 'class-validator';
+import { PaginationPayload } from 'src/core/dtos/pagination.dto';
 import { DishDishDomainV2, DishDomainV2, DishSauceDomainV2 } from '../domains';
-import { DishCreateDto, } from './dish.dto';
+import { DishCreateDto } from './dish.dto';
 
 export type TOperation = 'delete' | 'update' | 'none' | 'create';
 
@@ -57,14 +58,7 @@ export class DishPayloadCreateDto {
 /**
  * Create Dish Request
  */
-export class PayloadPagination {
-  @Expose()
-  @IsNumber()
-  page: number;
-  @Expose()
-  @IsNumber()
-  size: number;
-}
+export class GetDishesByCategory extends PaginationPayload {}
 
 /**
  * Update Dish Request

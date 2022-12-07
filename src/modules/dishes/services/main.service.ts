@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { MetaDomain } from 'src/core/domain';
+import { PaginationPayload } from 'src/core/dtos';
 import { EmptyError } from 'src/core/exceptions';
+import { MetaFactory } from 'src/core/factories';
+import { CategoryEntity } from 'src/modules/categories/categories.entity';
+import { CompanyEntity } from 'src/modules/companies/company.entity';
 import { DishDishDomainV2, DishDomainV2, DishSauceDomainV2 } from '../domains';
 import { DishesMainDomainV2 } from '../domains/dishes-main.domain';
 import { DishCreateResponseDto } from '../dtos';
-import { DishPayloadCreateDto, PayloadPagination } from '../dtos/main.dto';
+import { DishPayloadCreateDto } from '../dtos/main.dto';
 import { DishesDishesService } from './dishes-dishes.service';
 import { DishesSaucesService } from './dishes-sauces.service';
 import { DishesService } from './dishes.service';
@@ -77,13 +82,36 @@ export class DishesMainService {
 
   async findAllByCategoryId(
     categoryId: number,
-    pagination: PayloadPagination
-  ): Promise<DishDomainV2[]> {
+    pagination: PaginationPayload
+  ): Promise<MetaDomain<DishDomainV2[]>> {
+    const dishesCounter = await this.dishService.count({
+      filtersRepo: [
+        {
+          model: CategoryEntity,
+          attributes: ['id'],
+          required: true,
+          where: {
+            id: categoryId,
+          },
+        },
+        {
+          model: CompanyEntity,
+          attributes: ['id'],
+          required: true,
+        },
+      ],
+    });
     const dishesDomain = await this.dishService.findAllByCategoryId(
       categoryId,
       pagination
     );
 
-    return dishesDomain;
+    const metaResponse = MetaFactory.create<DishDomainV2[]>({
+      pagination,
+      totalItems: dishesCounter,
+      data: dishesDomain,
+    });
+
+    return metaResponse;
   }
 }

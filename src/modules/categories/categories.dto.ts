@@ -6,7 +6,14 @@ import {
   IsNotEmpty,
   MinLength,
 } from 'class-validator';
+import { PaginationPayload } from 'src/core/dtos';
 import { CompanyResponseDto } from '../companies/company.dto';
+
+/**
+ * Get By Pagination Request
+ */
+ export class GetCategoriesByCompany extends PaginationPayload {}
+
 
 /**
  * Request on create category

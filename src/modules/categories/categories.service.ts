@@ -1,7 +1,11 @@
 import { plainToClass } from '@nestjs/class-transformer';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CATEGORY_REPOSITORY } from 'src/core/constants';
+import { MetaDomain } from 'src/core/domain';
+import { PaginationPayload } from 'src/core/dtos';
 import { DBError, EmptyError } from 'src/core/exceptions';
+import { MetaFactory } from 'src/core/factories';
+import { BaseService } from 'src/core/services';
 import { CompanyEntity } from '../companies/company.entity';
 import { CompaniesService } from '../companies/company.service';
 import { CategoryDomainV2 } from './categories.domain';
@@ -9,12 +13,14 @@ import { CategoryCreateDto, CategoryUpdateDto } from './categories.dto';
 import { CategoryEntity } from './categories.entity';
 
 @Injectable()
-export class CategoriesService {
+export class CategoriesService extends BaseService {
   constructor(
     @Inject(CATEGORY_REPOSITORY)
     private readonly categoryRepository: typeof CategoryEntity,
     private readonly companyService: CompaniesService
-  ) {}
+  ) {
+    super(categoryRepository);
+  }
 
   async create(category: CategoryCreateDto): Promise<CategoryDomainV2> {
     await this.companyService.findOneById(category.companyId);
@@ -63,11 +69,13 @@ export class CategoriesService {
     return categoryDomain;
   }
 
-  async findAllByCompanyId(companyId: number): Promise<CategoryDomainV2[]> {
+  async findAllByCompanyId(
+    companyId: number,
+    pagination: PaginationPayload
+  ): Promise<MetaDomain<CategoryDomainV2[]>> {
     await this.companyService.findOneById(companyId);
-
-    const categoriesEntity = await this.categoryRepository.findAll({
-      include: [
+    const categoriesCounter = await this.count({
+      filtersRepo: [
         {
           model: CompanyEntity,
           attributes: ['id'],
@@ -79,6 +87,20 @@ export class CategoriesService {
       ],
     });
 
+    const categoriesEntity = await this.pagination<CategoryEntity[]>({
+      filtersRepo: [
+        {
+          model: CompanyEntity,
+          attributes: ['id'],
+          required: true,
+          where: {
+            id: companyId,
+          },
+        },
+      ],
+      pagination,
+    });
+
     const categoriesDomain = categoriesEntity.map((categoryEntity) =>
       plainToClass(CategoryDomainV2, categoryEntity, {
         excludeExtraneousValues: true,
@@ -86,7 +108,13 @@ export class CategoriesService {
       })
     );
 
-    return categoriesDomain;
+    const metaResponse = MetaFactory.create<CategoryDomainV2[]>({
+      pagination,
+      totalItems: categoriesCounter,
+      data: categoriesDomain,
+    });
+
+    return metaResponse;
   }
 
   async findAll(): Promise<CategoryDomainV2[]> {

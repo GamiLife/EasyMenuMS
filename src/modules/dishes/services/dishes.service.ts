@@ -1,19 +1,23 @@
 import { plainToClass } from '@nestjs/class-transformer';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { DISH_REPOSITORY } from 'src/core/constants';
+import { PaginationPayload } from 'src/core/dtos';
 import { DBError, EmptyError } from 'src/core/exceptions';
+import { BaseService } from 'src/core/services';
 import { CategoryEntity } from '../../categories/categories.entity';
 import { CompanyEntity } from '../../companies/company.entity';
 import { DishDomainV2 } from '../domains';
-import { DishCreateDto, DishUpdateDto, PayloadPagination } from '../dtos';
+import { DishCreateDto, DishUpdateDto } from '../dtos';
 import { DishEntity } from '../entities/dishes.entity';
 
 @Injectable()
-export class DishesService {
+export class DishesService extends BaseService {
   constructor(
     @Inject(DISH_REPOSITORY)
     private readonly dishRepository: typeof DishEntity
-  ) {}
+  ) {
+    super(dishRepository);
+  }
 
   async create(dish: DishCreateDto): Promise<DishDomainV2> {
     const dishCreatedEntity = await this.dishRepository
@@ -68,10 +72,10 @@ export class DishesService {
 
   async findAllByCategoryId(
     categoryId: number,
-    { page, size }: PayloadPagination
+    pagination: PaginationPayload
   ): Promise<DishDomainV2[]> {
-    const dishsEntity = await this.dishRepository.findAll({
-      include: [
+    const dishsEntity = await this.pagination<DishEntity[]>({
+      filtersRepo: [
         {
           model: CategoryEntity,
           attributes: ['id'],
@@ -86,8 +90,7 @@ export class DishesService {
           required: true,
         },
       ],
-      limit: size,
-      offset: page * size,
+      pagination,
     });
 
     const dishDomain = dishsEntity.map((dishEntity) =>

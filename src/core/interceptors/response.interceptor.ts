@@ -36,7 +36,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
         const Class = dtosInMetadata[ClassToTransform];
         if (!Class) return data;
 
-        const { finalResponse } = data;
+        const { finalResponse, metaData } = data;
         if (!finalResponse) return data;
 
         const converter = (item) =>
@@ -51,6 +51,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
 
         return {
           data: responseTransformed,
+          metaData,
           statusCode: context.switchToHttp().getResponse().statusCode,
           message: responseMessage,
         };

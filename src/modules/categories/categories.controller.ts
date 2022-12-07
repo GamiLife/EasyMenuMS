@@ -7,7 +7,11 @@ import {
 } from 'src/core/constants';
 import { ResponseMessage, Transform } from 'src/core/decorators';
 import { CatchControl } from 'src/core/exceptions';
-import { CategoryCreateDto, CategoryUpdateDto } from './categories.dto';
+import {
+  CategoryCreateDto,
+  CategoryUpdateDto,
+  GetCategoriesByCompany,
+} from './categories.dto';
 import { CategoriesService } from './categories.service';
 
 @Controller('categories')
@@ -29,14 +33,21 @@ export class CategoriesController {
 
   @Transform('CategoryResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_CATEGORY_BY_ID)
-  @Get('companies/:companyId')
-  async findAllByCompany(@Param('companyId') companyId) {
+  @Post('companies/:companyId')
+  async findAllByCompany(
+    @Param('companyId') companyId,
+    @Body() pagination: GetCategoriesByCompany
+  ) {
     try {
       const categoryDomain = await this.categoryService.findAllByCompanyId(
-        companyId
+        companyId,
+        pagination
       );
 
-      return { finalResponse: categoryDomain };
+      return {
+        finalResponse: categoryDomain.data,
+        metaData: categoryDomain.metadata,
+      };
     } catch (error) {
       CatchControl(error);
     }
