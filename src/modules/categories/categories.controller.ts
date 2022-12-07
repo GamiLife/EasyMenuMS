@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  Req,
+} from '@nestjs/common';
 import {
   MESSAGE_RESPONSE_CREATE_CATEGORY,
   MESSAGE_RESPONSE_GET_CATEGORY_ALL,
@@ -31,12 +40,13 @@ export class CategoriesController {
     }
   }
 
+  //ADD INTERCEPTOR TO VALIDATE IS NUMBER
   @Transform('CategoryResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_CATEGORY_BY_ID)
-  @Post('companies/:companyId')
+  @Get('companies/:companyId')
   async findAllByCompany(
     @Param('companyId') companyId,
-    @Body() pagination: GetCategoriesByCompany
+    @Query() pagination: GetCategoriesByCompany
   ) {
     try {
       const categoryDomain = await this.categoryService.findAllByCompanyId(

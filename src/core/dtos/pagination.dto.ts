@@ -6,12 +6,8 @@ import { IsNumber, Min } from 'class-validator';
  */
 export class PaginationPayload {
   @Expose()
-  @Min(1, { message: 'Min lenght should be one' })
-  @IsNumber()
   page: number;
   @Expose()
-  @Min(1, { message: 'Min lenght should be one' })
-  @IsNumber()
   sizeByPage: number;
 }
 

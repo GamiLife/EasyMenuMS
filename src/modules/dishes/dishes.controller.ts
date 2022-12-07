@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
   MESSAGE_RESPONSE_CREATE_DISH,
   MESSAGE_RESPONSE_GET_DISH,
@@ -15,10 +15,10 @@ export class DishesController {
 
   @Transform('DishResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_DISH_ALL)
-  @Post('/categories/:categoryId')
+  @Get('/categories/:categoryId')
   async findAllByCategoryId(
     @Param('categoryId') categoryId,
-    @Body() pagination: GetDishesByCategory
+    @Query() pagination: GetDishesByCategory
   ) {
     try {
       const dishesDomain = await this.dishesMainService.findAllByCategoryId(
