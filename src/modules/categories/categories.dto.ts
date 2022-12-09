@@ -9,11 +9,12 @@ import {
 import { PaginationPayload } from 'src/core/dtos';
 import { CompanyResponseDto } from '../companies/company.dto';
 
+export class CategoryFilters {}
+
 /**
  * Get By Pagination Request
  */
- export class GetCategoriesByCompany extends PaginationPayload {}
-
+export class GetCategoriesByCompany extends PaginationPayload<CategoryFilters> {}
 
 /**
  * Request on create category

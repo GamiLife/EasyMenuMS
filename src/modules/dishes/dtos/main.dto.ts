@@ -55,10 +55,12 @@ export class DishPayloadCreateDto {
   dishes: DishDishPayloadDto[];
 }
 
+export class DishesFilters {}
+
 /**
  * Create Dish Request
  */
-export class GetDishesByCategory extends PaginationPayload {}
+export class GetDishesByCategory extends PaginationPayload<DishesFilters> {}
 
 /**
  * Update Dish Request

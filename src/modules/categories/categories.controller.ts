@@ -6,7 +6,6 @@ import {
   Post,
   Put,
   Query,
-  Req,
 } from '@nestjs/common';
 import {
   MESSAGE_RESPONSE_CREATE_CATEGORY,

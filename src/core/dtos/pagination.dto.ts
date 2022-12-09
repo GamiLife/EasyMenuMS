@@ -1,10 +1,11 @@
 import { Expose } from '@nestjs/class-transformer';
-import { IsNumber, Min } from 'class-validator';
+import { IsNumber } from 'class-validator';
+import { FilteringPayload } from './filtering.dto';
 
 /**
  * Create Dish Request
  */
-export class PaginationPayload {
+export class PaginationPayload<T> extends FilteringPayload<T> {
   @Expose()
   page: number;
   @Expose()

@@ -8,7 +8,7 @@ import { CompanyEntity } from 'src/modules/companies/company.entity';
 import { DishDishDomainV2, DishDomainV2, DishSauceDomainV2 } from '../domains';
 import { DishesMainDomainV2 } from '../domains/dishes-main.domain';
 import { DishCreateResponseDto } from '../dtos';
-import { DishPayloadCreateDto } from '../dtos/main.dto';
+import { DishPayloadCreateDto, GetDishesByCategory } from '../dtos/main.dto';
 import { DishesDishesService } from './dishes-dishes.service';
 import { DishesSaucesService } from './dishes-sauces.service';
 import { DishesService } from './dishes.service';
@@ -82,7 +82,7 @@ export class DishesMainService {
 
   async findAllByCategoryId(
     categoryId: number,
-    pagination: PaginationPayload
+    pagination: GetDishesByCategory
   ): Promise<MetaDomain<DishDomainV2[]>> {
     const dishesCounter = await this.dishService.count({
       filtersRepo: [

@@ -2,14 +2,17 @@ import { plainToClass } from '@nestjs/class-transformer';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CATEGORY_REPOSITORY } from 'src/core/constants';
 import { MetaDomain } from 'src/core/domain';
-import { PaginationPayload } from 'src/core/dtos';
 import { DBError, EmptyError } from 'src/core/exceptions';
 import { MetaFactory } from 'src/core/factories';
 import { BaseService } from 'src/core/services';
 import { CompanyEntity } from '../companies/company.entity';
 import { CompaniesService } from '../companies/company.service';
 import { CategoryDomainV2 } from './categories.domain';
-import { CategoryCreateDto, CategoryUpdateDto } from './categories.dto';
+import {
+  CategoryCreateDto,
+  CategoryUpdateDto,
+  GetCategoriesByCompany,
+} from './categories.dto';
 import { CategoryEntity } from './categories.entity';
 
 @Injectable()
@@ -71,7 +74,7 @@ export class CategoriesService extends BaseService {
 
   async findAllByCompanyId(
     companyId: number,
-    pagination: PaginationPayload
+    pagination: GetCategoriesByCompany
   ): Promise<MetaDomain<CategoryDomainV2[]>> {
     await this.companyService.findOneById(companyId);
     const categoriesCounter = await this.count({
@@ -99,6 +102,7 @@ export class CategoriesService extends BaseService {
         },
       ],
       pagination,
+      searchCol: 'title',
     });
 
     const categoriesDomain = categoriesEntity.map((categoryEntity) =>

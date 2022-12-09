@@ -7,7 +7,7 @@ import { BaseService } from 'src/core/services';
 import { CategoryEntity } from '../../categories/categories.entity';
 import { CompanyEntity } from '../../companies/company.entity';
 import { DishDomainV2 } from '../domains';
-import { DishCreateDto, DishUpdateDto } from '../dtos';
+import { DishCreateDto, DishUpdateDto, GetDishesByCategory } from '../dtos';
 import { DishEntity } from '../entities/dishes.entity';
 
 @Injectable()
@@ -72,7 +72,7 @@ export class DishesService extends BaseService {
 
   async findAllByCategoryId(
     categoryId: number,
-    pagination: PaginationPayload
+    pagination: GetDishesByCategory
   ): Promise<DishDomainV2[]> {
     const dishsEntity = await this.pagination<DishEntity[]>({
       filtersRepo: [
@@ -91,6 +91,7 @@ export class DishesService extends BaseService {
         },
       ],
       pagination,
+      searchCol: 'title',
     });
 
     const dishDomain = dishsEntity.map((dishEntity) =>

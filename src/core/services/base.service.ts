@@ -1,11 +1,13 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
+import sequelize from 'sequelize';
 import { FindOptions } from 'sequelize';
 import { PaginationPayload } from '../dtos';
 import { DBError, EmptyError } from '../exceptions';
 
-interface IServicePagination<T> {
-  pagination: PaginationPayload;
+interface IServicePagination<T, S> {
+  pagination: PaginationPayload<S>;
   filtersRepo: FindOptions<T>['include'];
+  searchCol: string;
 }
 
 interface IServiceCount<T> {
@@ -38,16 +40,31 @@ export class BaseService<E = any> {
     return lenght;
   }
 
-  async pagination<T>({
-    pagination: { page, sizeByPage },
+  async pagination<T, S = any>({
+    pagination: { page, sizeByPage, search },
     filtersRepo,
-  }: IServicePagination<T>): Promise<T> {
-    const entities = await this.repository.findAll({
+    searchCol,
+  }: IServicePagination<T, S>): Promise<T> {
+    let filters: Record<string, any> = {
       include: filtersRepo,
-
       limit: sizeByPage,
       offset: (page - 1) * sizeByPage,
-    });
+    };
+
+    if (search) {
+      filters = {
+        ...filters,
+        where: {
+          [searchCol]: sequelize.where(
+            sequelize.fn('LOWER', sequelize.col(searchCol)),
+            'LIKE',
+            `${search.toLowerCase()}%`
+          ),
+        },
+      };
+    }
+
+    const entities = await this.repository.findAll(filters);
 
     return entities;
   }
