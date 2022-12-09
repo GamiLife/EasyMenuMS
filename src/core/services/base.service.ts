@@ -8,6 +8,7 @@ interface IServicePagination<T, S> {
   pagination: PaginationPayload<S>;
   filtersRepo: FindOptions<T>['include'];
   searchCol: string;
+  searchColFilters?: string;
 }
 
 interface IServiceCount<T> {
@@ -44,6 +45,7 @@ export class BaseService<E = any> {
     pagination: { page, sizeByPage, search },
     filtersRepo,
     searchCol,
+    searchColFilters,
   }: IServicePagination<T, S>): Promise<T> {
     let filters: Record<string, any> = {
       include: filtersRepo,
@@ -56,7 +58,7 @@ export class BaseService<E = any> {
         ...filters,
         where: {
           [searchCol]: sequelize.where(
-            sequelize.fn('LOWER', sequelize.col(searchCol)),
+            sequelize.fn('LOWER', sequelize.col(searchColFilters ?? searchCol)),
             'LIKE',
             `${search.toLowerCase()}%`
           ),

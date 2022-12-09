@@ -1,7 +1,6 @@
 import { plainToClass } from '@nestjs/class-transformer';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { DISH_REPOSITORY } from 'src/core/constants';
-import { PaginationPayload } from 'src/core/dtos';
 import { DBError, EmptyError } from 'src/core/exceptions';
 import { BaseService } from 'src/core/services';
 import { CategoryEntity } from '../../categories/categories.entity';
@@ -92,6 +91,7 @@ export class DishesService extends BaseService {
       ],
       pagination,
       searchCol: 'title',
+      searchColFilters: `DishEntity.title`,
     });
 
     const dishDomain = dishsEntity.map((dishEntity) =>
