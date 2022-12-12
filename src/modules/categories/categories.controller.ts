@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Put,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import {
   MESSAGE_RESPONSE_CREATE_CATEGORY,
   MESSAGE_RESPONSE_GET_CATEGORY_ALL,
