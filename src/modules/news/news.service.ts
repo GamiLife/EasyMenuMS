@@ -1,7 +1,11 @@
 import { plainToClass } from '@nestjs/class-transformer';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { NEW_REPOSITORY } from 'src/core/constants';
+import { MetaDomain } from 'src/core/domain';
 import { DBError } from 'src/core/exceptions';
+import { MetaFactory } from 'src/core/factories';
+import { BaseService } from 'src/core/services';
+import { GetCategoriesByCompany } from '../categories/categories.dto';
 import { CompanyEntity } from '../companies/company.entity';
 import { CompaniesService } from '../companies/company.service';
 import { NewDomainV2 } from './news.domain';
@@ -9,12 +13,14 @@ import { NewCreateDto, NewUpdateDto } from './news.dto';
 import { NewEntity } from './news.entity';
 
 @Injectable()
-export class NewsService {
+export class NewsService extends BaseService {
   constructor(
     @Inject(NEW_REPOSITORY)
     private readonly newRepository: typeof NewEntity,
     private readonly companyService: CompaniesService
-  ) {}
+  ) {
+    super(newRepository);
+  }
 
   async create(newToAdd: NewCreateDto): Promise<NewDomainV2> {
     await this.companyService.findOneById(newToAdd.companyId);
@@ -80,6 +86,55 @@ export class NewsService {
     );
 
     return newsDomain;
+  }
+
+  async findAllByCompanyId(
+    companyId: number,
+    pagination: GetCategoriesByCompany
+  ): Promise<MetaDomain<NewDomainV2[]>> {
+    await this.companyService.findOneById(companyId);
+    const newCounter = await this.count({
+      filtersRepo: [
+        {
+          model: CompanyEntity,
+          attributes: ['id'],
+          required: true,
+          where: {
+            id: companyId,
+          },
+        },
+      ],
+    });
+
+    const newsEntity = await this.pagination<NewEntity[]>({
+      filtersRepo: [
+        {
+          model: CompanyEntity,
+          attributes: ['id'],
+          required: true,
+          where: {
+            id: companyId,
+          },
+        },
+      ],
+      pagination,
+      searchCol: 'title',
+    });
+
+    const newsDomain = newsEntity.map((newEntity) =>
+      plainToClass(NewDomainV2, newEntity, {
+        excludeExtraneousValues: true,
+        enableImplicitConversion: true,
+      })
+    );
+
+    const metaResponse = MetaFactory.create<NewDomainV2[]>({
+      pagination,
+      totalItems: newCounter,
+      data: newsDomain,
+    });
+
+    return metaResponse;
   }
 
   async update(newToUpdate: NewUpdateDto, id: number): Promise<NewDomainV2> {
