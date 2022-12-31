@@ -1,29 +1,29 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from "@nestjs/common";
 import {
   MESSAGE_RESPONSE_CREATE_NEW,
   MESSAGE_RESPONSE_GET_NEW,
   MESSAGE_RESPONSE_GET_NEW_ALL,
   MESSAGE_RESPONSE_UPDATE_NEW,
-} from 'src/core/constants';
-import { ResponseMessage, Transform } from 'src/core/decorators';
-import { CatchControl } from 'src/core/exceptions';
-import { GetCategoriesByCompany } from '../categories/categories.dto';
-import { NewCreateDto, NewUpdateDto } from './news.dto';
-import { NewsService } from './news.service';
+} from "src/core/constants";
+import { ResponseMessage, Transform } from "src/core/decorators";
+import { CatchControl } from "src/core/exceptions";
+import { GetCategoriesByCompany } from "../categories/categories.dto";
+import { NewCreateDto, NewUpdateDto } from "./news.dto";
+import { NewsService } from "./news.service";
 
-@Controller('news')
+@Controller("news")
 export class NewsController {
   constructor(private newService: NewsService) {}
 
   async uploadImage() {
-    return
+    return;
   }
 
-  @Transform('NewResponseDto')
+  @Transform("NewResponseDto")
   @ResponseMessage(MESSAGE_RESPONSE_GET_NEW_ALL)
-  @Get('companies/:companyId')
+  @Get("companies/:companyId")
   async findAllByCompanyId(
-    @Param('companyId') companyId,
+    @Param("companyId") companyId,
     @Query() pagination: GetCategoriesByCompany
   ) {
     try {
@@ -41,7 +41,7 @@ export class NewsController {
     }
   }
 
-  @Transform('NewResponseDto')
+  @Transform("NewResponseDto")
   @ResponseMessage(MESSAGE_RESPONSE_GET_NEW_ALL)
   @Get()
   async findAll() {
@@ -54,10 +54,10 @@ export class NewsController {
     }
   }
 
-  @Transform('NewResponseDto')
+  @Transform("NewResponseDto")
   @ResponseMessage(MESSAGE_RESPONSE_GET_NEW)
-  @Get(':id')
-  async findById(@Param('id') id) {
+  @Get(":id")
+  async findById(@Param("id") id) {
     try {
       const newDomain = await this.newService.findOneById(id);
 
@@ -67,7 +67,7 @@ export class NewsController {
     }
   }
 
-  @Transform('NewResponseDto')
+  @Transform("NewResponseDto")
   @ResponseMessage(MESSAGE_RESPONSE_CREATE_NEW)
   @Post()
   async create(@Body() request: NewCreateDto) {
@@ -80,10 +80,10 @@ export class NewsController {
     }
   }
 
-  @Transform('NewResponseDto')
+  @Transform("NewResponseDto")
   @ResponseMessage(MESSAGE_RESPONSE_UPDATE_NEW)
-  @Put(':id')
-  async update(@Param('id') id, @Body() request: NewUpdateDto) {
+  @Put(":id")
+  async update(@Param("id") id, @Body() request: NewUpdateDto) {
     try {
       const newDomain = await this.newService.update(request, id);
 

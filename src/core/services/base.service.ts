@@ -1,18 +1,19 @@
-import { HttpStatus } from '@nestjs/common';
-import sequelize from 'sequelize';
-import { FindOptions } from 'sequelize';
-import { PaginationPayload } from '../dtos';
-import { DBError, EmptyError } from '../exceptions';
+import { HttpStatus } from "@nestjs/common";
+import sequelize from "sequelize";
+import { FindOptions } from "sequelize";
+import { PaginationPayload } from "../dtos";
+import { DBError, EmptyError } from "../exceptions";
 
 interface IServicePagination<T, S> {
+  attributes?: any[];
   pagination: PaginationPayload<S>;
-  filtersRepo: FindOptions<T>['include'];
+  filtersRepo: FindOptions<T>["include"];
   searchCol: string;
   searchColFilters?: string;
 }
 
 interface IServiceCount<T> {
-  filtersRepo: FindOptions<T>['include'];
+  filtersRepo: FindOptions<T>["include"];
 }
 
 export class BaseService<E = any> {
@@ -35,19 +36,21 @@ export class BaseService<E = any> {
       });
 
     if (lenght < 0) {
-      throw new EmptyError('Counter failed', HttpStatus.NOT_FOUND);
+      throw new EmptyError("Counter failed", HttpStatus.NOT_FOUND);
     }
 
     return lenght;
   }
 
   async pagination<T, S = any>({
+    attributes,
     pagination: { page, sizeByPage, search },
     filtersRepo,
     searchCol,
     searchColFilters,
   }: IServicePagination<T, S>): Promise<T> {
     let filters: Record<string, any> = {
+      attributes,
       include: filtersRepo,
       limit: sizeByPage,
       offset: (page - 1) * sizeByPage,
@@ -58,8 +61,8 @@ export class BaseService<E = any> {
         ...filters,
         where: {
           [searchCol]: sequelize.where(
-            sequelize.fn('LOWER', sequelize.col(searchColFilters ?? searchCol)),
-            'LIKE',
+            sequelize.fn("LOWER", sequelize.col(searchColFilters ?? searchCol)),
+            "LIKE",
             `${search.toLowerCase()}%`
           ),
         },

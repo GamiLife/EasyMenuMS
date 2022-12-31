@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -29,6 +29,6 @@ const databaseConfig = {
   },
 };
 
-const config = databaseConfig[process.env.NODE_ENV || 'development'];
+const config = databaseConfig[process.env.NODE_ENV || "development"];
 
 module.exports = config;

@@ -6,11 +6,12 @@ import {
   AutoIncrement,
   PrimaryKey,
   HasOne,
-} from 'sequelize-typescript';
-import { CompanyEntity } from '../companies/company.entity';
+} from "sequelize-typescript";
+import { transformUTCDate } from "src/core/helpers";
+import { CompanyEntity } from "../companies/company.entity";
 
 @Table({
-  tableName: 'news',
+  tableName: "news",
 })
 export class NewEntity extends Model<NewEntity> {
   @PrimaryKey
@@ -45,16 +46,24 @@ export class NewEntity extends Model<NewEntity> {
   backgroundColor: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.DATE,
     allowNull: false,
+    get: function () {
+      const currentValue = this.getDataValue("startDate") as Date;
+      return transformUTCDate(currentValue);
+    },
   })
-  startDate: string;
+  startDate: Date;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.DATE,
     allowNull: false,
+    get: function () {
+      const currentValue = this.getDataValue("endDate") as Date;
+      return transformUTCDate(currentValue);
+    },
   })
-  endDate: string;
+  endDate: Date;
 
   @Column({
     type: DataType.BIGINT,
@@ -63,9 +72,9 @@ export class NewEntity extends Model<NewEntity> {
   companyId: number;
 
   @HasOne(() => CompanyEntity, {
-    sourceKey: 'companyId',
-    foreignKey: 'id',
-    as: 'company',
+    sourceKey: "companyId",
+    foreignKey: "id",
+    as: "company",
   })
   company: CompanyEntity;
 }

@@ -1,33 +1,37 @@
-import { CompanyResponseDto } from '../companies/company.dto';
-import { Expose } from '@nestjs/class-transformer';
+import { CompanyResponseDto } from "../companies/company.dto";
+import { Expose } from "@nestjs/class-transformer";
 import {
   IsString,
   IsNumber,
   MaxLength,
   IsNotEmpty,
   MinLength,
-} from 'class-validator';
+  IsDateString,
+} from "class-validator";
+import { FnValidator } from "src/core/decorators/custom-validator.decorator";
+import { validateRGB } from "src/core/helpers/validators.helper";
 
 /**
  * Request on create new
  */
 export class NewCreateDto {
-  @IsNotEmpty({ message: 'Title required' })
-  @MinLength(2, { message: 'Min length of is 2 characters' })
+  @IsNotEmpty({ message: "Title required" })
+  @MinLength(2, { message: "Min length of is 2 characters" })
   @IsString()
-  @MaxLength(150, { message: 'This title is not valid' })
+  @MaxLength(150, { message: "This title is not valid" })
   readonly title: string;
   @IsString()
   readonly description: string;
   @IsString()
   readonly imageUrl?: string;
   @IsString()
+  @FnValidator(validateRGB)
   readonly backgroundColor?: string;
-  @IsString()
-  readonly startDate: string;
-  @IsString()
-  readonly endDate: string;
-  @IsNotEmpty({ message: 'CompanyId required' })
+  @IsDateString()
+  readonly startDate: Date;
+  @IsDateString()
+  readonly endDate: Date;
+  @IsNotEmpty({ message: "CompanyId required" })
   @IsNumber()
   readonly companyId: number;
 }
@@ -38,7 +42,7 @@ export class NewCreateDto {
 export class NewUpdateDto {
   @Expose()
   @IsString()
-  @MaxLength(150, { message: 'This title is not valid' })
+  @MaxLength(150, { message: "This title is not valid" })
   readonly title: string;
   @Expose()
   @IsString()
@@ -48,13 +52,14 @@ export class NewUpdateDto {
   readonly imageUrl?: string;
   @Expose()
   @IsString()
+  @FnValidator(validateRGB)
   readonly backgroundColor?: string;
   @Expose()
-  @IsString()
-  readonly startDate: string;
+  @IsDateString()
+  readonly startDate: Date;
   @Expose()
-  @IsString()
-  readonly endDate: string;
+  @IsDateString()
+  readonly endDate: Date;
   @Expose()
   @IsNumber()
   readonly companyId: number;
@@ -69,7 +74,7 @@ export class NewResponseDto {
   readonly id: number;
   @Expose()
   @IsString()
-  @MaxLength(150, { message: 'This title is not valid' })
+  @MaxLength(150, { message: "This title is not valid" })
   readonly title: string;
   @Expose()
   @IsString()
@@ -81,11 +86,11 @@ export class NewResponseDto {
   @IsString()
   readonly backgroundColor?: string;
   @Expose()
-  @IsString()
-  readonly startDate: string;
+  @IsDateString()
+  readonly startDate: Date;
   @Expose()
-  @IsString()
-  readonly endDate: string;
+  @IsDateString()
+  readonly endDate: Date;
   @Expose()
   @IsNumber()
   readonly company: CompanyResponseDto;

@@ -1,14 +1,15 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './config/database/database.module';
-import { CompaniesModule } from './modules/companies/company.module';
-import { UserTypesModule } from './modules/user-types/user-types.module';
-import { UsersModule } from './modules/users/users.module';
-import { NewsModule } from './modules/news/news.module';
-import { CategoriesModule } from './modules/categories/categories.module';
-import { SaucesModule } from './modules/sauces/sauces.module';
-import { DishesModule } from './modules/dishes/dishes.module';
-import { CoreModule } from './core/core.module';
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { DatabaseModule } from "./config/database/database.module";
+import { CompaniesModule } from "./modules/companies/company.module";
+import { UserTypesModule } from "./modules/user-types/user-types.module";
+import { UsersModule } from "./modules/users/users.module";
+import { NewsModule } from "./modules/news/news.module";
+import { CategoriesModule } from "./modules/categories/categories.module";
+import { SaucesModule } from "./modules/sauces/sauces.module";
+import { DishesModule } from "./modules/dishes/dishes.module";
+import { CoreModule } from "./core/core.module";
+import { CustomValidator } from "./core/decorators/custom-validator.decorator";
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CoreModule } from './core/core.module';
     DishesModule,
     CoreModule,
   ],
+  providers: [CustomValidator],
   controllers: [],
 })
 export class AppModule {}
