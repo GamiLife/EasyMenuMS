@@ -23,17 +23,14 @@ export class NewsService extends BaseService {
     super(newRepository);
   }
 
-  async create(newToAdd: NewCreateDto): Promise<NewDomainV2> {
+  async create(newToAdd: NewCreateDto, fileUrl: string): Promise<NewDomainV2> {
     await this.companyService.findOneById(newToAdd.companyId);
 
-    const newEntity = await this.newRepository
-      .create<NewEntity>(newToAdd)
-      .catch((reason) => {
-        throw new DBError(
-          `New query failed: ${reason}`,
-          HttpStatus.BAD_REQUEST
-        );
-      });
+    const entityToCreate = { ...newToAdd, imageUrl: fileUrl };
+
+    const newEntity = await this.newRepository.create<NewEntity>(
+      entityToCreate
+    );
 
     if (!newEntity) {
       throw new DBError("New query failed", HttpStatus.BAD_REQUEST);

@@ -7,6 +7,7 @@ import {
   IsNotEmpty,
   MinLength,
   IsDateString,
+  IsNumberString,
 } from "class-validator";
 import { FnValidator } from "src/core/decorators/custom-validator.decorator";
 import { validateRGB } from "src/core/helpers/validators.helper";
@@ -23,8 +24,6 @@ export class NewCreateDto {
   @IsString()
   readonly description: string;
   @IsString()
-  readonly imageUrl?: string;
-  @IsString()
   @FnValidator(validateRGB)
   readonly backgroundColor?: string;
   @IsDateString()
@@ -32,7 +31,7 @@ export class NewCreateDto {
   @IsDateString()
   readonly endDate: Date;
   @IsNotEmpty({ message: "CompanyId required" })
-  @IsNumber()
+  @IsNumberString()
   readonly companyId: number;
 }
 

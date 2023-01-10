@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { BASE_SERVICE } from './constants';
-import { ResponseInterceptor } from './interceptors';
-import { BaseService } from './services';
+import { Module } from "@nestjs/common";
+import { APP_INTERCEPTOR } from "@nestjs/core";
+import { BASE_SERVICE } from "./constants";
+import { ResponseInterceptor } from "./interceptors";
+import { BaseService } from "./services";
+import { S3Service } from "./services/S3.service";
 
 const providers = [
   {
@@ -17,7 +18,7 @@ const providers = [
 
 @Module({
   imports: [BaseService],
-  providers: [BaseService, ...providers],
-  exports: [BaseService],
+  providers: [BaseService, S3Service, ...providers],
+  exports: [BaseService, S3Service],
 })
 export class CoreModule {}

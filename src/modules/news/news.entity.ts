@@ -1,12 +1,4 @@
-import {
-  Table,
-  Column,
-  Model,
-  DataType,
-  AutoIncrement,
-  PrimaryKey,
-  HasOne,
-} from "sequelize-typescript";
+import { Table, Column, Model, DataType, HasOne } from "sequelize-typescript";
 import { transformUTCDate } from "src/core/helpers";
 import { CompanyEntity } from "../companies/company.entity";
 
@@ -14,10 +6,10 @@ import { CompanyEntity } from "../companies/company.entity";
   tableName: "news",
 })
 export class NewEntity extends Model<NewEntity> {
-  @PrimaryKey
-  @AutoIncrement
   @Column({
     type: DataType.BIGINT,
+    primaryKey: true,
+    autoIncrement: true,
   })
   id: number;
 
