@@ -5,7 +5,7 @@
  * @returns boolean
  */
 export const validateRGB = (key: string, value: string) => {
-  const regex = /rgb[(\]]([A-Za-z])\w+[)\]]/g;
+  const regex = /^(rgb[(\]]([0-9]*\S,[0-9]*\S,[0-9]*\S)[)\]])$/g;
   const hasRGBPattern = regex.test(value);
   return hasRGBPattern;
 };

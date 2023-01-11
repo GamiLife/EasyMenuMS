@@ -1,26 +1,24 @@
-import { Exclude, Expose, Type } from '@nestjs/class-transformer';
+import { Exclude, Expose, Type } from "@nestjs/class-transformer";
 import {
   Table,
   Column,
   Model,
   DataType,
-  AutoIncrement,
-  PrimaryKey,
   HasMany,
   ForeignKey,
-} from 'sequelize-typescript';
-import { DishEntity } from './dishes.entity';
+} from "sequelize-typescript";
+import { DishEntity } from "./dishes.entity";
 
 @Exclude()
 @Table({
-  tableName: 'dishes_dishes',
+  tableName: "dishes_dishes",
 })
 export class DishDishesEntity extends Model<DishDishesEntity> {
   @Expose()
-  @PrimaryKey
-  @AutoIncrement
   @Column({
     type: DataType.BIGINT,
+    primaryKey: true,
+    autoIncrement: true,
   })
   id: number;
 
@@ -48,18 +46,18 @@ export class DishDishesEntity extends Model<DishDishesEntity> {
   @Expose()
   @Type(() => DishEntity)
   @HasMany(() => DishEntity, {
-    sourceKey: 'dishId',
-    foreignKey: 'id',
-    as: 'dish',
+    sourceKey: "dishId",
+    foreignKey: "id",
+    as: "dish",
   })
   dish: DishEntity;
 
   @Expose()
   @Type(() => DishEntity)
   @HasMany(() => DishEntity, {
-    sourceKey: 'dishSecondId',
-    foreignKey: 'id',
-    as: 'dishSecond',
+    sourceKey: "dishSecondId",
+    foreignKey: "id",
+    as: "dishSecond",
   })
   dishSecond: DishEntity;
 }

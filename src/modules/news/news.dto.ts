@@ -48,9 +48,6 @@ export class NewUpdateDto {
   readonly description: string;
   @Expose()
   @IsString()
-  readonly imageUrl?: string;
-  @Expose()
-  @IsString()
   @FnValidator(validateRGB)
   readonly backgroundColor?: string;
   @Expose()
@@ -60,7 +57,7 @@ export class NewUpdateDto {
   @IsDateString()
   readonly endDate: Date;
   @Expose()
-  @IsNumber()
+  @IsNumberString()
   readonly companyId: number;
 }
 

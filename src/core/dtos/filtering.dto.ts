@@ -6,8 +6,6 @@ import { Expose } from '@nestjs/class-transformer';
 export class FilteringPayload<T> {
   @Expose()
   search: string;
-  @Expose()
-  filter: T;
 }
 
 export interface IFilterDto {

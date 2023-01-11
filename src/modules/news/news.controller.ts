@@ -88,7 +88,10 @@ export class NewsController {
         file.buffer,
         file.originalname
       );
-      const newDomain = await this.newService.create(request,fileResult.fileUrl);
+      const newDomain = await this.newService.create(
+        request,
+        fileResult.fileUrl
+      );
 
       return { finalResponse: newDomain };
     } catch (error) {
@@ -100,9 +103,22 @@ export class NewsController {
   @Transform("NewResponseDto")
   @ResponseMessage(MESSAGE_RESPONSE_UPDATE_NEW)
   @Put(":id")
-  async update(@Param("id") id, @Body() request: NewUpdateDto) {
+  @UseInterceptors(FileInterceptor("file"))
+  async update(
+    @UploadedFile() file,
+    @Param("id") id,
+    @Body() request: NewUpdateDto
+  ) {
     try {
-      const newDomain = await this.newService.update(request, id);
+      const fileResult = await this.s3Service.uploadFile(
+        file.buffer,
+        file.originalname
+      );
+      const newDomain = await this.newService.update(
+        request,
+        id,
+        fileResult.fileUrl
+      );
 
       return { finalResponse: newDomain };
     } catch (error) {

@@ -1,13 +1,13 @@
-import { plainToClass } from '@nestjs/class-transformer';
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { DISH_REPOSITORY } from 'src/core/constants';
-import { DBError, EmptyError } from 'src/core/exceptions';
-import { BaseService } from 'src/core/services';
-import { CategoryEntity } from '../../categories/categories.entity';
-import { CompanyEntity } from '../../companies/company.entity';
-import { DishDomainV2 } from '../domains';
-import { DishCreateDto, DishUpdateDto, GetDishesByCategory } from '../dtos';
-import { DishEntity } from '../entities/dishes.entity';
+import { plainToClass } from "@nestjs/class-transformer";
+import { HttpStatus, Inject, Injectable } from "@nestjs/common";
+import { DISH_REPOSITORY } from "src/core/constants";
+import { DBError, EmptyError } from "src/core/exceptions";
+import { BaseService } from "src/core/services";
+import { CategoryEntity } from "../../categories/categories.entity";
+import { CompanyEntity } from "../../companies/company.entity";
+import { DishDomainV2 } from "../domains";
+import { DishCreateDto, DishUpdateDto, GetDishesByCategory } from "../dtos";
+import { DishEntity } from "../entities/dishes.entity";
 
 @Injectable()
 export class DishesService extends BaseService {
@@ -29,10 +29,39 @@ export class DishesService extends BaseService {
       });
 
     if (!dishCreatedEntity) {
-      throw new DBError('Dish query failed', HttpStatus.BAD_REQUEST);
+      throw new DBError("Dish query failed", HttpStatus.BAD_REQUEST);
     }
 
     const dishDomain = plainToClass(DishDomainV2, dishCreatedEntity, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true,
+    });
+
+    return dishDomain;
+  }
+
+  async findOneBySlug(slug: string): Promise<DishDomainV2> {
+    const dishGetEntity = await this.dishRepository.findOne<DishEntity>({
+      where: { slug },
+      include: [
+        {
+          model: CategoryEntity,
+          attributes: ["id"],
+          required: true,
+        },
+        {
+          model: CompanyEntity,
+          attributes: ["id"],
+          required: true,
+        },
+      ],
+    });
+
+    if (!dishGetEntity) {
+      throw new EmptyError("DishId not found", HttpStatus.NOT_FOUND);
+    }
+
+    const dishDomain = plainToClass(DishDomainV2, dishGetEntity, {
       excludeExtraneousValues: true,
       enableImplicitConversion: true,
     });
@@ -46,19 +75,19 @@ export class DishesService extends BaseService {
       include: [
         {
           model: CategoryEntity,
-          attributes: ['id'],
+          attributes: ["id"],
           required: true,
         },
         {
           model: CompanyEntity,
-          attributes: ['id'],
+          attributes: ["id"],
           required: true,
         },
       ],
     });
 
     if (!dishGetEntity) {
-      throw new EmptyError('DishId not found', HttpStatus.NOT_FOUND);
+      throw new EmptyError("DishId not found", HttpStatus.NOT_FOUND);
     }
 
     const dishDomain = plainToClass(DishDomainV2, dishGetEntity, {
@@ -77,7 +106,7 @@ export class DishesService extends BaseService {
       filtersRepo: [
         {
           model: CategoryEntity,
-          attributes: ['id'],
+          attributes: ["id"],
           required: true,
           where: {
             id: categoryId,
@@ -85,12 +114,12 @@ export class DishesService extends BaseService {
         },
         {
           model: CompanyEntity,
-          attributes: ['id'],
+          attributes: ["id"],
           required: true,
         },
       ],
       pagination,
-      searchCol: 'title',
+      searchCol: "title",
       searchColFilters: `DishEntity.title`,
     });
 
@@ -109,12 +138,12 @@ export class DishesService extends BaseService {
       include: [
         {
           model: CategoryEntity,
-          attributes: ['id'],
+          attributes: ["id"],
           required: true,
         },
         {
           model: CompanyEntity,
-          attributes: ['id'],
+          attributes: ["id"],
           required: true,
         },
       ],

@@ -1,17 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { MetaDomain } from 'src/core/domain';
-import { PaginationPayload } from 'src/core/dtos';
-import { EmptyError } from 'src/core/exceptions';
-import { MetaFactory } from 'src/core/factories';
-import { CategoryEntity } from 'src/modules/categories/categories.entity';
-import { CompanyEntity } from 'src/modules/companies/company.entity';
-import { DishDishDomainV2, DishDomainV2, DishSauceDomainV2 } from '../domains';
-import { DishesMainDomainV2 } from '../domains/dishes-main.domain';
-import { DishCreateResponseDto } from '../dtos';
-import { DishPayloadCreateDto, GetDishesByCategory } from '../dtos/main.dto';
-import { DishesDishesService } from './dishes-dishes.service';
-import { DishesSaucesService } from './dishes-sauces.service';
-import { DishesService } from './dishes.service';
+import { Injectable } from "@nestjs/common";
+import { MetaDomain } from "src/core/domain";
+import { PaginationPayload } from "src/core/dtos";
+import { EmptyError } from "src/core/exceptions";
+import { MetaFactory } from "src/core/factories";
+import { CategoryEntity } from "src/modules/categories/categories.entity";
+import { CompanyEntity } from "src/modules/companies/company.entity";
+import { DishDishDomainV2, DishDomainV2, DishSauceDomainV2 } from "../domains";
+import { DishesMainDomainV2 } from "../domains/dishes-main.domain";
+import { DishCreateResponseDto } from "../dtos";
+import { DishPayloadCreateDto, GetDishesByCategory } from "../dtos/main.dto";
+import { DishesDishesService } from "./dishes-dishes.service";
+import { DishesSaucesService } from "./dishes-sauces.service";
+import { DishesService } from "./dishes.service";
 
 @Injectable()
 export class DishesMainService {
@@ -30,7 +30,7 @@ export class DishesMainService {
     const { id: dishId } = dishResponse;
 
     if (!dishId) {
-      throw new EmptyError('Dish Created empty error');
+      throw new EmptyError("Dish Created empty error");
     }
 
     const dishSaucesResponse: DishSauceDomainV2[] = [];
@@ -74,6 +74,14 @@ export class DishesMainService {
     return { dishInfo, dishSauces, dishDishes };
   }
 
+  async findOneBySlug(slug: string): Promise<DishesMainDomainV2> {
+    const dishInfo = await this.dishService.findOneBySlug(slug);
+    const dishSauces = await this.dishSauceService.findAllByDishId(dishInfo.id);
+    const dishDishes = await this.dishDishService.findAllByDishId(dishInfo.id);
+
+    return { dishInfo, dishSauces, dishDishes };
+  }
+
   async findAll(): Promise<DishDomainV2[]> {
     const dishes = await this.dishService.findAll();
 
@@ -84,22 +92,26 @@ export class DishesMainService {
     categoryId: number,
     pagination: GetDishesByCategory
   ): Promise<MetaDomain<DishDomainV2[]>> {
+    const filtersRepo = [
+      {
+        model: CategoryEntity,
+        attributes: ["id"],
+        required: true,
+        where: {
+          id: categoryId,
+        },
+      },
+      {
+        model: CompanyEntity,
+        attributes: ["id"],
+        required: true,
+      },
+    ];
+
     const dishesCounter = await this.dishService.count({
-      filtersRepo: [
-        {
-          model: CategoryEntity,
-          attributes: ['id'],
-          required: true,
-          where: {
-            id: categoryId,
-          },
-        },
-        {
-          model: CompanyEntity,
-          attributes: ['id'],
-          required: true,
-        },
-      ],
+      filtersRepo,
+      searchCol: "title",
+      search: pagination.search,
     });
     const dishesDomain = await this.dishService.findAllByCategoryId(
       categoryId,

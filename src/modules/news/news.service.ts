@@ -1,6 +1,6 @@
 import { plainToClass } from "@nestjs/class-transformer";
 import { HttpStatus, Inject, Injectable } from "@nestjs/common";
-import sequelize from "sequelize";
+import { Op } from "sequelize";
 import { NEW_REPOSITORY } from "src/core/constants";
 import { MetaDomain } from "src/core/domain";
 import { DBError } from "src/core/exceptions";
@@ -100,17 +100,33 @@ export class NewsService extends BaseService {
     pagination: GetCategoriesByCompany
   ): Promise<MetaDomain<NewDomainV2[]>> {
     await this.companyService.findOneById(companyId);
-    const newCounter = await this.count({
-      filtersRepo: [
-        {
-          model: CompanyEntity,
-          attributes: ["id"],
-          required: true,
-          where: {
-            id: companyId,
-          },
+
+    const filtersRepo = [
+      {
+        model: CompanyEntity,
+        attributes: ["id"],
+        required: true,
+        where: {
+          id: companyId,
         },
-      ],
+      },
+    ];
+
+    const where = pagination.byDate
+      ? {
+          startDate: {
+            [Op.and]: {
+              [Op.gte]: pagination.byDate,
+            },
+          },
+        }
+      : {};
+
+    const newCounter = await this.count({
+      filtersRepo,
+      searchCol: "title",
+      where,
+      search: pagination.search,
     });
 
     const newsEntity = await this.pagination<NewEntity[]>({
@@ -123,18 +139,10 @@ export class NewsService extends BaseService {
         "startDate",
         "endDate",
       ],
-      filtersRepo: [
-        {
-          model: CompanyEntity,
-          attributes: ["id"],
-          required: true,
-          where: {
-            id: companyId,
-          },
-        },
-      ],
+      filtersRepo,
       pagination,
       searchCol: "title",
+      where,
     });
 
     const newsDomain = newsEntity.map((newEntity) =>
@@ -153,11 +161,17 @@ export class NewsService extends BaseService {
     return metaResponse;
   }
 
-  async update(newToUpdate: NewUpdateDto, id: number): Promise<NewDomainV2> {
+  async update(
+    newToUpdate: NewUpdateDto,
+    id: number,
+    fileUrl: string
+  ): Promise<NewDomainV2> {
     await this.companyService.findOneById(newToUpdate.companyId);
 
+    const entityToUpdate = { ...newToUpdate, imageUrl: fileUrl };
+
     await this.newRepository
-      .update(newToUpdate, {
+      .update(entityToUpdate, {
         where: { id },
       })
       .catch((reason) => {

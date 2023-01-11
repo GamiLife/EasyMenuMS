@@ -10,10 +10,15 @@ interface IServicePagination<T, S> {
   filtersRepo: FindOptions<T>["include"];
   searchCol: string;
   searchColFilters?: string;
+  where?: Record<string, any>;
 }
 
 interface IServiceCount<T> {
+  search?: string;
   filtersRepo: FindOptions<T>["include"];
+  searchCol: string;
+  searchColFilters?: string;
+  where?: Record<string, any>;
 }
 
 export class BaseService<E = any> {
@@ -23,17 +28,46 @@ export class BaseService<E = any> {
     this.repository = repository;
   }
 
-  async count<T>({ filtersRepo }: IServiceCount<T>) {
-    const lenght = await this.repository
-      .count({
-        include: filtersRepo,
-      })
-      .catch((reason) => {
-        throw new DBError(
-          `Query counter failed: ${reason}`,
-          HttpStatus.BAD_REQUEST
-        );
-      });
+  async count<T>({
+    filtersRepo,
+    where,
+    searchCol,
+    searchColFilters,
+    search,
+  }: IServiceCount<T>) {
+    let filters: Record<string, any> = {
+      include: filtersRepo,
+    };
+
+    if (search) {
+      filters = {
+        ...filters,
+        where: {
+          [searchCol]: sequelize.where(
+            sequelize.fn("LOWER", sequelize.col(searchColFilters ?? searchCol)),
+            "LIKE",
+            `${search.toLowerCase()}%`
+          ),
+        },
+      };
+    }
+
+    if (where) {
+      filters = {
+        ...filters,
+        where: {
+          ...filters.where,
+          ...where,
+        },
+      };
+    }
+
+    const lenght = await this.repository.count(filters).catch((reason) => {
+      throw new DBError(
+        `Query counter failed: ${reason}`,
+        HttpStatus.BAD_REQUEST
+      );
+    });
 
     if (lenght < 0) {
       throw new EmptyError("Counter failed", HttpStatus.NOT_FOUND);
@@ -48,13 +82,20 @@ export class BaseService<E = any> {
     filtersRepo,
     searchCol,
     searchColFilters,
+    where,
   }: IServicePagination<T, S>): Promise<T> {
     let filters: Record<string, any> = {
       attributes,
       include: filtersRepo,
-      limit: sizeByPage,
-      offset: (page - 1) * sizeByPage,
     };
+
+    if (sizeByPage && page) {
+      filters = {
+        ...filters,
+        limit: sizeByPage,
+        offset: (page - 1) * sizeByPage,
+      };
+    }
 
     if (search) {
       filters = {
@@ -65,6 +106,16 @@ export class BaseService<E = any> {
             "LIKE",
             `${search.toLowerCase()}%`
           ),
+        },
+      };
+    }
+
+    if (where) {
+      filters = {
+        ...filters,
+        where: {
+          ...filters.where,
+          ...where,
         },
       };
     }

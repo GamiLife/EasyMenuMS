@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common/decorators";
 import { ConfigService } from "@nestjs/config";
 import { S3 } from "aws-sdk";
+import { mimeByBuffer } from "../helpers/mimeType.helper";
 
 export type TFileStorageInfo = {
   fileName: string;
@@ -18,6 +19,8 @@ export class S3Service implements IS3Service {
 
   async uploadFile(dataBuffer: Buffer, fileName: string) {
     try {
+      const { mime } = await mimeByBuffer(dataBuffer);
+
       const s3 = new S3();
       const awsBucket = this.configService.get("AWS_BUCKET_NAME");
 
@@ -29,6 +32,7 @@ export class S3Service implements IS3Service {
             .toLowerCase()
             .split(" ")
             .join("_")}`,
+          ContentType: mime,
         })
         .promise();
 

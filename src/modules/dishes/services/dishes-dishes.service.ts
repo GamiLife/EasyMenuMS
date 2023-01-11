@@ -1,11 +1,11 @@
-import { plainToClass } from '@nestjs/class-transformer';
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { DISH_DISH_REPOSITORY } from 'src/core/constants';
-import { DBError, EmptyError } from 'src/core/exceptions';
-import { DishDishDomainV2 } from '../domains';
-import { DishDishCreateDto, DishDishUpdateDto } from '../dtos';
-import { DishDishesEntity, DishEntity } from '../entities';
-import { DishesService } from './dishes.service';
+import { plainToClass } from "@nestjs/class-transformer";
+import { HttpStatus, Inject, Injectable } from "@nestjs/common";
+import { DISH_DISH_REPOSITORY } from "src/core/constants";
+import { DBError, EmptyError } from "src/core/exceptions";
+import { DishDishDomainV2 } from "../domains";
+import { DishDishCreateDto, DishDishUpdateDto } from "../dtos";
+import { DishDishesEntity, DishEntity } from "../entities";
+import { DishesService } from "./dishes.service";
 
 @Injectable()
 export class DishesDishesService {
@@ -29,7 +29,7 @@ export class DishesDishesService {
       });
 
     if (!dishDishEntity) {
-      throw new DBError('DishDish query failed', HttpStatus.BAD_REQUEST);
+      throw new DBError("DishDish query failed", HttpStatus.BAD_REQUEST);
     }
 
     const dishDishDomain = plainToClass(DishDishDomainV2, dishDishEntity, {
@@ -47,13 +47,13 @@ export class DishesDishesService {
         include: [
           {
             model: DishEntity,
-            as: 'dishSecond',
+            as: "dishSecond",
           },
         ],
       });
 
     if (!dishDishesGetEntity) {
-      throw new EmptyError('DishDish not found', HttpStatus.NOT_FOUND);
+      throw new EmptyError("DishDish not found", HttpStatus.NOT_FOUND);
     }
 
     const dishDishesDomain = plainToClass(
@@ -80,7 +80,7 @@ export class DishesDishesService {
       });
 
     if (!dishDishGetEntity) {
-      throw new EmptyError('DishId not found', HttpStatus.NOT_FOUND);
+      throw new EmptyError("DishId not found", HttpStatus.NOT_FOUND);
     }
 
     const dishDishesDomain = plainToClass(DishDishDomainV2, dishDishGetEntity, {
@@ -96,7 +96,7 @@ export class DishesDishesService {
       include: [
         {
           model: DishEntity,
-          attributes: ['id'],
+          attributes: ["id"],
           required: true,
         },
       ],

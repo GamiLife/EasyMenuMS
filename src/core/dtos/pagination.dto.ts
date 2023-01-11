@@ -1,15 +1,19 @@
-import { Expose } from '@nestjs/class-transformer';
-import { IsNumber } from 'class-validator';
-import { FilteringPayload } from './filtering.dto';
+import { Expose } from "@nestjs/class-transformer";
+import { IsNumber, IsNumberString, IsOptional } from "class-validator";
+import { FilteringPayload } from "./filtering.dto";
 
 /**
  * Create Dish Request
  */
 export class PaginationPayload<T> extends FilteringPayload<T> {
   @Expose()
-  page: number;
+  @IsOptional()
+  @IsNumberString()
+  page?: number;
   @Expose()
-  sizeByPage: number;
+  @IsOptional()
+  @IsNumberString()
+  sizeByPage?: number;
 }
 
 interface IPaginationDto {

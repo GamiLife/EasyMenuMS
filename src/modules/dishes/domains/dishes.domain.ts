@@ -1,8 +1,8 @@
-import { Expose, Transform, Type } from '@nestjs/class-transformer';
-import { IsString, IsNumber } from 'class-validator';
+import { Expose, Transform, Type } from "@nestjs/class-transformer";
+import { IsString, IsNumber } from "class-validator";
 
-import { CategoryDomainV2 } from '../../categories/categories.domain';
-import { CompanyDomainV2 } from '../../companies/company.domain';
+import { CategoryDomainV2 } from "../../categories/categories.domain";
+import { CompanyDomainV2 } from "../../companies/company.domain";
 
 /**
  * Dish Domain
@@ -17,6 +17,9 @@ export class DishDomainV2 {
   @Expose()
   @IsString()
   description: string;
+  @Expose()
+  @IsString()
+  slug: string;
   @Expose()
   @IsString()
   price: number;

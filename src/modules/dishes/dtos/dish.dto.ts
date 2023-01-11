@@ -1,13 +1,13 @@
-import { Expose, Type } from '@nestjs/class-transformer';
-import { IsNumber, IsString, IsNotEmpty } from 'class-validator';
-import { CategoryResponseDto } from 'src/modules/categories/categories.dto';
-import { CompanyResponseDto } from 'src/modules/companies/company.dto';
+import { Expose, Type } from "@nestjs/class-transformer";
+import { IsNumber, IsString, IsNotEmpty } from "class-validator";
+import { CategoryResponseDto } from "src/modules/categories/categories.dto";
+import { CompanyResponseDto } from "src/modules/companies/company.dto";
 
 /**
  * Request on create dish
  */
 export class DishCreateDto {
-  @IsNotEmpty({ message: 'Title required' })
+  @IsNotEmpty({ message: "Title required" })
   @IsString()
   readonly title: string;
   @IsString()
@@ -16,10 +16,10 @@ export class DishCreateDto {
   readonly price: number;
   @IsString()
   readonly imageUrl: string;
-  @IsNotEmpty({ message: 'CategoryId required' })
+  @IsNotEmpty({ message: "CategoryId required" })
   @IsNumber()
   readonly categoryId: number;
-  @IsNotEmpty({ message: 'CompanyId required' })
+  @IsNotEmpty({ message: "CompanyId required" })
   @IsNumber()
   readonly companyId: number;
 }
@@ -28,7 +28,7 @@ export class DishCreateDto {
  * Request on update dish
  */
 export class DishUpdateDto {
-  @IsNotEmpty({ message: 'Title required' })
+  @IsNotEmpty({ message: "Title required" })
   @IsString()
   readonly title: string;
   @IsString()
@@ -37,10 +37,10 @@ export class DishUpdateDto {
   readonly price: number;
   @IsString()
   readonly imageUrl: string;
-  @IsNotEmpty({ message: 'CategoryId required' })
+  @IsNotEmpty({ message: "CategoryId required" })
   @IsNumber()
   readonly categoryId: number;
-  @IsNotEmpty({ message: 'CompanyId required' })
+  @IsNotEmpty({ message: "CompanyId required" })
   @IsNumber()
   readonly companyId: number;
 }
@@ -55,6 +55,9 @@ export class DishResponseDto {
   @Expose()
   @IsString()
   readonly title: string;
+  @Expose()
+  @IsString()
+  readonly slug: string;
   @Expose()
   @IsString()
   readonly description: string;

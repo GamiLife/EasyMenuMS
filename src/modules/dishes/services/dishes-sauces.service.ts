@@ -1,13 +1,13 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { DISH_SAUCE_REPOSITORY } from 'src/core/constants';
-import { DBError, EmptyError } from 'src/core/exceptions';
-import { SauceEntity } from 'src/modules/sauces/sauces.entity';
-import { SaucesService } from 'src/modules/sauces/sauces.service';
-import { DishSauceDomainV2 } from '../domains';
-import { DishSauceCreateDto, DishSauceUpdateDto } from '../dtos';
-import { DishEntity, DishSauceEntity } from '../entities';
-import { DishesService } from './dishes.service';
-import { plainToClass } from '@nestjs/class-transformer';
+import { HttpStatus, Inject, Injectable } from "@nestjs/common";
+import { DISH_SAUCE_REPOSITORY } from "src/core/constants";
+import { DBError, EmptyError } from "src/core/exceptions";
+import { SauceEntity } from "src/modules/sauces/sauces.entity";
+import { SaucesService } from "src/modules/sauces/sauces.service";
+import { DishSauceDomainV2 } from "../domains";
+import { DishSauceCreateDto, DishSauceUpdateDto } from "../dtos";
+import { DishEntity, DishSauceEntity } from "../entities";
+import { DishesService } from "./dishes.service";
+import { plainToClass } from "@nestjs/class-transformer";
 
 @Injectable()
 export class DishesSaucesService {
@@ -32,7 +32,7 @@ export class DishesSaucesService {
       });
 
     if (!dishSauceEntity) {
-      throw new DBError('DishSauce query failed', HttpStatus.BAD_REQUEST);
+      throw new DBError("DishSauce query failed", HttpStatus.BAD_REQUEST);
     }
 
     const dishSauceDomain = plainToClass(DishSauceDomainV2, dishSauceEntity, {
@@ -55,7 +55,7 @@ export class DishesSaucesService {
       });
 
     if (!dishesSauceGetEntity) {
-      throw new EmptyError('DishSauce not found', HttpStatus.NOT_FOUND);
+      throw new EmptyError("DishSauce not found", HttpStatus.NOT_FOUND);
     }
 
     const dishSaucesDomain = plainToClass(
@@ -85,7 +85,7 @@ export class DishesSaucesService {
       });
 
     if (!dishSauceGetEntity) {
-      throw new EmptyError('DishSauce not found', HttpStatus.NOT_FOUND);
+      throw new EmptyError("DishSauce not found", HttpStatus.NOT_FOUND);
     }
 
     const dishSauceDomain = plainToClass(
@@ -105,7 +105,7 @@ export class DishesSaucesService {
       include: [
         {
           model: DishEntity,
-          attributes: ['id'],
+          attributes: ["id"],
           required: true,
         },
       ],
