@@ -50,7 +50,7 @@ export class DishesController {
 
   @Transform("DishGetResponseDto")
   @ResponseMessage(MESSAGE_RESPONSE_GET_DISH)
-  @Get(":slug")
+  @Get("slug/:slug")
   async findBySlug(@Param("slug") slug) {
     try {
       const dishDomain = await this.dishesMainService.findOneBySlug(slug);
