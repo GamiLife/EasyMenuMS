@@ -1,21 +1,22 @@
-import { HttpStatus } from "@nestjs/common";
-import sequelize from "sequelize";
-import { FindOptions } from "sequelize";
-import { PaginationPayload } from "../dtos";
-import { DBError, EmptyError } from "../exceptions";
+import { HttpStatus } from '@nestjs/common';
+import sequelize from 'sequelize';
+import { FindOptions } from 'sequelize';
+import { PaginationPayload } from '../dtos';
+import { DBError, EmptyError } from '../exceptions';
 
 interface IServicePagination<T, S> {
   attributes?: any[];
   pagination: PaginationPayload<S>;
-  filtersRepo: FindOptions<T>["include"];
+  filtersRepo: FindOptions<T>['include'];
   searchCol: string;
   searchColFilters?: string;
   where?: Record<string, any>;
+  sort?: Array<[string, 'ASC' | 'DESC']>;
 }
 
 interface IServiceCount<T> {
   search?: string;
-  filtersRepo: FindOptions<T>["include"];
+  filtersRepo: FindOptions<T>['include'];
   searchCol: string;
   searchColFilters?: string;
   where?: Record<string, any>;
@@ -44,8 +45,8 @@ export class BaseService<E = any> {
         ...filters,
         where: {
           [searchCol]: sequelize.where(
-            sequelize.fn("LOWER", sequelize.col(searchColFilters ?? searchCol)),
-            "LIKE",
+            sequelize.fn('LOWER', sequelize.col(searchColFilters ?? searchCol)),
+            'LIKE',
             `${search.toLowerCase()}%`
           ),
         },
@@ -70,7 +71,7 @@ export class BaseService<E = any> {
     });
 
     if (lenght < 0) {
-      throw new EmptyError("Counter failed", HttpStatus.NOT_FOUND);
+      throw new EmptyError('Counter failed', HttpStatus.NOT_FOUND);
     }
 
     return lenght;
@@ -83,6 +84,7 @@ export class BaseService<E = any> {
     searchCol,
     searchColFilters,
     where,
+    sort,
   }: IServicePagination<T, S>): Promise<T> {
     let filters: Record<string, any> = {
       attributes,
@@ -102,8 +104,8 @@ export class BaseService<E = any> {
         ...filters,
         where: {
           [searchCol]: sequelize.where(
-            sequelize.fn("LOWER", sequelize.col(searchColFilters ?? searchCol)),
-            "LIKE",
+            sequelize.fn('LOWER', sequelize.col(searchColFilters ?? searchCol)),
+            'LIKE',
             `${search.toLowerCase()}%`
           ),
         },
@@ -117,6 +119,13 @@ export class BaseService<E = any> {
           ...filters.where,
           ...where,
         },
+      };
+    }
+
+    if (sort?.length) {
+      filters = {
+        ...filters,
+        order: sort,
       };
     }
 

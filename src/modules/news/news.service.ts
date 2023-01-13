@@ -1,17 +1,16 @@
-import { plainToClass } from "@nestjs/class-transformer";
-import { HttpStatus, Inject, Injectable } from "@nestjs/common";
-import { Op } from "sequelize";
-import { NEW_REPOSITORY } from "src/core/constants";
-import { MetaDomain } from "src/core/domain";
-import { DBError } from "src/core/exceptions";
-import { MetaFactory } from "src/core/factories";
-import { BaseService } from "src/core/services";
-import { GetCategoriesByCompany } from "../categories/categories.dto";
-import { CompanyEntity } from "../companies/company.entity";
-import { CompaniesService } from "../companies/company.service";
-import { NewDomainV2 } from "./news.domain";
-import { NewCreateDto, NewUpdateDto } from "./news.dto";
-import { NewEntity } from "./news.entity";
+import { plainToClass } from '@nestjs/class-transformer';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { Op } from 'sequelize';
+import { NEW_REPOSITORY } from 'src/core/constants';
+import { MetaDomain } from 'src/core/domain';
+import { DBError } from 'src/core/exceptions';
+import { MetaFactory } from 'src/core/factories';
+import { BaseService } from 'src/core/services';
+import { CompanyEntity } from '../companies/company.entity';
+import { CompaniesService } from '../companies/company.service';
+import { NewDomainV2 } from './news.domain';
+import { GetNewsByCompany, NewCreateDto, NewUpdateDto } from './news.dto';
+import { NewEntity } from './news.entity';
 
 @Injectable()
 export class NewsService extends BaseService {
@@ -33,7 +32,7 @@ export class NewsService extends BaseService {
     );
 
     if (!newEntity) {
-      throw new DBError("New query failed", HttpStatus.BAD_REQUEST);
+      throw new DBError('New query failed', HttpStatus.BAD_REQUEST);
     }
 
     const newDomain = plainToClass(NewDomainV2, newEntity, {
@@ -54,7 +53,7 @@ export class NewsService extends BaseService {
     });
 
     if (!newGetEntity) {
-      throw new DBError("New not found", HttpStatus.NOT_FOUND);
+      throw new DBError('New not found', HttpStatus.NOT_FOUND);
     }
 
     const newDomain = plainToClass(NewDomainV2, newGetEntity, {
@@ -68,18 +67,18 @@ export class NewsService extends BaseService {
   async findAll(): Promise<NewDomainV2[]> {
     const newsEntity = await this.newRepository.findAll({
       attributes: [
-        "id",
-        "title",
-        "description",
-        "imageUrl",
-        "backgroundColor",
-        "startDate",
-        "endDate",
+        'id',
+        'title',
+        'description',
+        'imageUrl',
+        'backgroundColor',
+        'startDate',
+        'endDate',
       ],
       include: [
         {
           model: CompanyEntity,
-          attributes: ["id"],
+          attributes: ['id'],
           required: true,
         },
       ],
@@ -97,14 +96,14 @@ export class NewsService extends BaseService {
 
   async findAllByCompanyId(
     companyId: number,
-    pagination: GetCategoriesByCompany
+    pagination: GetNewsByCompany
   ): Promise<MetaDomain<NewDomainV2[]>> {
     await this.companyService.findOneById(companyId);
 
     const filtersRepo = [
       {
         model: CompanyEntity,
-        attributes: ["id"],
+        attributes: ['id'],
         required: true,
         where: {
           id: companyId,
@@ -112,9 +111,16 @@ export class NewsService extends BaseService {
       },
     ];
 
+    const sort = pagination.sort;
+
     const where = pagination.byDate
       ? {
           startDate: {
+            [Op.and]: {
+              [Op.lte]: pagination.byDate,
+            },
+          },
+          endDate: {
             [Op.and]: {
               [Op.gte]: pagination.byDate,
             },
@@ -124,25 +130,26 @@ export class NewsService extends BaseService {
 
     const newCounter = await this.count({
       filtersRepo,
-      searchCol: "title",
+      searchCol: 'title',
       where,
       search: pagination.search,
     });
 
     const newsEntity = await this.pagination<NewEntity[]>({
       attributes: [
-        "id",
-        "title",
-        "description",
-        "imageUrl",
-        "backgroundColor",
-        "startDate",
-        "endDate",
+        'id',
+        'title',
+        'description',
+        'imageUrl',
+        'backgroundColor',
+        'startDate',
+        'endDate',
       ],
       filtersRepo,
       pagination,
-      searchCol: "title",
+      searchCol: 'title',
       where,
+      sort,
     });
 
     const newsDomain = newsEntity.map((newEntity) =>

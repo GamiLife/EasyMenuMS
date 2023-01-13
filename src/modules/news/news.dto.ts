@@ -1,5 +1,5 @@
-import { CompanyResponseDto } from "../companies/company.dto";
-import { Expose } from "@nestjs/class-transformer";
+import { CompanyResponseDto } from '../companies/company.dto';
+import { Expose } from '@nestjs/class-transformer';
 import {
   IsString,
   IsNumber,
@@ -8,18 +8,30 @@ import {
   MinLength,
   IsDateString,
   IsNumberString,
-} from "class-validator";
-import { FnValidator } from "src/core/decorators/custom-validator.decorator";
-import { validateRGB } from "src/core/helpers/validators.helper";
+  IsOptional,
+} from 'class-validator';
+import { FnValidator } from 'src/core/decorators/custom-validator.decorator';
+import { validateRGB } from 'src/core/helpers/validators.helper';
+import { PaginationPayload } from 'src/core/dtos';
+
+export class NewsFilters {}
+/**
+ * Get By Pagination Request
+ */
+export class GetNewsByCompany extends PaginationPayload<NewsFilters> {
+  @IsDateString()
+  @IsOptional()
+  readonly byDate?: string;
+}
 
 /**
  * Request on create new
  */
 export class NewCreateDto {
-  @IsNotEmpty({ message: "Title required" })
-  @MinLength(2, { message: "Min length of is 2 characters" })
+  @IsNotEmpty({ message: 'Title required' })
+  @MinLength(2, { message: 'Min length of is 2 characters' })
   @IsString()
-  @MaxLength(150, { message: "This title is not valid" })
+  @MaxLength(150, { message: 'This title is not valid' })
   readonly title: string;
   @IsString()
   readonly description: string;
@@ -30,7 +42,7 @@ export class NewCreateDto {
   readonly startDate: Date;
   @IsDateString()
   readonly endDate: Date;
-  @IsNotEmpty({ message: "CompanyId required" })
+  @IsNotEmpty({ message: 'CompanyId required' })
   @IsNumberString()
   readonly companyId: number;
 }
@@ -41,7 +53,7 @@ export class NewCreateDto {
 export class NewUpdateDto {
   @Expose()
   @IsString()
-  @MaxLength(150, { message: "This title is not valid" })
+  @MaxLength(150, { message: 'This title is not valid' })
   readonly title: string;
   @Expose()
   @IsString()
@@ -70,7 +82,7 @@ export class NewResponseDto {
   readonly id: number;
   @Expose()
   @IsString()
-  @MaxLength(150, { message: "This title is not valid" })
+  @MaxLength(150, { message: 'This title is not valid' })
   readonly title: string;
   @Expose()
   @IsString()
