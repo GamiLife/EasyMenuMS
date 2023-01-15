@@ -8,7 +8,8 @@ module.exports = {
         title: 'Sea Foods',
         description: 'Everything related with sea food',
         iconId: 'burger',
-        imageCategory: '',
+        imageCategory:
+          'https://frdadmin21.fridaysperu.com/media/catalog/category/descarga_3_.png',
         companyId: 1,
         createdAt: '2022-11-11 00:00:00',
         updatedAt: '2022-11-11 00:00:00',
@@ -16,7 +17,7 @@ module.exports = {
       {
         title: 'Pastas',
         description: 'Everything related with pastas',
-        iconId: 'burger',
+        iconId: 'appetizer',
         imageCategory: '',
         companyId: 1,
         createdAt: '2022-11-11 00:00:00',
@@ -25,7 +26,7 @@ module.exports = {
       {
         title: 'Papas',
         description: 'Everything related with pastas',
-        iconId: 'burger',
+        iconId: 'ribb',
         imageCategory: '',
         companyId: 1,
         createdAt: '2022-11-11 00:00:00',
@@ -34,7 +35,7 @@ module.exports = {
       {
         title: 'Guarniciones',
         description: 'Everything related with pastas',
-        iconId: 'burger',
+        iconId: 'chicken',
         imageCategory: '',
         companyId: 1,
         createdAt: '2022-11-11 00:00:00',
@@ -43,7 +44,7 @@ module.exports = {
       {
         title: 'Bebidas',
         description: 'Everything related with pastas',
-        iconId: 'burger',
+        iconId: 'salad',
         imageCategory: '',
         companyId: 1,
         createdAt: '2022-11-11 00:00:00',
@@ -52,7 +53,7 @@ module.exports = {
       {
         title: 'Chicken',
         description: 'Everything related with pastas',
-        iconId: 'burger',
+        iconId: 'noodle',
         imageCategory: '',
         companyId: 1,
         createdAt: '2022-11-11 00:00:00',
@@ -61,8 +62,9 @@ module.exports = {
       {
         title: 'Burgers',
         description: 'Everything related with pastas',
-        iconId: 'burger',
-        imageCategory: '',
+        iconId: '',
+        imageCategory:
+          'https://frdadmin21.fridaysperu.com/media/catalog/category/descarga_3_.png',
         companyId: 1,
         createdAt: '2022-11-11 00:00:00',
         updatedAt: '2022-11-11 00:00:00',
