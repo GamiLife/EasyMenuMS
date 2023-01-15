@@ -20,6 +20,9 @@ export class CategoryDomainV2 {
   @IsString()
   iconId: string;
   @Expose()
+  @IsString()
+  imageCategory: string;
+  @Expose()
   @Transform(({ value, obj }) => {
     if (!value) {
       return { id: obj?.companyId };

@@ -1,4 +1,17 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   MESSAGE_RESPONSE_CREATE_CATEGORY,
   MESSAGE_RESPONSE_GET_CATEGORY_ALL,
@@ -7,6 +20,8 @@ import {
 } from 'src/core/constants';
 import { ResponseMessage, Transform } from 'src/core/decorators';
 import { CatchControl } from 'src/core/exceptions';
+import { S3Service } from 'src/core/services/S3.service';
+import { CategoryPayloadValidation } from 'src/core/validations';
 import {
   CategoryCreateDto,
   CategoryUpdateDto,
@@ -16,7 +31,10 @@ import { CategoriesService } from './categories.service';
 
 @Controller('categories')
 export class CategoriesController {
-  constructor(private categoryService: CategoriesService) {}
+  constructor(
+    private categoryService: CategoriesService,
+    private s3Service: S3Service
+  ) {}
 
   @Transform('CategoryResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_CATEGORY_ALL)
@@ -70,9 +88,21 @@ export class CategoriesController {
   @Transform('CategoryResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_CREATE_CATEGORY)
   @Post()
-  async create(@Body() request: CategoryCreateDto) {
+  @UsePipes(new CategoryPayloadValidation())
+  @UseInterceptors(FileInterceptor('file'))
+  async create(
+    @UploadedFile() file,
+    @Body(new CategoryPayloadValidation()) request: CategoryCreateDto
+  ) {
     try {
-      const categoryDomain = await this.categoryService.create(request);
+      const fileResult = file?.originalname
+        ? await this.s3Service.uploadFile(file.buffer, file.originalname)
+        : null;
+
+      const categoryDomain = await this.categoryService.create(
+        request,
+        fileResult?.fileUrl
+      );
 
       return { finalResponse: categoryDomain };
     } catch (error) {
@@ -83,9 +113,22 @@ export class CategoriesController {
   @Transform('CategoryResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_UPDATE_CATEGORY)
   @Put(':id')
-  async update(@Param('id') id, @Body() request: CategoryUpdateDto) {
+  @UseInterceptors(FileInterceptor('file'))
+  async update(
+    @UploadedFile() file,
+    @Param('id') id,
+    @Body(new CategoryPayloadValidation()) request: CategoryUpdateDto
+  ) {
     try {
-      const categoryDomain = await this.categoryService.update(request, id);
+      const fileResult = file?.originalname
+        ? await this.s3Service.uploadFile(file.buffer, file.originalname)
+        : null;
+
+      const categoryDomain = await this.categoryService.update(
+        request,
+        id,
+        fileResult?.fileUrl
+      );
 
       return { finalResponse: categoryDomain };
     } catch (error) {

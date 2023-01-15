@@ -4,10 +4,10 @@ import {
   Column,
   Model,
   DataType,
-  AutoIncrement,
-  PrimaryKey,
   HasOne,
   BelongsTo,
+  BeforeCreate,
+  BeforeUpdate,
 } from 'sequelize-typescript';
 import { CompanyEntity } from '../companies/company.entity';
 import { DishEntity } from '../dishes/entities/dishes.entity';
@@ -18,10 +18,10 @@ import { DishEntity } from '../dishes/entities/dishes.entity';
 })
 export class CategoryEntity extends Model<CategoryEntity> {
   @Expose()
-  @PrimaryKey
-  @AutoIncrement
   @Column({
     type: DataType.BIGINT,
+    primaryKey: true,
+    autoIncrement: true,
   })
   id: number;
 
@@ -48,6 +48,13 @@ export class CategoryEntity extends Model<CategoryEntity> {
 
   @Expose()
   @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  imageCategory: string;
+
+  @Expose()
+  @Column({
     type: DataType.BIGINT,
     allowNull: false,
   })
@@ -70,4 +77,16 @@ export class CategoryEntity extends Model<CategoryEntity> {
     as: 'dish',
   })
   dish: DishEntity;
+
+  @BeforeUpdate
+  @BeforeCreate
+  static validateIconOrImage(category: CategoryEntity) {
+    if (!category.iconId && !category.imageCategory) {
+      throw new Error(
+        'IconId field or ImageCategory must be filled at least one of them'
+      );
+    }
+
+    return category;
+  }
 }

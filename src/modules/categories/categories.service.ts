@@ -1,19 +1,19 @@
-import { plainToClass } from "@nestjs/class-transformer";
-import { HttpStatus, Inject, Injectable } from "@nestjs/common";
-import { CATEGORY_REPOSITORY } from "src/core/constants";
-import { MetaDomain } from "src/core/domain";
-import { DBError, EmptyError } from "src/core/exceptions";
-import { MetaFactory } from "src/core/factories";
-import { BaseService } from "src/core/services";
-import { CompanyEntity } from "../companies/company.entity";
-import { CompaniesService } from "../companies/company.service";
-import { CategoryDomainV2 } from "./categories.domain";
+import { plainToClass } from '@nestjs/class-transformer';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { CATEGORY_REPOSITORY } from 'src/core/constants';
+import { MetaDomain } from 'src/core/domain';
+import { DBError, EmptyError } from 'src/core/exceptions';
+import { MetaFactory } from 'src/core/factories';
+import { BaseService } from 'src/core/services';
+import { CompanyEntity } from '../companies/company.entity';
+import { CompaniesService } from '../companies/company.service';
+import { CategoryDomainV2 } from './categories.domain';
 import {
   CategoryCreateDto,
   CategoryUpdateDto,
   GetCategoriesByCompany,
-} from "./categories.dto";
-import { CategoryEntity } from "./categories.entity";
+} from './categories.dto';
+import { CategoryEntity } from './categories.entity';
 
 @Injectable()
 export class CategoriesService extends BaseService {
@@ -25,11 +25,19 @@ export class CategoriesService extends BaseService {
     super(categoryRepository);
   }
 
-  async create(category: CategoryCreateDto): Promise<CategoryDomainV2> {
+  async create(
+    category: CategoryCreateDto,
+    fileResult: string
+  ): Promise<CategoryDomainV2> {
     await this.companyService.findOneById(category.companyId);
 
+    const rowToCreate = {
+      ...category,
+      imageCategory: fileResult,
+    };
+
     const categoryEntity = await this.categoryRepository
-      .create<CategoryEntity>(category)
+      .create<CategoryEntity>(rowToCreate)
       .catch((reason) => {
         throw new DBError(
           `Category query failed: ${reason}`,
@@ -38,7 +46,7 @@ export class CategoriesService extends BaseService {
       });
 
     if (!categoryEntity) {
-      throw new DBError("Category query failed", HttpStatus.BAD_REQUEST);
+      throw new DBError('Category query failed', HttpStatus.BAD_REQUEST);
     }
 
     const categoryDomain = plainToClass(CategoryDomainV2, categoryEntity, {
@@ -61,7 +69,7 @@ export class CategoriesService extends BaseService {
       });
 
     if (!categoryGetEntity) {
-      throw new EmptyError("Category not found", HttpStatus.NOT_FOUND);
+      throw new EmptyError('Category not found', HttpStatus.NOT_FOUND);
     }
 
     const categoryDomain = plainToClass(CategoryDomainV2, categoryGetEntity, {
@@ -81,7 +89,7 @@ export class CategoriesService extends BaseService {
     const filtersRepo = [
       {
         model: CompanyEntity,
-        attributes: ["id"],
+        attributes: ['id'],
         required: true,
         where: {
           id: companyId,
@@ -91,14 +99,14 @@ export class CategoriesService extends BaseService {
 
     const categoriesCounter = await this.count({
       filtersRepo,
-      searchCol: "title",
+      searchCol: 'title',
       search: pagination.search,
     });
 
     const categoriesEntity = await this.pagination<CategoryEntity[]>({
       filtersRepo,
       pagination,
-      searchCol: "title",
+      searchCol: 'title',
     });
 
     const categoriesDomain = categoriesEntity.map((categoryEntity) =>
@@ -122,7 +130,7 @@ export class CategoriesService extends BaseService {
       include: [
         {
           model: CompanyEntity,
-          attributes: ["id"],
+          attributes: ['id'],
           required: true,
         },
       ],
@@ -140,12 +148,18 @@ export class CategoriesService extends BaseService {
 
   async update(
     category: CategoryUpdateDto,
-    id: number
+    id: number,
+    fileResult: string
   ): Promise<CategoryDomainV2> {
     await this.companyService.findOneById(category.companyId);
 
+    const rowToUpdate = {
+      ...category,
+      imageCategory: fileResult,
+    };
+
     await this.categoryRepository
-      .update(category, {
+      .update(rowToUpdate, {
         where: { id },
       })
       .catch((reason) => {

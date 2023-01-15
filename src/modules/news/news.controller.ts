@@ -103,7 +103,6 @@ export class NewsController {
 
       return { finalResponse: newDomain };
     } catch (error) {
-      console.log('test', error);
       CatchControl(error);
     }
   }

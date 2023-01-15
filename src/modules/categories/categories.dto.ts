@@ -5,6 +5,7 @@ import {
   MaxLength,
   IsNotEmpty,
   MinLength,
+  IsNumberString,
 } from 'class-validator';
 import { PaginationPayload } from 'src/core/dtos';
 import { CompanyResponseDto } from '../companies/company.dto';
@@ -27,7 +28,6 @@ export class CategoryCreateDto {
   readonly title: string;
   @IsString()
   readonly description: string;
-  @IsNotEmpty({ message: 'IconId required' })
   @IsString()
   readonly iconId: string;
   @IsNotEmpty({ message: 'CompanyId required' })
@@ -50,7 +50,7 @@ export class CategoryUpdateDto {
   @IsString()
   readonly iconId: string;
   @Expose()
-  @IsNumber()
+  @IsNumberString()
   readonly companyId: number;
 }
 
@@ -71,6 +71,9 @@ export class CategoryResponseDto {
   @Expose()
   @IsString()
   readonly iconId: string;
+  @Expose()
+  @IsString()
+  readonly imageCategory: string;
   @Expose()
   @Type(() => CompanyResponseDto)
   readonly company: CompanyResponseDto;
