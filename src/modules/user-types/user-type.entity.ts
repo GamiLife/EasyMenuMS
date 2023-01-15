@@ -4,11 +4,12 @@ import {
   Model,
   DataType,
   BelongsTo,
-  AutoIncrement,
   PrimaryKey,
+  BeforeCreate,
 } from 'sequelize-typescript';
 import { UserEntity } from '../users/users.entity';
 import { Expose, Type, Exclude } from '@nestjs/class-transformer';
+import { getNextId } from 'src/core/helpers';
 
 @Exclude()
 @Table({
@@ -17,7 +18,6 @@ import { Expose, Type, Exclude } from '@nestjs/class-transformer';
 export class UserTypeEntity extends Model<UserTypeEntity> {
   @Expose()
   @PrimaryKey
-  @AutoIncrement
   @Column({
     type: DataType.BIGINT,
   })
@@ -45,4 +45,11 @@ export class UserTypeEntity extends Model<UserTypeEntity> {
     as: 'user',
   })
   user: UserEntity;
+
+  @BeforeCreate
+  static async setDefaultId(entity: UserTypeEntity) {
+    const idNumber = await getNextId(entity.sequelize, 'user_types_sequence');
+
+    entity.id = idNumber;
+  }
 }

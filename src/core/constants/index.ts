@@ -1,6 +1,7 @@
 import { CategoryResponseDto } from 'src/modules/categories/categories.dto';
 import { CompanyResponseDto } from 'src/modules/companies/company.dto';
 import { DishGetResponseDto, DishResponseDto } from 'src/modules/dishes/dtos';
+import { LocationResponseDto } from 'src/modules/locations/locations.dto';
 import { NewResponseDto } from 'src/modules/news/news.dto';
 import { SauceResponseDto } from 'src/modules/sauces/sauces.dto';
 import { UserTypeResponseDto } from 'src/modules/user-types/user-type.dto';
@@ -16,6 +17,7 @@ export const dtosInMetadata = {
   SauceResponseDto: SauceResponseDto,
   DishResponseDto: DishResponseDto,
   DishGetResponseDto: DishGetResponseDto,
+  LocationResponseDto: LocationResponseDto
 };
 
 export const SEQUELIZE = 'SEQUELIZE';
@@ -29,6 +31,7 @@ export const USER_REPOSITORY = 'USER_REPOSITORY';
 export const NEW_REPOSITORY = 'NEW_REPOSITORY';
 export const CATEGORY_REPOSITORY = 'CATEGORY_REPOSITORY';
 export const SAUCE_REPOSITORY = 'SAUCE_REPOSITORY';
+export const LOCATION_REPOSITORY = 'LOCATION_REPOSITORY';
 
 export const DISH_REPOSITORY = 'DISH_REPOSITORY';
 export const DISH_SAUCE_REPOSITORY = 'DISH_SAUCE_REPOSITORY';

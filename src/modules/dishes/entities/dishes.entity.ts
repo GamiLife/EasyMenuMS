@@ -1,4 +1,4 @@
-import { Exclude, Expose, Type } from "@nestjs/class-transformer";
+import { Exclude, Expose, Type } from '@nestjs/class-transformer';
 import {
   Table,
   Column,
@@ -7,24 +7,25 @@ import {
   HasOne,
   BelongsToMany,
   BeforeCreate,
-} from "sequelize-typescript";
-import { slugify } from "src/core/helpers/slugify.helper";
-import { SauceEntity } from "src/modules/sauces/sauces.entity";
-import { CategoryEntity } from "../../categories/categories.entity";
-import { CompanyEntity } from "../../companies/company.entity";
-import { DishDishesEntity } from "./dishes-dishes.entity";
-import { DishSauceEntity } from "./dishes-sauces.entity";
+  PrimaryKey,
+} from 'sequelize-typescript';
+import { getNextId } from 'src/core/helpers';
+import { slugify } from 'src/core/helpers/slugify.helper';
+import { SauceEntity } from 'src/modules/sauces/sauces.entity';
+import { CategoryEntity } from '../../categories/categories.entity';
+import { CompanyEntity } from '../../companies/company.entity';
+import { DishDishesEntity } from './dishes-dishes.entity';
+import { DishSauceEntity } from './dishes-sauces.entity';
 
 @Exclude()
 @Table({
-  tableName: "dishes",
+  tableName: 'dishes',
 })
 export class DishEntity extends Model<DishEntity> {
   @Expose()
+  @PrimaryKey
   @Column({
     type: DataType.BIGINT,
-    primaryKey: true,
-    autoIncrement: true,
   })
   id: number;
 
@@ -78,18 +79,18 @@ export class DishEntity extends Model<DishEntity> {
   @Expose()
   @Type(() => CategoryEntity)
   @HasOne(() => CategoryEntity, {
-    sourceKey: "categoryId",
-    foreignKey: "id",
-    as: "category",
+    sourceKey: 'categoryId',
+    foreignKey: 'id',
+    as: 'category',
   })
   category: CategoryEntity;
 
   @Expose()
   @Type(() => CompanyEntity)
   @HasOne(() => CompanyEntity, {
-    sourceKey: "companyId",
-    foreignKey: "id",
-    as: "company",
+    sourceKey: 'companyId',
+    foreignKey: 'id',
+    as: 'company',
   })
   company: CompanyEntity;
 
@@ -104,7 +105,7 @@ export class DishEntity extends Model<DishEntity> {
   @Type(() => DishEntity)
   @BelongsToMany(() => DishEntity, {
     through: { model: () => DishDishesEntity },
-    as: "dish",
+    as: 'dish',
   })
   dishesMain?: DishEntity[];
 
@@ -112,9 +113,16 @@ export class DishEntity extends Model<DishEntity> {
   @Type(() => DishEntity)
   @BelongsToMany(() => DishEntity, {
     through: { model: () => DishDishesEntity },
-    as: "dishSecond",
+    as: 'dishSecond',
   })
   dishesSecond?: DishEntity[];
+
+  @BeforeCreate
+  static async setDefaultId(entity: DishEntity) {
+    const idNumber = await getNextId(entity.sequelize, 'dishes_sequence');
+
+    entity.id = idNumber;
+  }
 
   @BeforeCreate
   static slugFieldBeforeCreate(dish: DishEntity) {

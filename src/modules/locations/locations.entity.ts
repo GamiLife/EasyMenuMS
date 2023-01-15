@@ -1,30 +1,28 @@
-import { Exclude, Expose, Type } from '@nestjs/class-transformer';
+import { Expose, Exclude, Type } from '@nestjs/class-transformer';
 
 import {
-  Table,
-  Column,
-  Model,
-  DataType,
-  AutoIncrement,
-  PrimaryKey,
-  HasOne,
-  BelongsToMany,
   BeforeCreate,
+  Column,
+  DataType,
+  HasOne,
+  Length,
+  Model,
+  PrimaryKey,
+  Table,
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
 import { CompanyEntity } from '../companies/company.entity';
-import { DishEntity } from '../dishes/entities';
-import { DishSauceEntity } from '../dishes/entities/dishes-sauces.entity';
 
 @Exclude()
 @Table({
-  tableName: 'sauces',
+  tableName: 'locations',
 })
-export class SauceEntity extends Model<SauceEntity> {
+export class LocationsEntity extends Model<LocationsEntity> {
   @Expose()
   @PrimaryKey
   @Column({
     type: DataType.BIGINT,
+    //defaultValue: sequelize.Sequelize.literal("nextval('locations_sequence')"),
   })
   id: number;
 
@@ -33,28 +31,23 @@ export class SauceEntity extends Model<SauceEntity> {
     type: DataType.STRING,
     allowNull: false,
   })
-  title: string;
+  name: string;
 
   @Expose()
+  @Length({ min: 9, max: 100 })
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  description: string;
+  address: string;
 
   @Expose()
-  @Column({
-    type: DataType.FLOAT,
-    allowNull: true,
-  })
-  price: number;
-
-  @Expose()
+  @Length({ min: 9, max: 20 })
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  imageUrl: string;
+  phone: string;
 
   @Expose()
   @Column({
@@ -72,16 +65,9 @@ export class SauceEntity extends Model<SauceEntity> {
   })
   company: CompanyEntity;
 
-  @Expose()
-  @Type(() => DishEntity)
-  @BelongsToMany(() => DishEntity, {
-    through: { model: () => DishSauceEntity },
-  })
-  dishes?: DishEntity[];
-
   @BeforeCreate
-  static async setDefaultId(entity: SauceEntity) {
-    const idNumber = await getNextId(entity.sequelize, 'sauces_sequence');
+  static async setDefaultId(entity: LocationsEntity) {
+    const idNumber = await getNextId(entity.sequelize, 'locations_sequence');
 
     entity.id = idNumber;
   }

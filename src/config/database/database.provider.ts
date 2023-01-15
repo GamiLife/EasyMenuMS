@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Sequelize } from "sequelize-typescript";
-import { CategoryEntity } from "src/modules/categories/categories.entity";
-import { CompanyEntity } from "src/modules/companies/company.entity";
+import { Sequelize } from 'sequelize-typescript';
+import { CategoryEntity } from 'src/modules/categories/categories.entity';
+import { CompanyEntity } from 'src/modules/companies/company.entity';
 import {
   DishDishesEntity,
   DishEntity,
   DishSauceEntity,
-} from "src/modules/dishes/entities";
-import { NewEntity } from "src/modules/news/news.entity";
-import { SauceEntity } from "src/modules/sauces/sauces.entity";
-import { UserTypeEntity } from "src/modules/user-types/user-type.entity";
-import { UserEntity } from "src/modules/users/users.entity";
-import { SEQUELIZE } from "../../core/constants";
-const config = require("./database.config");
+} from 'src/modules/dishes/entities';
+import { LocationsEntity } from 'src/modules/locations/locations.entity';
+import { NewEntity } from 'src/modules/news/news.entity';
+import { SauceEntity } from 'src/modules/sauces/sauces.entity';
+import { UserTypeEntity } from 'src/modules/user-types/user-type.entity';
+import { UserEntity } from 'src/modules/users/users.entity';
+import { SEQUELIZE } from '../../core/constants';
+const config = require('./database.config');
 
 export const databaseProviders = [
   {
@@ -29,6 +30,7 @@ export const databaseProviders = [
         DishEntity,
         DishDishesEntity,
         DishSauceEntity,
+        LocationsEntity,
       ]);
       await sequelize.sync();
       return sequelize;

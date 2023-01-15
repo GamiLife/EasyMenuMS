@@ -10,6 +10,7 @@ import { SaucesModule } from './modules/sauces/sauces.module';
 import { DishesModule } from './modules/dishes/dishes.module';
 import { CoreModule } from './core/core.module';
 import { CustomValidatorField } from './core/validations';
+import { LocationsModule } from './modules/locations/locations.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CustomValidatorField } from './core/validations';
     SaucesModule,
     DishesModule,
     CoreModule,
+    LocationsModule,
   ],
   providers: [CustomValidatorField],
   controllers: [],

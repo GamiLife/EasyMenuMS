@@ -1,15 +1,22 @@
-import { Table, Column, Model, DataType, HasOne } from "sequelize-typescript";
-import { transformUTCDate } from "src/core/helpers";
-import { CompanyEntity } from "../companies/company.entity";
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  HasOne,
+  PrimaryKey,
+  BeforeCreate,
+} from 'sequelize-typescript';
+import { getNextId, transformUTCDate } from 'src/core/helpers';
+import { CompanyEntity } from '../companies/company.entity';
 
 @Table({
-  tableName: "news",
+  tableName: 'news',
 })
 export class NewEntity extends Model<NewEntity> {
+  @PrimaryKey
   @Column({
     type: DataType.BIGINT,
-    primaryKey: true,
-    autoIncrement: true,
   })
   id: number;
 
@@ -41,7 +48,7 @@ export class NewEntity extends Model<NewEntity> {
     type: DataType.DATE,
     allowNull: false,
     get: function () {
-      const currentValue = this.getDataValue("startDate") as Date;
+      const currentValue = this.getDataValue('startDate') as Date;
       return transformUTCDate(currentValue);
     },
   })
@@ -51,7 +58,7 @@ export class NewEntity extends Model<NewEntity> {
     type: DataType.DATE,
     allowNull: false,
     get: function () {
-      const currentValue = this.getDataValue("endDate") as Date;
+      const currentValue = this.getDataValue('endDate') as Date;
       return transformUTCDate(currentValue);
     },
   })
@@ -64,9 +71,16 @@ export class NewEntity extends Model<NewEntity> {
   companyId: number;
 
   @HasOne(() => CompanyEntity, {
-    sourceKey: "companyId",
-    foreignKey: "id",
-    as: "company",
+    sourceKey: 'companyId',
+    foreignKey: 'id',
+    as: 'company',
   })
   company: CompanyEntity;
+
+  @BeforeCreate
+  static async setDefaultId(entity: NewEntity) {
+    const idNumber = await getNextId(entity.sequelize, 'news_sequence');
+
+    entity.id = idNumber;
+  }
 }

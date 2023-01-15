@@ -4,6 +4,12 @@ export const MESSAGE_RESPONSE_GET_CATEGORY_ALL =
 export const MESSAGE_RESPONSE_CREATE_CATEGORY = 'Category Created succesful';
 export const MESSAGE_RESPONSE_UPDATE_CATEGORY = 'Category Updated succesful';
 
+export const MESSAGE_RESPONSE_GET_LOCATION_BY_ID = 'Location found succesful';
+export const MESSAGE_RESPONSE_GET_LOCATION_ALL =
+  'All Locations found succesful';
+export const MESSAGE_RESPONSE_CREATE_LOCATION = 'Location Created succesful';
+export const MESSAGE_RESPONSE_UPDATE_LOCATION = 'Location Updated succesful';
+
 export const MESSAGE_RESPONSE_GET_COMPANY = 'Company found succesful';
 export const MESSAGE_RESPONSE_GET_COMPANY_ALL = 'All Company found succesful';
 export const MESSAGE_RESPONSE_CREATE_COMPANY = 'Company Created succesful';

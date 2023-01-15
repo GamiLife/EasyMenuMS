@@ -6,10 +6,12 @@ import {
   DataType,
   BelongsTo,
   PrimaryKey,
-  AutoIncrement,
+  BeforeCreate,
 } from 'sequelize-typescript';
+import { getNextId } from 'src/core/helpers';
 import { CategoryEntity } from '../categories/categories.entity';
 import { DishEntity } from '../dishes/entities/dishes.entity';
+import { LocationsEntity } from '../locations/locations.entity';
 import { NewEntity } from '../news/news.entity';
 import { SauceEntity } from '../sauces/sauces.entity';
 import { UserEntity } from '../users/users.entity';
@@ -21,7 +23,6 @@ import { UserEntity } from '../users/users.entity';
 export class CompanyEntity extends Model<CompanyEntity> {
   @Expose()
   @PrimaryKey
-  @AutoIncrement
   @Column({
     type: DataType.BIGINT,
   })
@@ -69,6 +70,15 @@ export class CompanyEntity extends Model<CompanyEntity> {
   category: CategoryEntity;
 
   @Expose()
+  @Type(() => LocationsEntity)
+  @BelongsTo(() => LocationsEntity, {
+    targetKey: 'id',
+    foreignKey: 'companyId',
+    as: 'location',
+  })
+  location: LocationsEntity;
+
+  @Expose()
   @Type(() => SauceEntity)
   @BelongsTo(() => SauceEntity, {
     targetKey: 'id',
@@ -85,4 +95,11 @@ export class CompanyEntity extends Model<CompanyEntity> {
     as: 'dish',
   })
   dish: DishEntity;
+
+  @BeforeCreate
+  static async setDefaultId(entity: CompanyEntity) {
+    const idNumber = await getNextId(entity.sequelize, 'companies_sequence');
+
+    entity.id = idNumber;
+  }
 }

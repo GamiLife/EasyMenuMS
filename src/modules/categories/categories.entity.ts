@@ -8,7 +8,9 @@ import {
   BelongsTo,
   BeforeCreate,
   BeforeUpdate,
+  PrimaryKey,
 } from 'sequelize-typescript';
+import { getNextId } from 'src/core/helpers';
 import { CompanyEntity } from '../companies/company.entity';
 import { DishEntity } from '../dishes/entities/dishes.entity';
 
@@ -18,10 +20,9 @@ import { DishEntity } from '../dishes/entities/dishes.entity';
 })
 export class CategoryEntity extends Model<CategoryEntity> {
   @Expose()
+  @PrimaryKey
   @Column({
     type: DataType.BIGINT,
-    primaryKey: true,
-    autoIncrement: true,
   })
   id: number;
 
@@ -77,6 +78,13 @@ export class CategoryEntity extends Model<CategoryEntity> {
     as: 'dish',
   })
   dish: DishEntity;
+
+  @BeforeCreate
+  static async setDefaultId(entity: CategoryEntity) {
+    const idNumber = await getNextId(entity.sequelize, 'categories_sequence');
+
+    entity.id = idNumber;
+  }
 
   @BeforeUpdate
   @BeforeCreate

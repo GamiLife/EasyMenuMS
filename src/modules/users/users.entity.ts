@@ -6,9 +6,10 @@ import {
   DataType,
   Validate,
   HasOne,
-  AutoIncrement,
   PrimaryKey,
+  BeforeCreate,
 } from 'sequelize-typescript';
+import { getNextId } from 'src/core/helpers';
 import { CompanyEntity } from '../companies/company.entity';
 import { UserTypeEntity } from '../user-types/user-type.entity';
 
@@ -19,7 +20,6 @@ import { UserTypeEntity } from '../user-types/user-type.entity';
 export class UserEntity extends Model<UserEntity> {
   @Expose()
   @PrimaryKey
-  @AutoIncrement
   @Column({
     type: DataType.BIGINT,
   })
@@ -85,4 +85,11 @@ export class UserEntity extends Model<UserEntity> {
     as: 'company',
   })
   company: CompanyEntity;
+
+  @BeforeCreate
+  static async setDefaultId(entity: UserEntity) {
+    const idNumber = await getNextId(entity.sequelize, 'users_sequence');
+
+    entity.id = idNumber;
+  }
 }

@@ -20,7 +20,6 @@ import {
 import { ResponseMessage, Transform } from 'src/core/decorators';
 import { CatchControl } from 'src/core/exceptions';
 import { S3Service } from 'src/core/services/S3.service';
-import { GetCategoriesByCompany } from '../categories/categories.dto';
 import { GetNewsByCompany, NewCreateDto, NewUpdateDto } from './news.dto';
 import { NewsService } from './news.service';
 
