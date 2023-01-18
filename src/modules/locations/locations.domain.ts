@@ -1,7 +1,7 @@
 import { Expose } from '@nestjs/class-transformer';
 
 /**
- * LocationDomainDto
+ * LocationDomain
  */
 export class LocationDomain {
   @Expose()

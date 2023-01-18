@@ -4,6 +4,12 @@ export const MESSAGE_RESPONSE_GET_CATEGORY_ALL =
 export const MESSAGE_RESPONSE_CREATE_CATEGORY = 'Category Created succesful';
 export const MESSAGE_RESPONSE_UPDATE_CATEGORY = 'Category Updated succesful';
 
+export const MESSAGE_RESPONSE_GET_STATIC_PAGE_BY_ID = 'StaticPage found succesful';
+export const MESSAGE_RESPONSE_GET_STATIC_PAGE_ALL =
+  'All StaticPages found succesful';
+export const MESSAGE_RESPONSE_CREATE_STATIC_PAGE = 'StaticPage Created succesful';
+export const MESSAGE_RESPONSE_UPDATE_STATIC_PAGE = 'StaticPage Updated succesful';
+
 export const MESSAGE_RESPONSE_GET_LOCATION_BY_ID = 'Location found succesful';
 export const MESSAGE_RESPONSE_GET_LOCATION_ALL =
   'All Locations found succesful';

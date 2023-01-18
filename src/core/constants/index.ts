@@ -4,6 +4,7 @@ import { DishGetResponseDto, DishResponseDto } from 'src/modules/dishes/dtos';
 import { LocationResponseDto } from 'src/modules/locations/locations.dto';
 import { NewResponseDto } from 'src/modules/news/news.dto';
 import { SauceResponseDto } from 'src/modules/sauces/sauces.dto';
+import { StaticPagesResponseDto } from 'src/modules/static-pages/static-pages.dto';
 import { UserTypeResponseDto } from 'src/modules/user-types/user-type.dto';
 import { UserResponseDto } from 'src/modules/users/users.dto';
 export * from './message-decorators';
@@ -17,7 +18,8 @@ export const dtosInMetadata = {
   SauceResponseDto: SauceResponseDto,
   DishResponseDto: DishResponseDto,
   DishGetResponseDto: DishGetResponseDto,
-  LocationResponseDto: LocationResponseDto
+  LocationResponseDto: LocationResponseDto,
+  StaticPagesResponseDto: StaticPagesResponseDto,
 };
 
 export const SEQUELIZE = 'SEQUELIZE';
@@ -32,6 +34,7 @@ export const NEW_REPOSITORY = 'NEW_REPOSITORY';
 export const CATEGORY_REPOSITORY = 'CATEGORY_REPOSITORY';
 export const SAUCE_REPOSITORY = 'SAUCE_REPOSITORY';
 export const LOCATION_REPOSITORY = 'LOCATION_REPOSITORY';
+export const STATIC_PAGES_REPOSITORY = 'STATIC_PAGES_REPOSITORY';
 
 export const DISH_REPOSITORY = 'DISH_REPOSITORY';
 export const DISH_SAUCE_REPOSITORY = 'DISH_SAUCE_REPOSITORY';

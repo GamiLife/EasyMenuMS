@@ -72,6 +72,13 @@ module.exports = {
     await queryInterface.sequelize.query(
       "ALTER TABLE locations ALTER id SET DEFAULT nextval('locations_sequence')"
     );
+
+    await queryInterface.sequelize.query(
+      'CREATE SEQUENCE static_pages_sequence start 1'
+    );
+    await queryInterface.sequelize.query(
+      "ALTER TABLE static_pages ALTER id SET DEFAULT nextval('static_pages_sequence')"
+    );
   },
 
   async down(queryInterface, Sequelize) {

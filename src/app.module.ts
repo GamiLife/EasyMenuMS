@@ -11,6 +11,7 @@ import { DishesModule } from './modules/dishes/dishes.module';
 import { CoreModule } from './core/core.module';
 import { CustomValidatorField } from './core/validations';
 import { LocationsModule } from './modules/locations/locations.module';
+import { StaticPagesModule } from './modules/static-pages/static-pages.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { LocationsModule } from './modules/locations/locations.module';
     DishesModule,
     CoreModule,
     LocationsModule,
+    StaticPagesModule,
   ],
   providers: [CustomValidatorField],
   controllers: [],

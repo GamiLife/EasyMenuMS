@@ -10,6 +10,7 @@ import {
 import { LocationsEntity } from 'src/modules/locations/locations.entity';
 import { NewEntity } from 'src/modules/news/news.entity';
 import { SauceEntity } from 'src/modules/sauces/sauces.entity';
+import { StaticPagesEntity } from 'src/modules/static-pages/static-pages.entity';
 import { UserTypeEntity } from 'src/modules/user-types/user-type.entity';
 import { UserEntity } from 'src/modules/users/users.entity';
 import { SEQUELIZE } from '../../core/constants';
@@ -31,6 +32,7 @@ export const databaseProviders = [
         DishDishesEntity,
         DishSauceEntity,
         LocationsEntity,
+        StaticPagesEntity,
       ]);
       await sequelize.sync();
       return sequelize;

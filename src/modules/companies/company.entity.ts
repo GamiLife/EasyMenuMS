@@ -15,6 +15,7 @@ import { LocationsEntity } from '../locations/locations.entity';
 import { NewEntity } from '../news/news.entity';
 import { SauceEntity } from '../sauces/sauces.entity';
 import { UserEntity } from '../users/users.entity';
+import { StaticPagesEntity } from '../static-pages/static-pages.entity';
 
 @Exclude()
 @Table({
@@ -77,6 +78,15 @@ export class CompanyEntity extends Model<CompanyEntity> {
     as: 'location',
   })
   location: LocationsEntity;
+
+  @Expose()
+  @Type(() => StaticPagesEntity)
+  @BelongsTo(() => StaticPagesEntity, {
+    targetKey: 'id',
+    foreignKey: 'companyId',
+    as: 'staticPage',
+  })
+  staticPage: StaticPagesEntity;
 
   @Expose()
   @Type(() => SauceEntity)

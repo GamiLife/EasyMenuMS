@@ -63,7 +63,6 @@ export class LocationsController {
 
       return { finalResponse: categoryDomain };
     } catch (error) {
-      console.log('test', error);
       CatchControl(error);
     }
   }
