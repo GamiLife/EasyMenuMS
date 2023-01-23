@@ -5,7 +5,6 @@ import {
   Column,
   Model,
   DataType,
-  AutoIncrement,
   PrimaryKey,
   HasOne,
   BelongsToMany,

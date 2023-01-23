@@ -5,6 +5,7 @@ import {
   MESSAGE_RESPONSE_CREATE_COMPANY,
   MESSAGE_RESPONSE_GET_COMPANY,
   MESSAGE_RESPONSE_GET_COMPANY_ALL,
+  MESSAGE_RESPONSE_GET_COMPANY_BY_SLUG,
   MESSAGE_RESPONSE_UPDATE_COMPANY,
 } from 'src/core/constants';
 import { ResponseMessage, Transform } from 'src/core/decorators';
@@ -33,6 +34,19 @@ export class CompaniesController {
   async findById(@Param('id') id) {
     try {
       const companyDomain = await this.companyService.findOneById(id);
+
+      return { finalResponse: companyDomain };
+    } catch (error) {
+      CatchControl(error);
+    }
+  }
+
+  @Transform('CompanyDetailsResponseDto')
+  @ResponseMessage(MESSAGE_RESPONSE_GET_COMPANY_BY_SLUG)
+  @Get('slug/:slug')
+  async findBySlug(@Param('slug') slug) {
+    try {
+      const companyDomain = await this.companyService.findOneBySlugUrl(slug);
 
       return { finalResponse: companyDomain };
     } catch (error) {

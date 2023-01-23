@@ -9,3 +9,14 @@ export const validateRGB = (key: string, value: string) => {
   const hasRGBPattern = regex.test(value);
   return hasRGBPattern;
 };
+
+/**
+ * Validate Slug pattern in fields
+ * @param text: text for testing
+ * @returns boolean
+ */
+export const isSlug = (text: string) => {
+  const reg = new RegExp('^([a-z]|[0-9]|(-))+$', 'i');
+  const isValid = reg.test(text);
+  return isValid;
+};

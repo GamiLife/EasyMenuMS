@@ -1,5 +1,8 @@
 import { CategoryResponseDto } from 'src/modules/categories/categories.dto';
-import { CompanyResponseDto } from 'src/modules/companies/company.dto';
+import {
+  CompanyDetailsResponseDto,
+  CompanyResponseDto,
+} from 'src/modules/companies/company.dto';
 import { DishGetResponseDto, DishResponseDto } from 'src/modules/dishes/dtos';
 import { LocationResponseDto } from 'src/modules/locations/locations.dto';
 import { NewResponseDto } from 'src/modules/news/news.dto';
@@ -20,6 +23,7 @@ export const dtosInMetadata = {
   DishGetResponseDto: DishGetResponseDto,
   LocationResponseDto: LocationResponseDto,
   StaticPagesResponseDto: StaticPagesResponseDto,
+  CompanyDetailsResponseDto: CompanyDetailsResponseDto,
 };
 
 export const SEQUELIZE = 'SEQUELIZE';
@@ -35,6 +39,7 @@ export const CATEGORY_REPOSITORY = 'CATEGORY_REPOSITORY';
 export const SAUCE_REPOSITORY = 'SAUCE_REPOSITORY';
 export const LOCATION_REPOSITORY = 'LOCATION_REPOSITORY';
 export const STATIC_PAGES_REPOSITORY = 'STATIC_PAGES_REPOSITORY';
+export const BRAND_REPOSITORY = 'BRAND_REPOSITORY';
 
 export const DISH_REPOSITORY = 'DISH_REPOSITORY';
 export const DISH_SAUCE_REPOSITORY = 'DISH_SAUCE_REPOSITORY';

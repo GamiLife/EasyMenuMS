@@ -7,6 +7,9 @@ import {
   BelongsTo,
   PrimaryKey,
   BeforeCreate,
+  Unique,
+  HasMany,
+  HasOne,
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
 import { CategoryEntity } from '../categories/categories.entity';
@@ -16,6 +19,7 @@ import { NewEntity } from '../news/news.entity';
 import { SauceEntity } from '../sauces/sauces.entity';
 import { UserEntity } from '../users/users.entity';
 import { StaticPagesEntity } from '../static-pages/static-pages.entity';
+import { BrandEntity } from './modules/brand/brand.entity';
 
 @Exclude()
 @Table({
@@ -44,6 +48,42 @@ export class CompanyEntity extends Model<CompanyEntity> {
   description: string;
 
   @Expose()
+  @Unique
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    validate: {
+      max: 100,
+      isLowercase: true,
+      is: /^([a-z]|[0-9]|(-))+$/i,
+    },
+  })
+  slugUrl: string;
+
+  @Expose()
+  @Type(() => BrandEntity)
+  @HasOne(() => BrandEntity, {
+    as: 'brand',
+  })
+  brand: BrandEntity;
+
+  @Expose()
+  @Type(() => StaticPagesEntity)
+  @HasMany(() => StaticPagesEntity, {
+    as: 'staticPages',
+  })
+  staticPages: StaticPagesEntity[];
+
+  @Expose()
+  @Type(() => CategoryEntity)
+  @BelongsTo(() => CategoryEntity, {
+    targetKey: 'id',
+    foreignKey: 'companyId',
+    as: 'category',
+  })
+  category: CategoryEntity;
+
+  @Expose()
   @Type(() => UserEntity)
   @BelongsTo(() => UserEntity, {
     targetKey: 'id',
@@ -62,15 +102,6 @@ export class CompanyEntity extends Model<CompanyEntity> {
   new: NewEntity;
 
   @Expose()
-  @Type(() => CategoryEntity)
-  @BelongsTo(() => CategoryEntity, {
-    targetKey: 'id',
-    foreignKey: 'companyId',
-    as: 'category',
-  })
-  category: CategoryEntity;
-
-  @Expose()
   @Type(() => LocationsEntity)
   @BelongsTo(() => LocationsEntity, {
     targetKey: 'id',
@@ -78,15 +109,6 @@ export class CompanyEntity extends Model<CompanyEntity> {
     as: 'location',
   })
   location: LocationsEntity;
-
-  @Expose()
-  @Type(() => StaticPagesEntity)
-  @BelongsTo(() => StaticPagesEntity, {
-    targetKey: 'id',
-    foreignKey: 'companyId',
-    as: 'staticPage',
-  })
-  staticPage: StaticPagesEntity;
 
   @Expose()
   @Type(() => SauceEntity)

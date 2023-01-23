@@ -7,12 +7,14 @@ module.exports = {
       {
         name: 'SeaFastFood',
         description: 'Restaurant to sell sea fast food',
+        slugUrl: 'sea-fast-food',
         createdAt: '2022-11-11 00:00:00',
         updatedAt: '2022-11-11 00:00:00',
       },
       {
         name: 'Pizza Hut',
         description: 'Company dedicated to sell pizzas',
+        slugUrl: 'pizza-hut',
         createdAt: '2022-11-11 00:00:00',
         updatedAt: '2022-11-11 00:00:00',
       },

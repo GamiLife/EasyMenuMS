@@ -15,4 +15,7 @@ export class CompanyDomainV2 {
   @Expose()
   @IsString()
   description: string;
+  @Expose()
+  @IsString()
+  slugUrl: string;
 }

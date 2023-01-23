@@ -1,17 +1,21 @@
 import { Exclude, Expose, Type } from '@nestjs/class-transformer';
 import {
   BeforeCreate,
+  BelongsTo,
   Column,
   DataType,
+  ForeignKey,
   HasOne,
   Model,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { getNextId } from 'src/core/helpers';
+import { getEnumKeys, getNextId } from 'src/core/helpers';
 import { LocationsEntity } from 'src/modules/locations/locations.entity';
 import { CompanyEntity } from '../companies/company.entity';
 import { EPageType } from './static-pages.dto';
+
+const enumValues = getEnumKeys(EPageType);
 
 @Exclude()
 @Table({
@@ -40,6 +44,7 @@ export class StaticPagesEntity extends Model<StaticPagesEntity> {
   htmlContent: string;
 
   @Expose()
+  @ForeignKey(() => CompanyEntity)
   @Column({
     type: DataType.BIGINT,
     allowNull: false,
@@ -52,8 +57,7 @@ export class StaticPagesEntity extends Model<StaticPagesEntity> {
     allowNull: false,
     validate: {
       customValidator: (value) => {
-        const enums = [EPageType.editable, EPageType.informative];
-        if (!enums.includes(value)) {
+        if (!enumValues.includes(value)) {
           throw new Error('not a valid option');
         }
       },
@@ -63,9 +67,7 @@ export class StaticPagesEntity extends Model<StaticPagesEntity> {
 
   @Expose()
   @Type(() => CompanyEntity)
-  @HasOne(() => CompanyEntity, {
-    sourceKey: 'companyId',
-    foreignKey: 'id',
+  @BelongsTo(() => CompanyEntity, {
     as: 'company',
   })
   company: CompanyEntity;

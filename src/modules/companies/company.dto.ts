@@ -1,4 +1,4 @@
-import { Expose } from '@nestjs/class-transformer';
+import { Expose, Type } from '@nestjs/class-transformer';
 import {
   IsNotEmpty,
   IsNumber,
@@ -6,6 +6,12 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { IsSlug } from 'src/core/decorators';
+import { StaticPagesDomain } from '../static-pages/static-pages.domain';
+import { BrandDomain } from './modules/brand/brand.domain';
+import { LogoProviderDomain } from './modules/logo-provider/logo-provider.domain';
+import { SocialNetworkDomain } from './modules/social-networks/social-network.domain';
+import { ThemeProviderDomain } from './modules/theme-provider/theme-provider.domain';
 
 /**
  * Request on create company
@@ -18,6 +24,9 @@ export class CompanyCreateDto {
   readonly name: string;
   @IsString()
   readonly description: string;
+  @IsString()
+  @IsSlug()
+  readonly slugUrl: string;
 }
 
 /**
@@ -33,6 +42,10 @@ export class CompanyUpdateDto {
   @Expose()
   @IsString()
   readonly description: string;
+  @Expose()
+  @IsString()
+  @IsSlug()
+  readonly slugUrl: string;
 }
 
 /**
@@ -48,4 +61,28 @@ export class CompanyResponseDto {
   @Expose()
   @IsString()
   readonly description: string;
+  @Expose()
+  @IsString()
+  readonly slugUrl: string;
+}
+
+/**General Response DTO */
+export class CompanyDetailsResponseDto {
+  @Expose()
+  readonly company: CompanyResponseDto;
+  @Expose()
+  @Type(() => BrandDomain)
+  readonly brand: BrandDomain;
+  @Expose()
+  @Type(() => ThemeProviderDomain)
+  readonly theme: ThemeProviderDomain[];
+  @Expose()
+  @Type(() => LogoProviderDomain)
+  readonly logos: LogoProviderDomain[];
+  @Expose()
+  @Type(() => SocialNetworkDomain)
+  readonly socialNetworks: SocialNetworkDomain[];
+  @Expose()
+  @Type(() => StaticPagesDomain)
+  readonly staticPages: StaticPagesDomain[];
 }

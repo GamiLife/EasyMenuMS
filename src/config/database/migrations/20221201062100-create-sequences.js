@@ -79,6 +79,41 @@ module.exports = {
     await queryInterface.sequelize.query(
       "ALTER TABLE static_pages ALTER id SET DEFAULT nextval('static_pages_sequence')"
     );
+
+    await queryInterface.sequelize.query(
+      'CREATE SEQUENCE brands_sequence start 1'
+    );
+    await queryInterface.sequelize.query(
+      "ALTER TABLE brands ALTER id SET DEFAULT nextval('brands_sequence')"
+    );
+
+    await queryInterface.sequelize.query(
+      'CREATE SEQUENCE brand_social_networks_sequence start 1'
+    );
+    await queryInterface.sequelize.query(
+      "ALTER TABLE brand_social_networks ALTER id SET DEFAULT nextval('brand_social_networks_sequence')"
+    );
+
+    await queryInterface.sequelize.query(
+      'CREATE SEQUENCE logos_provider_sequence start 1'
+    );
+    await queryInterface.sequelize.query(
+      "ALTER TABLE logos_provider ALTER id SET DEFAULT nextval('logos_provider_sequence')"
+    );
+
+    await queryInterface.sequelize.query(
+      'CREATE SEQUENCE social_networks_sequence start 1'
+    );
+    await queryInterface.sequelize.query(
+      "ALTER TABLE social_networks ALTER id SET DEFAULT nextval('social_networks_sequence')"
+    );
+
+    await queryInterface.sequelize.query(
+      'CREATE SEQUENCE theme_provider_sequence start 1'
+    );
+    await queryInterface.sequelize.query(
+      "ALTER TABLE theme_provider ALTER id SET DEFAULT nextval('theme_provider_sequence')"
+    );
   },
 
   async down(queryInterface, Sequelize) {
@@ -96,5 +131,18 @@ module.exports = {
       'DROP SEQUENCE dishes_dishes_sequence'
     );
     await queryInterface.sequelize.query('DROP SEQUENCE locations_sequence');
+    await queryInterface.sequelize.query('DROP SEQUENCE brands_sequence');
+    await queryInterface.sequelize.query(
+      'DROP SEQUENCE brand_social_networks_sequence'
+    );
+    await queryInterface.sequelize.query(
+      'DROP SEQUENCE logos_provider_sequence'
+    );
+    await queryInterface.sequelize.query(
+      'DROP SEQUENCE social_networks_sequence'
+    );
+    await queryInterface.sequelize.query(
+      'DROP SEQUENCE theme_provider_sequence'
+    );
   },
 };

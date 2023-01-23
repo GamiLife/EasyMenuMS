@@ -87,7 +87,6 @@ export class CategoriesController {
   @Transform('CategoryResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_CREATE_CATEGORY)
   @Post()
-  @UsePipes(new CategoryPayloadValidation())
   @UseInterceptors(FileInterceptor('file'))
   async create(
     @UploadedFile() file,
