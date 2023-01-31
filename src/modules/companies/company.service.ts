@@ -10,7 +10,6 @@ import { LogoProviderEntity } from './modules/logo-provider/logo-provider.entity
 import { ThemeProviderEntity } from './modules/theme-provider/theme-provider.entity';
 import { SocialNetworkEntity } from './modules/social-networks/social-network.entity';
 import { BrandDomain } from './modules/brand/brand.domain';
-import { BrandSocialNetworkEntity } from './modules/brand-social-networks/brand-social-network.entity';
 import { SocialNetworkDomain } from './modules/social-networks/social-network.domain';
 import { LogoProviderDomain } from './modules/logo-provider/logo-provider.domain';
 import { ThemeProviderDomain } from './modules/theme-provider/theme-provider.domain';

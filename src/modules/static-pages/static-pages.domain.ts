@@ -1,4 +1,4 @@
-import { Expose, Type } from '@nestjs/class-transformer';
+import { Expose } from '@nestjs/class-transformer';
 import { EPageType } from './static-pages.dto';
 
 /**

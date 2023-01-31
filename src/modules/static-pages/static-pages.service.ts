@@ -132,7 +132,7 @@ export class StaticPagesService extends BaseService {
         );
       });
 
-    const staticPageDomain = plainToClass(StaticPagesDomain, location, {
+    const staticPageDomain = plainToClass(StaticPagesDomain, staticPage, {
       excludeExtraneousValues: true,
       enableImplicitConversion: true,
     });

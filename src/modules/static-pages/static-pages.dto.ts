@@ -73,6 +73,8 @@ export class StaticPagesUpdateDto {
  */
 export class StaticPagesResponseDto {
   @Expose()
+  readonly id: number;
+  @Expose()
   readonly url: string;
   @Expose()
   readonly htmlContent: string;
