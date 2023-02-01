@@ -1,17 +1,9 @@
 import { Expose, Transform } from '@nestjs/class-transformer';
-
-export class BrandSocialDetailsDomain {
-  @Expose()
-  readonly user: string;
-  @Expose()
-  readonly phone: string;
-  @Expose()
-  readonly countryCode: string;
-}
+import { BrandSocialDetailsDomain } from '../brand-social-networks/brand-social-network.domain';
 
 export class SocialNetworkDomain {
   @Expose()
-  readonly id: number;
+  readonly id?: number;
   @Expose()
   readonly name: string;
   @Expose()
@@ -24,5 +16,5 @@ export class SocialNetworkDomain {
       countryCode: obj?.details?.countryCode,
     };
   })
-  readonly details: BrandSocialDetailsDomain;
+  readonly details?: BrandSocialDetailsDomain;
 }

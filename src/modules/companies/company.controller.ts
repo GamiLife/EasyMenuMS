@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { CompaniesService } from './company.service';
-import { CompanyCreateDto, CompanyUpdateDto } from './company.dto';
+import { CompanyDetailsCreateDto, CompanyUpdateDto } from './company.dto';
 import {
   MESSAGE_RESPONSE_CREATE_COMPANY,
   MESSAGE_RESPONSE_GET_COMPANY,
@@ -28,7 +28,7 @@ export class CompaniesController {
     }
   }
 
-  @Transform('CompanyResponseDto')
+  @Transform('CompanyDetailsResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_COMPANY)
   @Get(':id')
   async findById(@Param('id') id) {
@@ -54,10 +54,10 @@ export class CompaniesController {
     }
   }
 
-  @Transform('CompanyResponseDto')
+  @Transform('CompanyDetailsCreateDto')
   @ResponseMessage(MESSAGE_RESPONSE_CREATE_COMPANY)
   @Post()
-  async create(@Body() request: CompanyCreateDto) {
+  async create(@Body() request: CompanyDetailsCreateDto) {
     try {
       const companyDomain = await this.companyService.create(request);
 

@@ -5,8 +5,6 @@ import {
   Column,
   DataType,
   ForeignKey,
-  HasMany,
-  HasOne,
   Model,
   PrimaryKey,
   Table,
@@ -79,7 +77,10 @@ export class LogoProviderEntity extends Model<LogoProviderEntity> {
 
   @BeforeCreate
   static async setDefaultId(entity: LogoProviderEntity) {
-    const idNumber = await getNextId(entity.sequelize, 'logos_sequence');
+    const idNumber = await getNextId(
+      entity.sequelize,
+      'logos_provider_sequence'
+    );
 
     entity.id = idNumber;
   }

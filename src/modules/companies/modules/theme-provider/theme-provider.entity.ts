@@ -5,8 +5,6 @@ import {
   Column,
   DataType,
   ForeignKey,
-  HasMany,
-  HasOne,
   Model,
   PrimaryKey,
   Table,
@@ -44,7 +42,7 @@ export class ThemeProviderEntity extends Model<ThemeProviderEntity> {
     validate: {
       customValidator: (value) => {
         if (!enumValuesThemeMode.includes(value)) {
-          throw new Error('not a valid option');
+          throw new Error('Theme mode not a valid option');
         }
       },
     },
@@ -65,7 +63,7 @@ export class ThemeProviderEntity extends Model<ThemeProviderEntity> {
     validate: {
       customValidator: (value) => {
         if (!enumValuesThemeProvider.includes(value)) {
-          throw new Error('not a valid option');
+          throw new Error('Type not a valid option');
         }
       },
     },
@@ -88,7 +86,10 @@ export class ThemeProviderEntity extends Model<ThemeProviderEntity> {
 
   @BeforeCreate
   static async setDefaultId(entity: ThemeProviderEntity) {
-    const idNumber = await getNextId(entity.sequelize, 'companies_sequence');
+    const idNumber = await getNextId(
+      entity.sequelize,
+      'theme_provider_sequence'
+    );
 
     entity.id = idNumber;
   }

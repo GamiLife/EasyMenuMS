@@ -1,8 +1,13 @@
 import { plainToClass } from '@nestjs/class-transformer';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { BRAND_REPOSITORY, COMPANY_REPOSITORY } from 'src/core/constants';
+import {
+  BRANDSOCIALNETWORK_REPOSITORY,
+  BRAND_REPOSITORY,
+  COMPANY_REPOSITORY,
+  THEMEPROVIDER_REPOSITORY,
+} from 'src/core/constants';
 import { DBError, EmptyError } from 'src/core/exceptions';
-import { CompanyCreateDto, CompanyUpdateDto } from './company.dto';
+import { CompanyDetailsCreateDto, CompanyUpdateDto } from './company.dto';
 import { CompanyDomainV2 } from './company.domain';
 import { CompanyEntity } from './company.entity';
 import { BrandEntity } from './modules/brand/brand.entity';
@@ -15,6 +20,7 @@ import { LogoProviderDomain } from './modules/logo-provider/logo-provider.domain
 import { ThemeProviderDomain } from './modules/theme-provider/theme-provider.domain';
 import { StaticPagesEntity } from '../static-pages/static-pages.entity';
 import { StaticPagesDomain } from '../static-pages/static-pages.domain';
+import { BrandSocialNetworkEntity } from './modules/brand-social-networks/brand-social-network.entity';
 
 @Injectable()
 export class CompaniesService {
@@ -22,10 +28,17 @@ export class CompaniesService {
     @Inject(COMPANY_REPOSITORY)
     private readonly companyRepository: typeof CompanyEntity,
     @Inject(BRAND_REPOSITORY)
-    private readonly brandRepository: typeof BrandEntity
+    private readonly brandRepository: typeof BrandEntity,
+    @Inject(THEMEPROVIDER_REPOSITORY)
+    private readonly themeRepository: typeof ThemeProviderEntity,
+    @Inject(BRANDSOCIALNETWORK_REPOSITORY)
+    private readonly brandSocialNetworksRepository: typeof BrandSocialNetworkEntity
   ) {}
 
-  async create(company: CompanyCreateDto): Promise<CompanyDomainV2> {
+  async create(
+    companyDetails: CompanyDetailsCreateDto
+  ): Promise<CompanyDetailsCreateDto> {
+    const company = companyDetails.company;
     const companyEntity = await this.companyRepository
       .create<CompanyEntity>(company)
       .catch((reason) => {
@@ -39,34 +52,72 @@ export class CompaniesService {
       throw new DBError('Company query failed', HttpStatus.BAD_REQUEST);
     }
 
-    const companyDomain = plainToClass(CompanyDomainV2, companyEntity, {
-      excludeExtraneousValues: true,
-      enableImplicitConversion: true,
-    });
+    const brand = { ...companyDetails.brand, companyId: companyEntity.id };
+    const brandEntity = await this.brandRepository
+      .create<BrandEntity>(brand)
+      .catch((reason) => {
+        throw new DBError(
+          `Brand query failed: ${reason}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
 
-    return companyDomain;
-  }
-
-  async findOneById(id: number): Promise<CompanyDomainV2> {
-    const companyEntity = await this.companyRepository.findOne<CompanyEntity>({
-      where: { id },
-    });
-
-    if (!companyEntity) {
-      throw new EmptyError('Company not found', HttpStatus.NOT_FOUND);
+    if (!brandEntity) {
+      throw new DBError('Brand query failed', HttpStatus.BAD_REQUEST);
     }
 
-    const companyDomain = plainToClass(CompanyDomainV2, companyEntity, {
-      excludeExtraneousValues: true,
-      enableImplicitConversion: true,
-    });
+    const themes = companyDetails.theme.map((theme) => ({
+      ...theme,
+      brandId: Number(brandEntity.id),
+    }));
+    const themeEntities = [];
+    for (const theme of themes) {
+      const themeEntity = await this.themeRepository
+        .create<ThemeProviderEntity>(theme)
+        .catch((reason) => {
+          throw new DBError(
+            `Theme query failed: ${reason}`,
+            HttpStatus.BAD_REQUEST
+          );
+        });
+      themeEntities.push(themeEntity);
+    }
+    if (!themeEntities.length) {
+      throw new DBError('Themes query failed', HttpStatus.BAD_REQUEST);
+    }
 
-    return companyDomain;
+    const brandSocialNetworks = companyDetails.brandSocialNetworks.map(
+      (brandSocialNetwork) => ({
+        ...brandSocialNetwork,
+        brandId: Number(brandEntity.id),
+      })
+    );
+    const brandSocialNetworkEntities = [];
+    for (const brandSocialNetwork of brandSocialNetworks) {
+      const brandSocialNetworkEntity = await this.brandSocialNetworksRepository
+        .create<BrandSocialNetworkEntity>(brandSocialNetwork)
+        .catch((reason) => {
+          throw new DBError(
+            `Brand Social Networks query failed: ${reason}`,
+            HttpStatus.BAD_REQUEST
+          );
+        });
+      brandSocialNetworkEntities.push(brandSocialNetworkEntity);
+    }
+
+    if (!brandSocialNetworkEntities.length) {
+      throw new DBError(
+        'Brand Social Networks query failed',
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    return companyDetails;
   }
 
-  async findOneBySlugUrl(slugUrl: string): Promise<any> {
+  private async findOneByField(name: string, value: string | number) {
     const companyEntity = await this.companyRepository.findOne<CompanyEntity>({
-      where: { slugUrl },
+      where: { [name]: value },
       include: [
         {
           model: BrandEntity,
@@ -148,6 +199,14 @@ export class CompaniesService {
     };
 
     return reponse;
+  }
+
+  async findOneBySlugUrl(slugUrl: string): Promise<any> {
+    return await this.findOneByField('slugUrl', slugUrl);
+  }
+
+  async findOneById(id: number): Promise<any> {
+    return await this.findOneByField('id', id);
   }
 
   async findAll(): Promise<CompanyDomainV2[]> {

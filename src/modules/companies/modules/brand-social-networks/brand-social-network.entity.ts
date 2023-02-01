@@ -89,7 +89,10 @@ export class BrandSocialNetworkEntity extends Model<BrandSocialNetworkEntity> {
 
   @BeforeCreate
   static async setDefaultId(entity: BrandSocialNetworkEntity) {
-    const idNumber = await getNextId(entity.sequelize, 'companies_sequence');
+    const idNumber = await getNextId(
+      entity.sequelize,
+      'brand_social_networks_sequence'
+    );
 
     entity.id = idNumber;
   }

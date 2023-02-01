@@ -8,7 +8,6 @@ import {
   DataType,
   ForeignKey,
   HasMany,
-  HasOne,
   Model,
   PrimaryKey,
   Table,

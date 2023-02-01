@@ -1,7 +1,7 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
 import { CustomValidatorField } from '../validations';
 
-export const FnValidator = (fn: (key: string, value: string) => boolean) => {
+export const FnValidator = (fn: (key: string, value: any) => boolean) => {
   return function (
     object: any,
     propertyName: string,
