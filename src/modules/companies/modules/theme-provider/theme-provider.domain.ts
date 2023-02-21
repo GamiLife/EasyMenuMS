@@ -1,5 +1,8 @@
+import {
+  EThemeModeType,
+  EThemeProviderType,
+} from '@gamilife/node-components.core.core';
 import { Expose } from '@nestjs/class-transformer';
-import { EThemeModeType, EThemeProviderType } from './theme-provider.entity';
 
 export class ThemeProviderDomain {
   @Expose()

@@ -1,4 +1,6 @@
 import { Expose } from '@nestjs/class-transformer';
+import { IsNotEmpty } from 'class-validator';
+import { TOperations } from 'src/core/types';
 
 export class BrandSocialNetworksCreateDto {
   @Expose()
@@ -13,7 +15,7 @@ export class BrandSocialNetworksCreateDto {
 
 export class BrandSocialNetworksUpdateDto {
   @Expose()
-  readonly id: number;
+  readonly id?: number;
   @Expose()
   readonly user: string;
   @Expose()
@@ -21,5 +23,9 @@ export class BrandSocialNetworksUpdateDto {
   @Expose()
   readonly countryCode: string;
   @Expose()
+  @IsNotEmpty()
   readonly socialNetworkId: number;
+  @Expose()
+  @IsNotEmpty()
+  readonly operation: TOperations;
 }

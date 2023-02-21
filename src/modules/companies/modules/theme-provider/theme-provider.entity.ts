@@ -1,3 +1,7 @@
+import {
+  EThemeModeType,
+  EThemeProviderType,
+} from '@gamilife/node-components.core.core';
 import { Expose, Type } from '@nestjs/class-transformer';
 import {
   BeforeCreate,
@@ -10,17 +14,10 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { getEnumKeys, getNextId } from 'src/core/helpers';
+import { switchOperation } from 'src/core/helpers/operations.helper';
+import { TEntityOperation } from 'src/core/types';
 import { BrandEntity } from '../brand/brand.entity';
 
-export enum EThemeModeType {
-  light = 'light',
-  dark = 'dark',
-}
-export enum EThemeProviderType {
-  primary = 'primary',
-  secondary = 'secondary',
-  thid = 'third',
-}
 const enumValuesThemeMode = getEnumKeys(EThemeModeType);
 const enumValuesThemeProvider = getEnumKeys(EThemeProviderType);
 
@@ -93,4 +90,8 @@ export class ThemeProviderEntity extends Model<ThemeProviderEntity> {
 
     entity.id = idNumber;
   }
+
+  declare switchOperation: (request: TEntityOperation) => void;
 }
+
+ThemeProviderEntity.prototype.switchOperation = switchOperation;

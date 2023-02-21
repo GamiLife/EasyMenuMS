@@ -7,7 +7,10 @@ import {
   THEMEPROVIDER_REPOSITORY,
 } from 'src/core/constants';
 import { DBError, EmptyError } from 'src/core/exceptions';
-import { CompanyDetailsCreateDto, CompanyUpdateDto } from './company.dto';
+import {
+  CompanyDetailsCreateDto,
+  CompanyDetailsUpdateDto,
+} from './company.dto';
 import { CompanyDomainV2 } from './company.domain';
 import { CompanyEntity } from './company.entity';
 import { BrandEntity } from './modules/brand/brand.entity';
@@ -21,6 +24,7 @@ import { ThemeProviderDomain } from './modules/theme-provider/theme-provider.dom
 import { StaticPagesEntity } from '../static-pages/static-pages.entity';
 import { StaticPagesDomain } from '../static-pages/static-pages.domain';
 import { BrandSocialNetworkEntity } from './modules/brand-social-networks/brand-social-network.entity';
+import { TEntityMixin } from 'src/core/types';
 
 @Injectable()
 export class CompaniesService {
@@ -30,9 +34,11 @@ export class CompaniesService {
     @Inject(BRAND_REPOSITORY)
     private readonly brandRepository: typeof BrandEntity,
     @Inject(THEMEPROVIDER_REPOSITORY)
-    private readonly themeRepository: typeof ThemeProviderEntity,
+    private readonly themeRepository: TEntityMixin<typeof ThemeProviderEntity>,
     @Inject(BRANDSOCIALNETWORK_REPOSITORY)
-    private readonly brandSocialNetworksRepository: typeof BrandSocialNetworkEntity
+    private readonly brandSocialNetworksRepository: TEntityMixin<
+      typeof BrandSocialNetworkEntity
+    >
   ) {}
 
   async create(
@@ -112,7 +118,13 @@ export class CompaniesService {
       );
     }
 
-    return companyDetails;
+    return {
+      ...companyDetails,
+      company: {
+        id: companyEntity.id,
+        ...companyDetails.company,
+      },
+    };
   }
 
   private async findOneByField(name: string, value: string | number) {
@@ -128,21 +140,19 @@ export class CompaniesService {
               required: true,
             },
             {
-              model: LogoProviderEntity,
-              required: true,
-            },
-            {
               through: {
                 as: 'details',
               },
               model: SocialNetworkEntity,
               required: true,
             },
+            {
+              model: LogoProviderEntity,
+            },
           ],
         },
         {
           model: StaticPagesEntity,
-          required: true,
           attributes: ['id', 'url'],
         },
       ],
@@ -223,12 +233,15 @@ export class CompaniesService {
   }
 
   async update(
-    company: CompanyUpdateDto,
-    id: number
-  ): Promise<CompanyDomainV2> {
-    await this.companyRepository
-      .update(company, {
-        where: { id },
+    companyDetails: CompanyDetailsUpdateDto,
+    companyId: number
+  ): Promise<CompanyDetailsUpdateDto> {
+    const company = companyDetails.company;
+    const companyEntity = await this.companyRepository
+      .update<CompanyEntity>(company, {
+        where: {
+          id: companyId,
+        },
       })
       .catch((reason) => {
         throw new DBError(
@@ -237,11 +250,80 @@ export class CompaniesService {
         );
       });
 
-    const companyDomain = plainToClass(CompanyDomainV2, company, {
-      excludeExtraneousValues: true,
-      enableImplicitConversion: true,
-    });
+    if (!companyEntity) {
+      throw new DBError('Company query failed', HttpStatus.BAD_REQUEST);
+    }
 
-    return companyDomain;
+    const brand = { ...companyDetails.brand, companyId: companyId };
+    const brandEntity = await this.brandRepository
+      .update<BrandEntity>(brand, {
+        where: {
+          id: brand.id,
+        },
+      })
+      .catch((reason) => {
+        throw new DBError(
+          `Brand query failed: ${reason}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+
+    if (!brandEntity) {
+      throw new DBError('Brand query failed', HttpStatus.BAD_REQUEST);
+    }
+
+    const themes = companyDetails.theme.map((theme) => ({
+      ...theme,
+      brandId: Number(brand.id),
+    }));
+    const themeEntities = [];
+    for (const theme of themes) {
+      const themeEntity = await this.themeRepository
+        .switchOperation(theme)
+        .catch((reason) => {
+          throw new DBError(
+            `Theme query failed: ${reason}`,
+            HttpStatus.BAD_REQUEST
+          );
+        });
+      themeEntities.push(themeEntity);
+    }
+    if (!themeEntities.length) {
+      throw new DBError('Themes operation failed', HttpStatus.BAD_REQUEST);
+    }
+
+    const brandSocialNetworks = companyDetails.brandSocialNetworks.map(
+      (brandSocialNetwork) => ({
+        ...brandSocialNetwork,
+        brandId: Number(brand.id),
+      })
+    );
+    const brandSocialNetworkEntities = [];
+    for (const brandSocialNetwork of brandSocialNetworks) {
+      const brandSocialNetworkEntity = await this.brandSocialNetworksRepository
+        .switchOperation(brandSocialNetwork)
+        .catch((reason) => {
+          throw new DBError(
+            `Brand Social Networks operation failed: ${reason}`,
+            HttpStatus.BAD_REQUEST
+          );
+        });
+      brandSocialNetworkEntities.push(brandSocialNetworkEntity);
+    }
+
+    if (!brandSocialNetworkEntities.length) {
+      throw new DBError(
+        'Brand Social Networks query failed',
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    return {
+      ...companyDetails,
+      company: {
+        id: companyId,
+        ...companyDetails.company,
+      },
+    };
   }
 }

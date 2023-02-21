@@ -1,6 +1,9 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { CompaniesService } from './company.service';
-import { CompanyDetailsCreateDto, CompanyUpdateDto } from './company.dto';
+import {
+  CompanyDetailsCreateDto,
+  CompanyDetailsUpdateDto,
+} from './company.dto';
 import {
   MESSAGE_RESPONSE_CREATE_COMPANY,
   MESSAGE_RESPONSE_GET_COMPANY,
@@ -67,15 +70,16 @@ export class CompaniesController {
     }
   }
 
-  @Transform('CompanyResponseDto')
+  @Transform('CompanyDetailsUpdateDto')
   @ResponseMessage(MESSAGE_RESPONSE_UPDATE_COMPANY)
   @Put(':id')
-  async update(@Param('id') id, @Body() request: CompanyUpdateDto) {
+  async update(@Param('id') id, @Body() request: CompanyDetailsUpdateDto) {
     try {
       const companyDomain = await this.companyService.update(request, id);
 
       return { finalResponse: companyDomain };
     } catch (error) {
+      console.log('test', error);
       CatchControl(error);
     }
   }

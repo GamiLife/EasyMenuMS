@@ -2,6 +2,7 @@ import { CategoryResponseDto } from 'src/modules/categories/categories.dto';
 import {
   CompanyDetailsCreateDto,
   CompanyDetailsResponseDto,
+  CompanyDetailsUpdateDto,
   CompanyResponseDto,
 } from 'src/modules/companies/company.dto';
 import { DishGetResponseDto, DishResponseDto } from 'src/modules/dishes/dtos';
@@ -26,6 +27,7 @@ export const dtosInMetadata = {
   StaticPagesResponseDto: StaticPagesResponseDto,
   CompanyDetailsResponseDto: CompanyDetailsResponseDto,
   CompanyDetailsCreateDto: CompanyDetailsCreateDto,
+  CompanyDetailsUpdateDto: CompanyDetailsUpdateDto,
 };
 
 export const SEQUELIZE = 'SEQUELIZE';
