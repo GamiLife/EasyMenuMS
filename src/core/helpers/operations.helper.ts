@@ -1,7 +1,7 @@
 import { DBError } from '../exceptions';
 import { TEntityOperation } from '../types';
 
-export function switchOperation(request: TEntityOperation) {
+export function switchOperationHelper(request: TEntityOperation) {
   const { id, operations: op, ...entity } = request;
 
   if (!op) throw new DBError('Operation is not defined');

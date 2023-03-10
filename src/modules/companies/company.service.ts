@@ -24,7 +24,12 @@ import { ThemeProviderDomain } from './modules/theme-provider/theme-provider.dom
 import { StaticPagesEntity } from '../static-pages/static-pages.entity';
 import { StaticPagesDomain } from '../static-pages/static-pages.domain';
 import { BrandSocialNetworkEntity } from './modules/brand-social-networks/brand-social-network.entity';
-import { TEntityMixin } from 'src/core/types';
+
+import { switchOperationHelper } from 'src/core/helpers/operations.helper';
+import {
+  ThemeProviderCreateDto,
+  ThemeProviderUpdateDto,
+} from './modules/theme-provider/theme-provider.dto';
 
 @Injectable()
 export class CompaniesService {
@@ -34,11 +39,9 @@ export class CompaniesService {
     @Inject(BRAND_REPOSITORY)
     private readonly brandRepository: typeof BrandEntity,
     @Inject(THEMEPROVIDER_REPOSITORY)
-    private readonly themeRepository: TEntityMixin<typeof ThemeProviderEntity>,
+    private readonly themeProviderRepository: typeof ThemeProviderEntity,
     @Inject(BRANDSOCIALNETWORK_REPOSITORY)
-    private readonly brandSocialNetworksRepository: TEntityMixin<
-      typeof BrandSocialNetworkEntity
-    >
+    private readonly brandSocialNetworksRepository: typeof BrandSocialNetworkEntity
   ) {}
 
   async create(
@@ -70,26 +73,6 @@ export class CompaniesService {
 
     if (!brandEntity) {
       throw new DBError('Brand query failed', HttpStatus.BAD_REQUEST);
-    }
-
-    const themes = companyDetails.theme.map((theme) => ({
-      ...theme,
-      brandId: Number(brandEntity.id),
-    }));
-    const themeEntities = [];
-    for (const theme of themes) {
-      const themeEntity = await this.themeRepository
-        .create<ThemeProviderEntity>(theme)
-        .catch((reason) => {
-          throw new DBError(
-            `Theme query failed: ${reason}`,
-            HttpStatus.BAD_REQUEST
-          );
-        });
-      themeEntities.push(themeEntity);
-    }
-    if (!themeEntities.length) {
-      throw new DBError('Themes query failed', HttpStatus.BAD_REQUEST);
     }
 
     const brandSocialNetworks = companyDetails.brandSocialNetworks.map(
@@ -232,6 +215,25 @@ export class CompaniesService {
     return companiesDomain;
   }
 
+  async updateBlockId(blockId: number, request: ThemeProviderUpdateDto) {
+    const blockUpdated = await this.themeProviderRepository
+      .update<ThemeProviderEntity>(request, {
+        where: { id: blockId },
+      })
+      .catch((reason) => {
+        throw new DBError(
+          `Company query failed: ${reason}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+
+    if (!blockUpdated) {
+      throw new DBError('BlockId udpate query failed', HttpStatus.BAD_REQUEST);
+    }
+
+    return request;
+  }
+
   async update(
     companyDetails: CompanyDetailsUpdateDto,
     companyId: number
@@ -272,26 +274,6 @@ export class CompaniesService {
       throw new DBError('Brand query failed', HttpStatus.BAD_REQUEST);
     }
 
-    const themes = companyDetails.theme.map((theme) => ({
-      ...theme,
-      brandId: Number(brand.id),
-    }));
-    const themeEntities = [];
-    for (const theme of themes) {
-      const themeEntity = await this.themeRepository
-        .switchOperation(theme)
-        .catch((reason) => {
-          throw new DBError(
-            `Theme query failed: ${reason}`,
-            HttpStatus.BAD_REQUEST
-          );
-        });
-      themeEntities.push(themeEntity);
-    }
-    if (!themeEntities.length) {
-      throw new DBError('Themes operation failed', HttpStatus.BAD_REQUEST);
-    }
-
     const brandSocialNetworks = companyDetails.brandSocialNetworks.map(
       (brandSocialNetwork) => ({
         ...brandSocialNetwork,
@@ -300,14 +282,12 @@ export class CompaniesService {
     );
     const brandSocialNetworkEntities = [];
     for (const brandSocialNetwork of brandSocialNetworks) {
-      const brandSocialNetworkEntity = await this.brandSocialNetworksRepository
-        .switchOperation(brandSocialNetwork)
-        .catch((reason) => {
-          throw new DBError(
-            `Brand Social Networks operation failed: ${reason}`,
-            HttpStatus.BAD_REQUEST
-          );
-        });
+      const brandSocialNetworkEntityFunc = await switchOperationHelper.bind(
+        this.brandSocialNetworksRepository
+      );
+      const brandSocialNetworkEntity =
+        brandSocialNetworkEntityFunc(brandSocialNetwork);
+
       brandSocialNetworkEntities.push(brandSocialNetworkEntity);
     }
 

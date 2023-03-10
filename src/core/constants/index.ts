@@ -5,6 +5,7 @@ import {
   CompanyDetailsUpdateDto,
   CompanyResponseDto,
 } from 'src/modules/companies/company.dto';
+import { ThemeProviderResponseDto } from 'src/modules/companies/modules/theme-provider/theme-provider.dto';
 import { DishGetResponseDto, DishResponseDto } from 'src/modules/dishes/dtos';
 import { LocationResponseDto } from 'src/modules/locations/locations.dto';
 import { NewResponseDto } from 'src/modules/news/news.dto';
@@ -28,6 +29,7 @@ export const dtosInMetadata = {
   CompanyDetailsResponseDto: CompanyDetailsResponseDto,
   CompanyDetailsCreateDto: CompanyDetailsCreateDto,
   CompanyDetailsUpdateDto: CompanyDetailsUpdateDto,
+  ThemeProviderResponseDto: ThemeProviderResponseDto,
 };
 
 export const SEQUELIZE = 'SEQUELIZE';

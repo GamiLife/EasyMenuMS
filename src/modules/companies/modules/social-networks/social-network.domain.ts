@@ -14,6 +14,7 @@ export class SocialNetworkDomain {
       user: obj?.details?.user,
       phone: obj?.details?.phone,
       countryCode: obj?.details?.countryCode,
+      id: obj?.details?.id,
     };
   })
   readonly details?: BrandSocialDetailsDomain;

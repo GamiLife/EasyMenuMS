@@ -13,6 +13,7 @@ import {
 } from 'src/core/constants';
 import { ResponseMessage, Transform } from 'src/core/decorators';
 import { CatchControl } from 'src/core/exceptions';
+import { ThemeProviderUpdateDto } from './modules/theme-provider/theme-provider.dto';
 
 @Controller('companies')
 export class CompaniesController {
@@ -78,6 +79,27 @@ export class CompaniesController {
       const companyDomain = await this.companyService.update(request, id);
 
       return { finalResponse: companyDomain };
+    } catch (error) {
+      console.log('test', error);
+      CatchControl(error);
+    }
+  }
+
+  @Transform('ThemeProviderResponseDto')
+  @ResponseMessage(MESSAGE_RESPONSE_UPDATE_COMPANY)
+  @Put(':id/blocks/:blockId')
+  async updateBlockForTheme(
+    @Param('id') id,
+    @Param('blockId') blockId,
+    @Body() request: ThemeProviderUpdateDto
+  ) {
+    try {
+      const blockDomain = await this.companyService.updateBlockId(
+        blockId,
+        request
+      );
+
+      return { finalResponse: blockDomain };
     } catch (error) {
       console.log('test', error);
       CatchControl(error);

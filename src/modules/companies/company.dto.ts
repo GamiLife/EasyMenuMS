@@ -19,10 +19,6 @@ import { BrandCreateDto, BrandUpdateDto } from './modules/brand/brand.dto';
 import { LogoProviderDomain } from './modules/logo-provider/logo-provider.domain';
 import { SocialNetworkDomain } from './modules/social-networks/social-network.domain';
 import { ThemeProviderDomain } from './modules/theme-provider/theme-provider.domain';
-import {
-  ThemeProviderCreateDto,
-  ThemeProviderUpdateDto,
-} from './modules/theme-provider/theme-provider.dto';
 
 /**
  * Request on create company
@@ -46,7 +42,7 @@ export class CompanyCreateDto {
 }
 
 /**
- * Request on create company
+ * Request on update company
  */
 export class CompanyUpdateDto {
   @Expose()
@@ -87,23 +83,17 @@ export class CompanyDetailsCreateDto {
   @Expose()
   readonly brand: BrandCreateDto;
   @Expose()
-  @Type(() => ThemeProviderCreateDto)
-  readonly theme: ThemeProviderCreateDto[];
-  @Expose()
   @Type(() => BrandSocialNetworksCreateDto)
   @FnValidator(hasUniqueSocialNetworks)
   readonly brandSocialNetworks: BrandSocialNetworksCreateDto[];
 }
 
-/**Create DTO */
+/**Update DTO */
 export class CompanyDetailsUpdateDto {
   @Expose()
   readonly company: CompanyUpdateDto;
   @Expose()
   readonly brand: BrandUpdateDto;
-  @Expose()
-  @Type(() => ThemeProviderUpdateDto)
-  readonly theme: ThemeProviderUpdateDto[];
   @Expose()
   @Type(() => BrandSocialNetworksUpdateDto)
   @FnValidator(hasUniqueSocialNetworks)

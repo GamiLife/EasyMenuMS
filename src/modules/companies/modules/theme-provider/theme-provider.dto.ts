@@ -1,7 +1,4 @@
-import {
-  EThemeModeType,
-  EThemeProviderType,
-} from '@gamilife/node-components.core.core';
+import { EThemeModeType } from '@gamilife/node-components.core.core';
 import { Expose } from '@nestjs/class-transformer';
 import { IsNotEmpty } from 'class-validator';
 import { TOperations } from 'src/core/types';
@@ -12,10 +9,13 @@ export class ThemeProviderCreateDto {
   readonly themeMode: EThemeModeType;
   @Expose()
   @IsNotEmpty()
-  readonly type: EThemeProviderType;
+  readonly background: string;
   @Expose()
   @IsNotEmpty()
-  readonly value: string;
+  readonly color: string;
+  @Expose()
+  @IsNotEmpty()
+  readonly brandId: number;
 }
 
 export class ThemeProviderUpdateDto {
@@ -26,11 +26,30 @@ export class ThemeProviderUpdateDto {
   readonly themeMode: EThemeModeType;
   @Expose()
   @IsNotEmpty()
-  readonly type: EThemeProviderType;
+  readonly background: string;
   @Expose()
   @IsNotEmpty()
-  readonly value: string;
+  readonly color: string;
   @Expose()
   @IsNotEmpty()
-  readonly operation: TOperations;
+  readonly brandId: number;
+}
+
+export class ThemeProviderResponseDto {
+  @Expose()
+  readonly id?: number;
+  @Expose()
+  @IsNotEmpty()
+  readonly themeMode: EThemeModeType;
+  @Expose()
+  @IsNotEmpty()
+  readonly background: string;
+  @Expose()
+  @IsNotEmpty()
+  readonly color: string;
+  @Expose()
+  @IsNotEmpty()
+  readonly brandId: number;
+  @Expose()
+  readonly blockId: string;
 }

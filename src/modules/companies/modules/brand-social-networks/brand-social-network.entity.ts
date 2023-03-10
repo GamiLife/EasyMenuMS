@@ -10,7 +10,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
-import { switchOperation } from 'src/core/helpers/operations.helper';
+import { switchOperationHelper } from 'src/core/helpers/operations.helper';
 import { TEntityOperation } from 'src/core/types';
 import { BrandEntity } from '../brand/brand.entity';
 import { SocialNetworkEntity } from '../social-networks/social-network.entity';
@@ -98,7 +98,4 @@ export class BrandSocialNetworkEntity extends Model<BrandSocialNetworkEntity> {
 
     entity.id = idNumber;
   }
-  declare switchOperation: (request: TEntityOperation) => void;
 }
-
-BrandSocialNetworkEntity.prototype.switchOperation = switchOperation;

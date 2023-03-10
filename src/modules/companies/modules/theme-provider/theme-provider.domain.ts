@@ -1,7 +1,4 @@
-import {
-  EThemeModeType,
-  EThemeProviderType,
-} from '@gamilife/node-components.core.core';
+import { EThemeModeType } from '@gamilife/node-components.core.core';
 import { Expose } from '@nestjs/class-transformer';
 
 export class ThemeProviderDomain {
@@ -10,7 +7,11 @@ export class ThemeProviderDomain {
   @Expose()
   readonly themeMode: EThemeModeType;
   @Expose()
-  readonly type: EThemeProviderType;
+  readonly background: string;
   @Expose()
-  readonly value: string;
+  readonly color: string;
+  @Expose()
+  readonly brandId: number;
+  @Expose()
+  readonly blockId: string;
 }

@@ -1,7 +1,4 @@
-import {
-  EThemeModeType,
-  EThemeProviderType,
-} from '@gamilife/node-components.core.core';
+import { EThemeModeType } from '@gamilife/node-components.core.core';
 import { Expose, Type } from '@nestjs/class-transformer';
 import {
   BeforeCreate,
@@ -14,12 +11,9 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { getEnumKeys, getNextId } from 'src/core/helpers';
-import { switchOperation } from 'src/core/helpers/operations.helper';
-import { TEntityOperation } from 'src/core/types';
 import { BrandEntity } from '../brand/brand.entity';
 
 const enumValuesThemeMode = getEnumKeys(EThemeModeType);
-const enumValuesThemeProvider = getEnumKeys(EThemeProviderType);
 
 @Table({
   tableName: 'theme_provider',
@@ -47,6 +41,13 @@ export class ThemeProviderEntity extends Model<ThemeProviderEntity> {
   themeMode: EThemeModeType;
 
   @Expose()
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  blockId: string;
+
+  @Expose()
   @ForeignKey(() => BrandEntity)
   @Column({
     type: DataType.BIGINT,
@@ -55,24 +56,17 @@ export class ThemeProviderEntity extends Model<ThemeProviderEntity> {
 
   @Expose()
   @Column({
-    defaultValue: EThemeProviderType.primary,
+    type: DataType.STRING,
     allowNull: false,
-    validate: {
-      customValidator: (value) => {
-        if (!enumValuesThemeProvider.includes(value)) {
-          throw new Error('Type not a valid option');
-        }
-      },
-    },
   })
-  type: EThemeProviderType;
+  background: string;
 
   @Expose()
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  value: string;
+  color: string;
 
   @Expose()
   @Type(() => BrandEntity)
@@ -90,8 +84,4 @@ export class ThemeProviderEntity extends Model<ThemeProviderEntity> {
 
     entity.id = idNumber;
   }
-
-  declare switchOperation: (request: TEntityOperation) => void;
 }
-
-ThemeProviderEntity.prototype.switchOperation = switchOperation;
