@@ -67,7 +67,7 @@ export class LocationsService extends BaseService {
   }
 
   async findAllByCompanyId(
-    companyId: number,
+    companyId: number, 
     pagination: GetLocationsByCompany
   ): Promise<MetaDomain<LocationDomain[]>> {
     await this.companyService.findOneById(companyId);

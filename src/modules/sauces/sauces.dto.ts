@@ -6,7 +6,14 @@ import {
   IsNotEmpty,
   MinLength,
 } from 'class-validator';
+import { PaginationPayload } from 'src/core/dtos';
 import { CompanyResponseDto } from '../companies/company.dto';
+
+export class SauceFilters {}
+/**
+ * Get By Pagination Request
+ */
+export class GetSaucesByCompany extends PaginationPayload<SauceFilters> {}
 
 /**
  * Request on create sauce

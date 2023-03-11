@@ -4,6 +4,8 @@ import { CompanyDomainV2 } from '../companies/company.domain';
 
 export class SauceDomainV2 {
   @Expose()
+  id: number;
+  @Expose()
   @IsString()
   title: string;
   @Expose()

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import {
   MESSAGE_RESPONSE_CREATE_SAUCE,
   MESSAGE_RESPONSE_GET_SAUCE,
@@ -7,6 +7,7 @@ import {
 } from 'src/core/constants';
 import { ResponseMessage, Transform } from 'src/core/decorators';
 import { CatchControl } from 'src/core/exceptions';
+import { GetLocationsByCompany } from '../locations/locations.dto';
 import { SauceCreateDto, SauceUpdateDto } from './sauces.dto';
 import { SaucesService } from './sauces.service';
 
@@ -16,12 +17,21 @@ export class SaucesController {
 
   @Transform('SauceResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_SAUCE_ALL)
-  @Get()
-  async findAll() {
+  @Get('companies/:companyId')
+  async findAllByCompany(
+    @Param('companyId') companyId,
+    @Query() pagination: GetLocationsByCompany
+  ) {
     try {
-      const saucesDomain = await this.sauceService.findAll();
+      const saucesDomain = await this.sauceService.findAllByCompanyId(
+        companyId,
+        pagination
+      );
 
-      return { finalResponse: saucesDomain };
+      return {
+        finalResponse: saucesDomain.data,
+        metaData: saucesDomain.metadata,
+      };
     } catch (error) {
       CatchControl(error);
     }
