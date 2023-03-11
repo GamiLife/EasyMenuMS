@@ -10,8 +10,6 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
-import { switchOperationHelper } from 'src/core/helpers/operations.helper';
-import { TEntityOperation } from 'src/core/types';
 import { BrandEntity } from '../brand/brand.entity';
 import { SocialNetworkEntity } from '../social-networks/social-network.entity';
 
@@ -29,7 +27,7 @@ export class BrandSocialNetworkEntity extends Model<BrandSocialNetworkEntity> {
   @Expose()
   @Column({
     type: DataType.STRING,
-    allowNull: false,
+    allowNull: true,
   })
   user: string;
 
@@ -44,9 +42,6 @@ export class BrandSocialNetworkEntity extends Model<BrandSocialNetworkEntity> {
   @Column({
     type: DataType.STRING,
     allowNull: true,
-    validate: {
-      max: 3,
-    },
   })
   countryCode: string;
 

@@ -2,7 +2,7 @@ import { DBError } from '../exceptions';
 import { TEntityOperation } from '../types';
 
 export function switchOperationHelper(request: TEntityOperation) {
-  const { id, operations: op, ...entity } = request;
+  const { id, operation: op, ...entity } = request;
 
   if (!op) throw new DBError('Operation is not defined');
 
@@ -22,5 +22,10 @@ export function switchOperationHelper(request: TEntityOperation) {
     return;
   }
 
+  this.destroy({
+    where: {
+      id,
+    },
+  });
   return;
 }

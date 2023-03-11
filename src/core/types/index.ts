@@ -6,5 +6,5 @@ export type TEntityMixin<TEntity> = TEntity & {
 
 export type TEntityOperation = {
   [key: string]: any;
-  operations: TOperations;
+  operation: TOperations;
 };
