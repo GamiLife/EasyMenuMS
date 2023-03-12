@@ -8,7 +8,7 @@ module.exports = {
         title: 'This is our last offers for you!',
         description: 'Valid until last day of month.',
         imageUrl:
-          'https://menudigital011023.s3.amazonaws.com/1673459873090-component_gaminote2.png',
+          'https://menudigital011023.s3.amazonaws.com/Banner_Web_3_horas_del_sabor.jpg',
         backgroundColor: 'rgb(122,122,122)',
         startDate: '2023-01-01T00:00:00.000Z',
         endDate: '2023-01-15T00:00:00.000Z',
@@ -20,7 +20,7 @@ module.exports = {
         title: 'This is our another last offers for you!',
         description: 'Valid until last day of month.',
         imageUrl:
-          'https://menudigital011023.s3.amazonaws.com/1673465177914-1665576018479.jpg',
+          'https://menudigital011023.s3.amazonaws.com/Banner-Web-Refresh-Brownie.jpg',
         backgroundColor: 'rgb(122,122,122)',
         startDate: '2023-01-01T00:00:00.000Z',
         endDate: '2023-01-15T00:00:00.000Z',
@@ -32,7 +32,7 @@ module.exports = {
         title: 'This is our another last offers for you!',
         description: 'Valid until last day of month.',
         imageUrl:
-          'https://menudigital011023.s3.amazonaws.com/1673465177914-1665576018479.jpg',
+          'https://menudigital011023.s3.amazonaws.com/Banner_Web_3_horas_del_sabor.jpg',
         backgroundColor: 'rgb(122,122,122)',
         startDate: '2023-01-16T00:00:00.000Z',
         endDate: '2023-01-20T00:00:00.000Z',
