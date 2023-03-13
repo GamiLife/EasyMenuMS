@@ -13,7 +13,7 @@ import {
 } from 'src/core/constants';
 import { ResponseMessage, Transform } from 'src/core/decorators';
 import { CatchControl } from 'src/core/exceptions';
-import { ThemeProviderUpdateDto } from './modules/theme-provider/theme-provider.dto';
+import { ThemeProviderUpdateBlockDto, ThemeProviderUpdateDto } from './modules/theme-provider/theme-provider.dto';
 
 @Controller('companies')
 export class CompaniesController {
@@ -91,7 +91,7 @@ export class CompaniesController {
   async updateBlockForTheme(
     @Param('id') id,
     @Param('blockId') blockId,
-    @Body() request: ThemeProviderUpdateDto
+    @Body() request: ThemeProviderUpdateBlockDto
   ) {
     try {
       const blockDomain = await this.companyService.updateBlockId(

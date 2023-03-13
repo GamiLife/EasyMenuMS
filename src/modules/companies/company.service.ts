@@ -28,6 +28,7 @@ import { BrandSocialNetworkEntity } from './modules/brand-social-networks/brand-
 import { switchOperationHelper } from 'src/core/helpers/operations.helper';
 import {
   ThemeProviderCreateDto,
+  ThemeProviderUpdateBlockDto,
   ThemeProviderUpdateDto,
 } from './modules/theme-provider/theme-provider.dto';
 
@@ -215,11 +216,18 @@ export class CompaniesService {
     return companiesDomain;
   }
 
-  async updateBlockId(blockId: number, request: ThemeProviderUpdateDto) {
+  async updateBlockId(blockId: number, request: ThemeProviderUpdateBlockDto) {
     const blockUpdated = await this.themeProviderRepository
-      .update<ThemeProviderEntity>(request, {
-        where: { id: blockId },
-      })
+      .update<ThemeProviderEntity>(
+        {
+          background: request.background,
+          color: request.color,
+          themeMode: request.themeMode,
+        },
+        {
+          where: { id: blockId },
+        }
+      )
       .catch((reason) => {
         throw new DBError(
           `Company query failed: ${reason}`,

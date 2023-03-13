@@ -18,6 +18,18 @@ export class ThemeProviderCreateDto {
   readonly brandId: number;
 }
 
+export class ThemeProviderUpdateBlockDto {
+  @Expose()
+  @IsNotEmpty()
+  readonly themeMode: EThemeModeType;
+  @Expose()
+  @IsNotEmpty()
+  readonly background: string;
+  @Expose()
+  @IsNotEmpty()
+  readonly color: string;
+}
+
 export class ThemeProviderUpdateDto {
   @Expose()
   readonly id?: number;
