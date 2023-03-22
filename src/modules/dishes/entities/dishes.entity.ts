@@ -59,6 +59,13 @@ export class DishEntity extends Model<DishEntity> {
 
   @Expose()
   @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  stock: number;
+
+  @Expose()
+  @Column({
     type: DataType.STRING,
     allowNull: false,
   })
@@ -107,7 +114,7 @@ export class DishEntity extends Model<DishEntity> {
     through: { model: () => DishDishesEntity },
     as: 'dish',
   })
-  dishesMain?: DishEntity[];
+  dishMain?: DishEntity;
 
   @Expose()
   @Type(() => DishEntity)
@@ -115,7 +122,7 @@ export class DishEntity extends Model<DishEntity> {
     through: { model: () => DishDishesEntity },
     as: 'dishSecond',
   })
-  dishesSecond?: DishEntity[];
+  dishSecond?: DishEntity;
 
   @BeforeCreate
   static async setDefaultId(entity: DishEntity) {

@@ -25,11 +25,15 @@ export class SaucesService extends BaseService {
     super(sauceRepository);
   }
 
-  async create(sauce: SauceCreateDto): Promise<SauceDomainV2> {
+  async create(
+    sauce: SauceCreateDto,
+    imageUrl: string
+  ): Promise<SauceDomainV2> {
     await this.companyService.findOneById(sauce.companyId);
 
+    const entity = { ...sauce, imageUrl };
     const sauceEntity = await this.sauceRepository
-      .create<SauceEntity>(sauce)
+      .create<SauceEntity>(entity)
       .catch((reason) => {
         throw new DBError(
           `Category query failed: ${reason}`,
@@ -139,12 +143,14 @@ export class SaucesService extends BaseService {
 
   async update(
     sauceToUpdate: SauceUpdateDto,
-    id: number
+    id: number,
+    imageUrl: string
   ): Promise<SauceDomainV2> {
     await this.companyService.findOneById(sauceToUpdate.companyId);
 
+    const entity = { ...sauceToUpdate, imageUrl };
     await this.sauceRepository
-      .update(sauceToUpdate, {
+      .update<SauceEntity>(entity, {
         where: { id },
       })
       .catch((reason) => {

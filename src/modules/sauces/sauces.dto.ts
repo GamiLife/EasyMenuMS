@@ -28,8 +28,6 @@ export class SauceCreateDto {
   readonly description: string;
   @IsNumber()
   readonly price: number;
-  @IsString()
-  readonly imageUrl: string;
   @IsNotEmpty({ message: 'CompanyId required' })
   @IsNumber()
   readonly companyId: number;
@@ -52,9 +50,6 @@ export class SauceUpdateDto {
   @Expose()
   @IsNumber()
   readonly price: number;
-  @Expose()
-  @IsString()
-  readonly imageUrl: string;
   @Expose()
   @IsNotEmpty({ message: 'CompanyId required' })
   @IsNumber()

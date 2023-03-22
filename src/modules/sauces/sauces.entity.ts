@@ -76,7 +76,7 @@ export class SauceEntity extends Model<SauceEntity> {
   @BelongsToMany(() => DishEntity, {
     through: { model: () => DishSauceEntity },
   })
-  dishes?: DishEntity[];
+  sauceFromDish?: DishEntity;
 
   @BeforeCreate
   static async setDefaultId(entity: SauceEntity) {

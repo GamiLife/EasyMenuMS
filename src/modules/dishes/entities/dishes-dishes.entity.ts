@@ -10,6 +10,7 @@ import {
   BeforeCreate,
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
+import { CombosEntity } from './combos.entity';
 import { DishEntity } from './dishes.entity';
 
 @Exclude()
@@ -31,6 +32,14 @@ export class DishDishesEntity extends Model<DishDishesEntity> {
   })
   price: number;
 
+  @Exclude()
+  @ForeignKey(() => CombosEntity)
+  @Column({
+    type: DataType.BIGINT,
+    comment: 'Combo assigned',
+  })
+  comboId: number;
+
   @Expose()
   @ForeignKey(() => DishEntity)
   @Column({
@@ -44,6 +53,15 @@ export class DishDishesEntity extends Model<DishDishesEntity> {
     type: DataType.BIGINT,
   })
   dishSecondId: number;
+
+  @Expose()
+  @Type(() => CombosEntity)
+  @HasMany(() => CombosEntity, {
+    sourceKey: 'comboId',
+    foreignKey: 'id',
+    as: 'combo',
+  })
+  combo: CombosEntity;
 
   @Expose()
   @Type(() => DishEntity)
