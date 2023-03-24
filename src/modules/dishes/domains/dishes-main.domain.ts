@@ -17,10 +17,10 @@ export class DishesMainDomainV2 {
   @Transform(({ value }) =>
     value?.map((o) => plainToClass(DishSauceDomainV2, o))
   )
-  readonly dishSauces: DishSauceDomainV2[];
+  readonly dishSauces?: DishSauceDomainV2[];
   @Expose()
   @Transform(({ value }) =>
     value?.map((o) => plainToClass(DishDishDomainV2, o))
   )
-  readonly dishDishes: DishDishDomainV2[];
+  readonly dishDishes?: DishDishDomainV2[];
 }

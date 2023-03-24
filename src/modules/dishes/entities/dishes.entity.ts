@@ -11,6 +11,7 @@ import {
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
 import { slugify } from 'src/core/helpers/slugify.helper';
+import { CombosEntity } from 'src/modules/combos/combos.entity';
 import { SauceEntity } from 'src/modules/sauces/sauces.entity';
 import { CategoryEntity } from '../../categories/categories.entity';
 import { CompanyEntity } from '../../companies/company.entity';
@@ -62,7 +63,7 @@ export class DishEntity extends Model<DishEntity> {
     type: DataType.INTEGER,
     allowNull: false,
   })
-  stock: number;
+  maxItems: number;
 
   @Expose()
   @Column({
@@ -105,24 +106,41 @@ export class DishEntity extends Model<DishEntity> {
   @Type(() => SauceEntity)
   @BelongsToMany(() => SauceEntity, {
     through: { model: () => DishSauceEntity },
+    as: 'dishWithSauces',
   })
-  sauces?: SauceEntity[];
+  dishWithSauces?: SauceEntity[];
+
+  @Expose()
+  @Type(() => CombosEntity)
+  @BelongsToMany(() => CombosEntity, {
+    through: { model: () => DishSauceEntity },
+    as: 'dishSauceWithCombos',
+  })
+  dishSauceWithCombos?: CombosEntity[];
+
+  @Expose()
+  @Type(() => CombosEntity)
+  @BelongsToMany(() => CombosEntity, {
+    through: { model: () => DishDishesEntity },
+    as: 'dishDishWithCombos',
+  })
+  dishDishWithCombos?: CombosEntity[];
 
   @Expose()
   @Type(() => DishEntity)
   @BelongsToMany(() => DishEntity, {
     through: { model: () => DishDishesEntity },
-    as: 'dish',
+    as: 'primaryDish',
   })
-  dishMain?: DishEntity;
+  primaryDish?: DishEntity;
 
   @Expose()
   @Type(() => DishEntity)
   @BelongsToMany(() => DishEntity, {
     through: { model: () => DishDishesEntity },
-    as: 'dishSecond',
+    as: 'secondaryDish',
   })
-  dishSecond?: DishEntity;
+  secondaryDish?: DishEntity;
 
   @BeforeCreate
   static async setDefaultId(entity: DishEntity) {

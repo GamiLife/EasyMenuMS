@@ -6,15 +6,10 @@ module.exports = {
     const rows = [
       {
         price: 3,
+        comboId: 1,
+        dishId: 1,
         sauceId: 1,
-        dishId: 1,
-        createdAt: '2022-11-11 00:00:00',
-        updatedAt: '2022-11-11 00:00:00',
-      },
-      {
-        price: 2,
-        sauceId: 2,
-        dishId: 1,
+        maxSauces: 10,
         createdAt: '2022-11-11 00:00:00',
         updatedAt: '2022-11-11 00:00:00',
       },

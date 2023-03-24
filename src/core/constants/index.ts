@@ -6,7 +6,11 @@ import {
   CompanyResponseDto,
 } from 'src/modules/companies/company.dto';
 import { ThemeProviderResponseDto } from 'src/modules/companies/modules/theme-provider/theme-provider.dto';
-import { DishGetResponseDto, DishResponseDto } from 'src/modules/dishes/dtos';
+import {
+  DishDetailResponseDto,
+  DishGetResponseDto,
+  DishResponseDto,
+} from 'src/modules/dishes/dtos';
 import { LocationResponseDto } from 'src/modules/locations/locations.dto';
 import { NewResponseDto } from 'src/modules/news/news.dto';
 import { SauceResponseDto } from 'src/modules/sauces/sauces.dto';
@@ -30,6 +34,7 @@ export const dtosInMetadata = {
   CompanyDetailsCreateDto: CompanyDetailsCreateDto,
   CompanyDetailsUpdateDto: CompanyDetailsUpdateDto,
   ThemeProviderResponseDto: ThemeProviderResponseDto,
+  DishDetailResponseDto: DishDetailResponseDto,
 };
 
 export const SEQUELIZE = 'SEQUELIZE';

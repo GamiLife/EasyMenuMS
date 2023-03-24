@@ -57,6 +57,13 @@ export class SauceEntity extends Model<SauceEntity> {
 
   @Expose()
   @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  maxItems: number;
+
+  @Expose()
+  @Column({
     type: DataType.BIGINT,
     allowNull: false,
   })
@@ -75,6 +82,7 @@ export class SauceEntity extends Model<SauceEntity> {
   @Type(() => DishEntity)
   @BelongsToMany(() => DishEntity, {
     through: { model: () => DishSauceEntity },
+    as: 'sauceFromDish',
   })
   sauceFromDish?: DishEntity;
 

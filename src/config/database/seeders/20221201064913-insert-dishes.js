@@ -9,6 +9,7 @@ module.exports = {
         slug: 'ceviche',
         description: 'Food with sea food ingredients',
         price: 21.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -21,6 +22,7 @@ module.exports = {
         slug: 'tiradito',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -33,6 +35,7 @@ module.exports = {
         slug: 'arroz-con-pollo',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -45,6 +48,7 @@ module.exports = {
         slug: 'arroz-con-pato',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -57,6 +61,7 @@ module.exports = {
         slug: 'pure',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -69,6 +74,7 @@ module.exports = {
         slug: 'jalea-mixta',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -81,6 +87,7 @@ module.exports = {
         slug: 'sopa-de-pollo',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -93,6 +100,7 @@ module.exports = {
         slug: 'coliflor-saltado',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -105,6 +113,7 @@ module.exports = {
         slug: 'lomo-saltado',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -117,6 +126,7 @@ module.exports = {
         slug: 'escaveche',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -129,6 +139,7 @@ module.exports = {
         slug: 'menestron',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -141,6 +152,7 @@ module.exports = {
         slug: 'aguadito',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -153,6 +165,7 @@ module.exports = {
         slug: 'mondonguito-a-la-italiana',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -165,6 +178,7 @@ module.exports = {
         slug: 'aeropuerto',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -177,6 +191,7 @@ module.exports = {
         slug: 'estofado',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -189,6 +204,7 @@ module.exports = {
         slug: 'carne-de-res',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 1,
@@ -201,6 +217,7 @@ module.exports = {
         slug: 'arroz-de-quinua',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 2,
@@ -213,6 +230,7 @@ module.exports = {
         slug: 'tallarines-rojos',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 2,
@@ -225,6 +243,7 @@ module.exports = {
         slug: 'tallarines-verdes',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 2,
@@ -237,6 +256,7 @@ module.exports = {
         slug: 'tallarines-saltados',
         description: 'Food with sea food and specil fish',
         price: 16.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/w/i/wings-texas-spiced-bbq.jpg',
         categoryId: 2,

@@ -60,7 +60,14 @@ export class DishesFilters {}
 /**
  * Create Dish Request
  */
-export class GetDishesByCategory extends PaginationPayload<DishesFilters> {}
+export class GetDishesByCategory extends PaginationPayload<DishesFilters> {
+  @Expose()
+  @IsNumber()
+  categoryId: number;
+  @Expose()
+  @IsNumber()
+  companyId: number;
+}
 
 /**
  * Update Dish Request

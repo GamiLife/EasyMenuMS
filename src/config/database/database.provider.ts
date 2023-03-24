@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Sequelize } from 'sequelize-typescript';
 import { CategoryEntity } from 'src/modules/categories/categories.entity';
+import { CombosEntity } from 'src/modules/combos/combos.entity';
 import { CompanyEntity } from 'src/modules/companies/company.entity';
 import { BrandSocialNetworkEntity } from 'src/modules/companies/modules/brand-social-networks/brand-social-network.entity';
 import { BrandEntity } from 'src/modules/companies/modules/brand/brand.entity';
@@ -32,6 +33,7 @@ export const databaseProviders = [
         UserEntity,
         NewEntity,
         CategoryEntity,
+        CombosEntity,
         SauceEntity,
         DishEntity,
         DishDishesEntity,

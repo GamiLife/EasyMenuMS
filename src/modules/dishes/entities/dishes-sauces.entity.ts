@@ -12,7 +12,7 @@ import {
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
 import { SauceEntity } from '../../sauces/sauces.entity';
-import { CombosEntity } from './combos.entity';
+import { CombosEntity } from '../../combos/combos.entity';
 import { DishEntity } from './dishes.entity';
 
 @Exclude()
@@ -63,9 +63,9 @@ export class DishSauceEntity extends Model<DishSauceEntity> {
   sauceId: number;
 
   @Exclude()
-  @ForeignKey(() => SauceEntity)
   @Column({
     type: DataType.BIGINT,
+    allowNull: true,
     comment: 'Max sauces available to dish',
   })
   maxSauces: number;
@@ -84,9 +84,9 @@ export class DishSauceEntity extends Model<DishSauceEntity> {
   @HasMany(() => CombosEntity, {
     sourceKey: 'comboId',
     foreignKey: 'id',
-    as: 'combo',
+    as: 'comboDishWithSauce',
   })
-  combo: CombosEntity;
+  comboDishWithSauce: CombosEntity;
 
   @Expose()
   @Type(() => DishEntity)

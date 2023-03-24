@@ -1,30 +1,24 @@
-import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
   MESSAGE_RESPONSE_CREATE_DISH,
   MESSAGE_RESPONSE_GET_DISH,
   MESSAGE_RESPONSE_GET_DISH_ALL,
-} from "src/core/constants";
-import { ResponseMessage, Transform } from "src/core/decorators";
-import { CatchControl } from "src/core/exceptions";
-import { DishPayloadCreateDto, GetDishesByCategory } from "./dtos";
-import { DishesMainService } from "./services";
+} from 'src/core/constants';
+import { ResponseMessage, Transform } from 'src/core/decorators';
+import { CatchControl } from 'src/core/exceptions';
+import { DishPayloadCreateDto, GetDishesByCategory } from './dtos';
+import { DishesService } from './services';
 
-@Controller("dishes")
+@Controller('dishes')
 export class DishesController {
-  constructor(private dishesMainService: DishesMainService) {}
+  constructor(private dishesService: DishesService) {}
 
-  @Transform("DishResponseDto")
+  @Transform('DishResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_DISH_ALL)
-  @Get("/categories/:categoryId")
-  async findAllByCategoryId(
-    @Param("categoryId") categoryId,
-    @Query() pagination: GetDishesByCategory
-  ) {
+  @Get('byPagination')
+  async findAllByPagination(@Query() query: GetDishesByCategory) {
     try {
-      const dishesDomain = await this.dishesMainService.findAllByCategoryId(
-        categoryId,
-        pagination
-      );
+      const dishesDomain = await this.dishesService.findAllByPagination(query);
 
       return {
         finalResponse: dishesDomain.data,
@@ -35,12 +29,12 @@ export class DishesController {
     }
   }
 
-  @Transform("DishResponseDto")
+  @Transform('DishResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_DISH_ALL)
   @Get()
   async findAll() {
     try {
-      const dishesDomain = await this.dishesMainService.findAll();
+      const dishesDomain = await this.dishesService.findAll();
 
       return { finalResponse: dishesDomain };
     } catch (error) {
@@ -48,38 +42,38 @@ export class DishesController {
     }
   }
 
-  @Transform("DishGetResponseDto")
+  //@Transform('DishGetResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_DISH)
-  @Get("slug/:slug")
-  async findBySlug(@Param("slug") slug) {
+  @Get('slug/:slug')
+  async findBySlug(@Param('slug') slug) {
     try {
-      const dishDomain = await this.dishesMainService.findOneBySlug(slug);
+      const dishDomain = await this.dishesService.findOneBySlug(slug);
 
-      return { finalResponse: dishDomain };
+      return { data: dishDomain };
     } catch (error) {
       CatchControl(error);
     }
   }
 
-  @Transform("DishGetResponseDto")
+  //@Transform('DishDetailResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_DISH)
-  @Get(":id")
-  async findById(@Param("id") id) {
+  @Get(':id')
+  async findById(@Param('id') id) {
     try {
-      const dishDomain = await this.dishesMainService.findOneById(id);
+      const dishResponse = await this.dishesService.findOneById(id);
 
-      return { finalResponse: dishDomain };
+      return { data: dishResponse };
     } catch (error) {
       CatchControl(error);
     }
   }
 
-  @Transform("DishResponseDto")
+  @Transform('DishResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_CREATE_DISH)
   @Post()
   async create(@Body() newToAdd: DishPayloadCreateDto) {
     try {
-      const dishDomain = await this.dishesMainService.create(newToAdd);
+      const dishDomain = await this.dishesService.create(newToAdd);
 
       return { finalResponse: dishDomain };
     } catch (error) {

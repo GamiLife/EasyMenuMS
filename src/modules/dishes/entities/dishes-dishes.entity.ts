@@ -10,7 +10,7 @@ import {
   BeforeCreate,
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
-import { CombosEntity } from './combos.entity';
+import { CombosEntity } from '../../combos/combos.entity';
 import { DishEntity } from './dishes.entity';
 
 @Exclude()
@@ -45,41 +45,48 @@ export class DishDishesEntity extends Model<DishDishesEntity> {
   @Column({
     type: DataType.BIGINT,
   })
-  dishId: number;
+  primaryDishId: number;
 
   @Expose()
   @ForeignKey(() => DishEntity)
   @Column({
     type: DataType.BIGINT,
   })
-  dishSecondId: number;
+  secondarydishId: number;
+
+  @Exclude()
+  @Column({
+    type: DataType.BIGINT,
+    comment: 'Max Secondary dishes available',
+  })
+  maxSecondaryDishes: number;
 
   @Expose()
   @Type(() => CombosEntity)
   @HasMany(() => CombosEntity, {
     sourceKey: 'comboId',
     foreignKey: 'id',
-    as: 'combo',
+    as: 'comboDishWithSecondDish',
   })
-  combo: CombosEntity;
+  comboDishWithSecondDish: CombosEntity;
 
   @Expose()
   @Type(() => DishEntity)
   @HasMany(() => DishEntity, {
-    sourceKey: 'dishId',
+    sourceKey: 'primaryDishId',
     foreignKey: 'id',
-    as: 'dish',
+    as: 'primaryDish',
   })
-  dish: DishEntity;
+  primaryDish: DishEntity;
 
   @Expose()
   @Type(() => DishEntity)
   @HasMany(() => DishEntity, {
-    sourceKey: 'dishSecondId',
+    sourceKey: 'secondarydishId',
     foreignKey: 'id',
-    as: 'dishSecond',
+    as: 'secondaryDish',
   })
-  dishSecond: DishEntity;
+  secondaryDish: DishEntity;
 
   @BeforeCreate
   static async setDefaultId(entity: DishDishesEntity) {

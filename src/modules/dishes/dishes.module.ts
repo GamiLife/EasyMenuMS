@@ -3,7 +3,6 @@ import {
   DishesService,
   DishesDishesService,
   DishesSaucesService,
-  DishesMainService,
 } from './services';
 import { DishesController } from './dishes.controller';
 import { dishesProviders } from './dishes.provider';
@@ -16,15 +15,10 @@ import { SaucesModule } from '../sauces/sauces.module';
     DishesService,
     DishesDishesService,
     DishesSaucesService,
-    DishesMainService,
+
     ...dishesProviders,
   ],
-  exports: [
-    DishesService,
-    DishesDishesService,
-    DishesSaucesService,
-    DishesMainService,
-  ],
+  exports: [DishesService, DishesDishesService, DishesSaucesService],
   controllers: [DishesController],
 })
 export class DishesModule {}

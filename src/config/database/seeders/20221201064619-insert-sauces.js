@@ -8,6 +8,7 @@ module.exports = {
         title: 'Mostaza',
         description: 'Mostaza for nasty dishes',
         price: 1.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/f/r/fridays-peru-porcion-de-guacamole.jpg',
         companyId: 1,
@@ -18,6 +19,7 @@ module.exports = {
         title: 'Quetchup',
         description: 'Quetchup for spicy dishes',
         price: 2.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/l/o/loaded-potato-fried_fridays-peru.jpg',
         companyId: 1,
@@ -28,6 +30,7 @@ module.exports = {
         title: 'Mayonesa',
         description: 'Mayonesa for spicy dishes',
         price: 8.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/l/o/loaded-potato-fried_fridays-peru.jpg',
         companyId: 1,
@@ -38,6 +41,7 @@ module.exports = {
         title: 'Ocopa',
         description: 'Ocopa for spicy dishes',
         price: 9.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/l/o/loaded-potato-fried_fridays-peru.jpg',
         companyId: 1,
@@ -48,6 +52,7 @@ module.exports = {
         title: 'Tamarindo',
         description: 'Tamarindo for spicy dishes',
         price: 2.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/l/o/loaded-potato-fried_fridays-peru.jpg',
         companyId: 1,
@@ -58,6 +63,7 @@ module.exports = {
         title: 'Leche de Tigre',
         description: 'Leche de Tigre for spicy dishes',
         price: 2.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/l/o/loaded-potato-fried_fridays-peru.jpg',
         companyId: 1,
@@ -68,6 +74,7 @@ module.exports = {
         title: 'Aji',
         description: 'Aji for spicy dishes',
         price: 2.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/l/o/loaded-potato-fried_fridays-peru.jpg',
         companyId: 1,
@@ -78,6 +85,7 @@ module.exports = {
         title: 'Rocoto',
         description: 'Rocoto for spicy dishes',
         price: 12.5,
+        maxItems: 10,
         imageUrl:
           'https://frdadmin21.fridaysperu.com/media/catalog/product/l/o/loaded-potato-fried_fridays-peru.jpg',
         companyId: 1,

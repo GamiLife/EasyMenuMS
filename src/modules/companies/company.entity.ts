@@ -20,6 +20,7 @@ import { SauceEntity } from '../sauces/sauces.entity';
 import { UserEntity } from '../users/users.entity';
 import { StaticPagesEntity } from '../static-pages/static-pages.entity';
 import { BrandEntity } from './modules/brand/brand.entity';
+import { CombosEntity } from '../combos/combos.entity';
 
 @Exclude()
 @Table({
@@ -109,6 +110,15 @@ export class CompanyEntity extends Model<CompanyEntity> {
     as: 'location',
   })
   location: LocationsEntity;
+
+  @Expose()
+  @Type(() => CombosEntity)
+  @BelongsTo(() => CombosEntity, {
+    targetKey: 'id',
+    foreignKey: 'companyId',
+    as: 'combo',
+  })
+  combo: CombosEntity;
 
   @Expose()
   @Type(() => SauceEntity)
