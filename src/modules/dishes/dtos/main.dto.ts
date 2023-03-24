@@ -62,10 +62,8 @@ export class DishesFilters {}
  */
 export class GetDishesByCategory extends PaginationPayload<DishesFilters> {
   @Expose()
-  @IsNumber()
   categoryId: number;
   @Expose()
-  @IsNumber()
   companyId: number;
 }
 
