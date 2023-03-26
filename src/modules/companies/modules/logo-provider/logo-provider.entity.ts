@@ -71,6 +71,7 @@ export class LogoProviderEntity extends Model<LogoProviderEntity> {
   @Expose()
   @Type(() => BrandEntity)
   @BelongsTo(() => BrandEntity, {
+    foreignKey: 'brandId',
     as: 'brand',
   })
   brand: BrandEntity;

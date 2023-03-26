@@ -60,17 +60,17 @@ module.exports = {
     );
 
     await queryInterface.sequelize.query(
-      'CREATE SEQUENCE dishes_sauces_sequence start 1'
+      'CREATE SEQUENCE combo_sauces_sequence start 1'
     );
     await queryInterface.sequelize.query(
-      "ALTER TABLE dishes_sauces ALTER id SET DEFAULT nextval('dishes_sauces_sequence')"
+      "ALTER TABLE combo_sauces ALTER id SET DEFAULT nextval('combo_sauces_sequence')"
     );
 
     await queryInterface.sequelize.query(
-      'CREATE SEQUENCE dishes_dishes_sequence start 1'
+      'CREATE SEQUENCE combo_dishes_sequence start 1'
     );
     await queryInterface.sequelize.query(
-      "ALTER TABLE dishes_dishes ALTER id SET DEFAULT nextval('dishes_dishes_sequence')"
+      "ALTER TABLE combo_dishes ALTER id SET DEFAULT nextval('combo_dishes_sequence')"
     );
 
     await queryInterface.sequelize.query(
@@ -132,12 +132,8 @@ module.exports = {
     await queryInterface.sequelize.query('DROP SEQUENCE combos_sequence');
     await queryInterface.sequelize.query('DROP SEQUENCE sauces_sequence');
     await queryInterface.sequelize.query('DROP SEQUENCE dishes_sequence');
-    await queryInterface.sequelize.query(
-      'DROP SEQUENCE dishes_sauces_sequence'
-    );
-    await queryInterface.sequelize.query(
-      'DROP SEQUENCE dishes_dishes_sequence'
-    );
+    await queryInterface.sequelize.query('DROP SEQUENCE combo_sauces_sequence');
+    await queryInterface.sequelize.query('DROP SEQUENCE combo_dishes_sequence');
     await queryInterface.sequelize.query('DROP SEQUENCE locations_sequence');
     await queryInterface.sequelize.query('DROP SEQUENCE brands_sequence');
     await queryInterface.sequelize.query(

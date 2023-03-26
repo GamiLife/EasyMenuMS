@@ -6,6 +6,7 @@ import {
   HasOne,
   PrimaryKey,
   BeforeCreate,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { getNextId, transformUTCDate } from 'src/core/helpers';
 import { CompanyEntity } from '../companies/company.entity';
@@ -70,9 +71,8 @@ export class NewEntity extends Model<NewEntity> {
   })
   companyId: number;
 
-  @HasOne(() => CompanyEntity, {
-    sourceKey: 'companyId',
-    foreignKey: 'id',
+  @BelongsTo(() => CompanyEntity, {
+    foreignKey: 'companyId',
     as: 'company',
   })
   company: CompanyEntity;

@@ -6,8 +6,4 @@ export abstract class Entity<T> {
     if (id) this._id = id;
     this.props = props;
   }
-
-  get id() {
-    return this._id;
-  }
 }

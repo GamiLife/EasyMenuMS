@@ -2,9 +2,9 @@ import { Expose, Exclude, Type } from '@nestjs/class-transformer';
 
 import {
   BeforeCreate,
+  BelongsTo,
   Column,
   DataType,
-  HasOne,
   Length,
   Model,
   PrimaryKey,
@@ -58,9 +58,8 @@ export class LocationsEntity extends Model<LocationsEntity> {
 
   @Expose()
   @Type(() => CompanyEntity)
-  @HasOne(() => CompanyEntity, {
-    sourceKey: 'companyId',
-    foreignKey: 'id',
+  @BelongsTo(() => CompanyEntity, {
+    foreignKey: 'companyId',
     as: 'company',
   })
   company: CompanyEntity;

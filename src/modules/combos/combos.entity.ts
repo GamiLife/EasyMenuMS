@@ -7,14 +7,14 @@ import {
   Model,
   BelongsToMany,
   BeforeCreate,
-  HasOne,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
 import { CompanyEntity } from 'src/modules/companies/company.entity';
-import { DishDishesEntity } from '../dishes/entities/dishes-dishes.entity';
-import { DishSauceEntity } from '../dishes/entities/dishes-sauces.entity';
-import { DishEntity } from '../dishes/entities/dishes.entity';
+import { ComboDishesEntity } from './entities/combo-dishes.entity';
+import { DishModel } from '../dishes/infraestructure/db/dish.model';
 import { SauceEntity } from '../sauces/sauces.entity';
+import { ComboSauceEntity } from './entities/combo-sauces.entity';
 
 @Exclude()
 @Table({
@@ -53,50 +53,48 @@ export class CombosEntity extends Model<CombosEntity> {
   @Expose()
   @Column({
     type: DataType.BIGINT,
+    allowNull: true,
+  })
+  dishId?: number;
+
+  @Expose()
+  @Column({
+    type: DataType.BIGINT,
     allowNull: false,
   })
   companyId: number;
 
   @Expose()
   @Type(() => CompanyEntity)
-  @HasOne(() => CompanyEntity, {
-    sourceKey: 'companyId',
-    foreignKey: 'id',
+  @BelongsTo(() => CompanyEntity, {
+    foreignKey: 'companyId',
     as: 'company',
   })
   company: CompanyEntity;
 
   @Expose()
+  @Type(() => DishModel)
+  @BelongsTo(() => DishModel, {
+    foreignKey: 'dishId',
+    as: 'dishCombo',
+  })
+  dishCombo: DishModel;
+
+  @Expose()
+  @Type(() => DishModel)
+  @BelongsToMany(() => DishModel, {
+    through: { model: () => ComboDishesEntity },
+    as: 'dishesFromCombo',
+  })
+  dishesFromCombo: DishModel[];
+
+  @Expose()
   @Type(() => SauceEntity)
   @BelongsToMany(() => SauceEntity, {
-    through: { model: () => DishSauceEntity },
-    as: 'comboSauceFromDishSauce',
+    through: { model: () => ComboSauceEntity },
+    as: 'saucesFromCombo',
   })
-  comboSauceFromDishSauce?: SauceEntity;
-
-  @Expose()
-  @Type(() => DishEntity)
-  @BelongsToMany(() => DishEntity, {
-    through: { model: () => DishSauceEntity },
-    as: 'comboDishFromDishSauce',
-  })
-  comboDishFromDishSauce?: DishEntity;
-
-  @Expose()
-  @Type(() => DishEntity)
-  @BelongsToMany(() => DishEntity, {
-    through: { model: () => DishDishesEntity },
-    as: 'comboMainDishFromDishDish',
-  })
-  comboMainDishFromDishDish?: DishEntity;
-
-  @Expose()
-  @Type(() => DishEntity)
-  @BelongsToMany(() => DishEntity, {
-    through: { model: () => DishDishesEntity },
-    as: 'comboSecondDishFromDishDish',
-  })
-  comboSecondDishFromDishDish?: DishEntity;
+  saucesFromCombo: SauceEntity[];
 
   @BeforeCreate
   static async setDefaultId(entity: CombosEntity) {

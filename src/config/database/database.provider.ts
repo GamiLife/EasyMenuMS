@@ -2,17 +2,16 @@
 import { Sequelize } from 'sequelize-typescript';
 import { CategoryEntity } from 'src/modules/categories/categories.entity';
 import { CombosEntity } from 'src/modules/combos/combos.entity';
+import { ComboDishesEntity } from 'src/modules/combos/entities/combo-dishes.entity';
+import { ComboSauceEntity } from 'src/modules/combos/entities/combo-sauces.entity';
 import { CompanyEntity } from 'src/modules/companies/company.entity';
 import { BrandSocialNetworkEntity } from 'src/modules/companies/modules/brand-social-networks/brand-social-network.entity';
 import { BrandEntity } from 'src/modules/companies/modules/brand/brand.entity';
 import { LogoProviderEntity } from 'src/modules/companies/modules/logo-provider/logo-provider.entity';
 import { SocialNetworkEntity } from 'src/modules/companies/modules/social-networks/social-network.entity';
 import { ThemeProviderEntity } from 'src/modules/companies/modules/theme-provider/theme-provider.entity';
-import {
-  DishDishesEntity,
-  DishEntity,
-  DishSauceEntity,
-} from 'src/modules/dishes/entities';
+
+import { DishModel } from 'src/modules/dishes/infraestructure/db/dish.model';
 import { LocationsEntity } from 'src/modules/locations/locations.entity';
 import { NewEntity } from 'src/modules/news/news.entity';
 import { SauceEntity } from 'src/modules/sauces/sauces.entity';
@@ -33,11 +32,11 @@ export const databaseProviders = [
         UserEntity,
         NewEntity,
         CategoryEntity,
-        CombosEntity,
         SauceEntity,
-        DishEntity,
-        DishDishesEntity,
-        DishSauceEntity,
+        DishModel,
+        CombosEntity,
+        ComboDishesEntity,
+        ComboSauceEntity,
         LocationsEntity,
         StaticPagesEntity,
         BrandEntity,

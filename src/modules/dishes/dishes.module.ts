@@ -1,24 +1,14 @@
 import { Module } from '@nestjs/common';
-import {
-  DishesService,
-  DishesDishesService,
-  DishesSaucesService,
-} from './services';
-import { DishesController } from './dishes.controller';
 import { dishesProviders } from './dishes.provider';
 import { CoreModule } from 'src/core/core.module';
-import { SaucesModule } from '../sauces/sauces.module';
+import { DishService } from './application/dish.service';
+import { DishesController } from './application/dish.controller';
+import { DishRepository } from './infraestructure/db/dish.repository';
 
 @Module({
-  imports: [CoreModule, SaucesModule],
-  providers: [
-    DishesService,
-    DishesDishesService,
-    DishesSaucesService,
-
-    ...dishesProviders,
-  ],
-  exports: [DishesService, DishesDishesService, DishesSaucesService],
+  imports: [CoreModule],
+  providers: [DishService, DishRepository, ...dishesProviders],
+  exports: [DishService],
   controllers: [DishesController],
 })
 export class DishesModule {}

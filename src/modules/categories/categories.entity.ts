@@ -4,15 +4,15 @@ import {
   Column,
   Model,
   DataType,
-  HasOne,
   BelongsTo,
   BeforeCreate,
   BeforeUpdate,
   PrimaryKey,
+  HasMany,
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
 import { CompanyEntity } from '../companies/company.entity';
-import { DishEntity } from '../dishes/entities/dishes.entity';
+import { DishModel } from '../dishes/infraestructure/db/dish.model';
 
 @Exclude()
 @Table({
@@ -63,21 +63,19 @@ export class CategoryEntity extends Model<CategoryEntity> {
 
   @Expose()
   @Type(() => CompanyEntity)
-  @HasOne(() => CompanyEntity, {
-    sourceKey: 'companyId',
-    foreignKey: 'id',
+  @BelongsTo(() => CompanyEntity, {
+    foreignKey: 'companyId',
     as: 'company',
   })
   company: CompanyEntity;
 
   @Expose()
-  @Type(() => DishEntity)
-  @BelongsTo(() => DishEntity, {
-    targetKey: 'id',
-    foreignKey: 'dishId',
-    as: 'dish',
+  @Type(() => DishModel)
+  @HasMany(() => DishModel, {
+    foreignKey: 'categoryId',
+    as: 'dishes',
   })
-  dish: DishEntity;
+  dishes: DishModel[];
 
   @BeforeCreate
   static async setDefaultId(entity: CategoryEntity) {

@@ -67,6 +67,7 @@ export class StaticPagesEntity extends Model<StaticPagesEntity> {
   @Expose()
   @Type(() => CompanyEntity)
   @BelongsTo(() => CompanyEntity, {
+    foreignKey: "companyId",
     as: 'company',
   })
   company: CompanyEntity;

@@ -8,6 +8,7 @@ import {
   HasOne,
   PrimaryKey,
   BeforeCreate,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
 import { CompanyEntity } from '../companies/company.entity';
@@ -70,18 +71,16 @@ export class UserEntity extends Model<UserEntity> {
 
   @Expose()
   @Type(() => UserTypeEntity)
-  @HasOne(() => UserTypeEntity, {
-    sourceKey: 'userTypeId',
-    foreignKey: 'id',
+  @BelongsTo(() => UserTypeEntity, {
+    foreignKey: 'userTypeId',
     as: 'userType',
   })
   userType: UserTypeEntity;
 
   @Expose()
   @Type(() => CompanyEntity)
-  @HasOne(() => CompanyEntity, {
-    sourceKey: 'companyId',
-    foreignKey: 'id',
+  @BelongsTo(() => CompanyEntity, {
+    foreignKey: 'companyId',
     as: 'company',
   })
   company: CompanyEntity;

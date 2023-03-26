@@ -60,6 +60,7 @@ export class BrandEntity extends Model<BrandEntity> {
   @Expose()
   @Type(() => CompanyEntity)
   @BelongsTo(() => CompanyEntity, {
+    foreignKey: 'companyId',
     as: 'company',
   })
   company: CompanyEntity;
@@ -67,6 +68,7 @@ export class BrandEntity extends Model<BrandEntity> {
   @Expose()
   @Type(() => ThemeProviderEntity)
   @HasMany(() => ThemeProviderEntity, {
+    foreignKey: 'brandId',
     as: 'themeProviders',
   })
   themeProviders: ThemeProviderEntity[];
@@ -74,6 +76,7 @@ export class BrandEntity extends Model<BrandEntity> {
   @Expose()
   @Type(() => LogoProviderEntity)
   @HasMany(() => LogoProviderEntity, {
+    foreignKey: 'brandId',
     as: 'logoProviders',
   })
   logoProviders: LogoProviderEntity[];

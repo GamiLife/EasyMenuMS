@@ -3,9 +3,9 @@ import {
   Column,
   Model,
   DataType,
-  BelongsTo,
   PrimaryKey,
   BeforeCreate,
+  HasMany,
 } from 'sequelize-typescript';
 import { UserEntity } from '../users/users.entity';
 import { Expose, Type, Exclude } from '@nestjs/class-transformer';
@@ -39,12 +39,11 @@ export class UserTypeEntity extends Model<UserTypeEntity> {
 
   @Expose()
   @Type(() => UserEntity)
-  @BelongsTo(() => UserEntity, {
-    targetKey: 'id',
+  @HasMany(() => UserEntity, {
     foreignKey: 'userTypeId',
-    as: 'user',
+    as: 'users',
   })
-  user: UserEntity;
+  users: UserEntity[];
 
   @BeforeCreate
   static async setDefaultId(entity: UserTypeEntity) {

@@ -9,11 +9,12 @@ import {
   HasOne,
   BelongsToMany,
   BeforeCreate,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
+import { CombosEntity } from '../combos/combos.entity';
 import { CompanyEntity } from '../companies/company.entity';
-import { DishEntity } from '../dishes/entities';
-import { DishSauceEntity } from '../dishes/entities/dishes-sauces.entity';
+import { ComboSauceEntity } from '../dishes/entities/combo-sauces.entity';
 
 @Exclude()
 @Table({
@@ -46,7 +47,7 @@ export class SauceEntity extends Model<SauceEntity> {
     type: DataType.FLOAT,
     allowNull: true,
   })
-  price: number;
+  priceByUnit: number;
 
   @Expose()
   @Column({
@@ -71,20 +72,19 @@ export class SauceEntity extends Model<SauceEntity> {
 
   @Expose()
   @Type(() => CompanyEntity)
-  @HasOne(() => CompanyEntity, {
-    sourceKey: 'companyId',
-    foreignKey: 'id',
+  @BelongsTo(() => CompanyEntity, {
+    foreignKey: 'companyId',
     as: 'company',
   })
   company: CompanyEntity;
 
   @Expose()
-  @Type(() => DishEntity)
-  @BelongsToMany(() => DishEntity, {
-    through: { model: () => DishSauceEntity },
-    as: 'sauceFromDish',
+  @Type(() => CombosEntity)
+  @BelongsToMany(() => CombosEntity, {
+    through: { model: () => ComboSauceEntity },
+    as: 'comboSauce',
   })
-  sauceFromDish?: DishEntity;
+  comboSauce?: CombosEntity;
 
   @BeforeCreate
   static async setDefaultId(entity: SauceEntity) {

@@ -71,6 +71,7 @@ export class ThemeProviderEntity extends Model<ThemeProviderEntity> {
   @Expose()
   @Type(() => BrandEntity)
   @BelongsTo(() => BrandEntity, {
+    foreignKey: 'brandId',
     as: 'brand',
   })
   brand: BrandEntity;

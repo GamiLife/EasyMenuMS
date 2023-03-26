@@ -1,42 +1,19 @@
-import {
-  DISH_DISH_REPOSITORY,
-  DISH_REPOSITORY,
-  DISH_SAUCE_REPOSITORY,
-  DISH_SERVCICE,
-  DISH_DISH_SERVICE,
-  DISH_SAUCE_SERVCICE,
-} from '../../core/constants';
-import { DishDishesEntity, DishSauceEntity, DishEntity } from './entities';
-import {
-  DishesDishesService,
-  DishesSaucesService,
-  DishesService,
-} from './services';
+import { DishProviders } from './application/dish.constants';
+import { DishService } from './application/dish.service';
+import { DishModel } from './infraestructure/db/dish.model';
+import { DishRepository } from './infraestructure/db/dish.repository';
 
 export const dishesProviders = [
   {
-    provide: DISH_REPOSITORY,
-    useValue: DishEntity,
+    provide: DishProviders.Model,
+    useValue: DishModel,
   },
   {
-    provide: DISH_SAUCE_REPOSITORY,
-    useValue: DishSauceEntity,
+    provide: DishProviders.Repository,
+    useValue: DishRepository,
   },
   {
-    provide: DISH_DISH_REPOSITORY,
-    useValue: DishDishesEntity,
-  },
-
-  {
-    provide: DISH_SERVCICE,
-    useValue: DishesService,
-  },
-  {
-    provide: DISH_SAUCE_SERVCICE,
-    useValue: DishesSaucesService,
-  },
-  {
-    provide: DISH_DISH_SERVICE,
-    useValue: DishesDishesService,
+    provide: DishProviders.Service,
+    useValue: DishService,
   },
 ];

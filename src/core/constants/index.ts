@@ -6,11 +6,6 @@ import {
   CompanyResponseDto,
 } from 'src/modules/companies/company.dto';
 import { ThemeProviderResponseDto } from 'src/modules/companies/modules/theme-provider/theme-provider.dto';
-import {
-  DishDetailResponseDto,
-  DishGetResponseDto,
-  DishResponseDto,
-} from 'src/modules/dishes/dtos';
 import { LocationResponseDto } from 'src/modules/locations/locations.dto';
 import { NewResponseDto } from 'src/modules/news/news.dto';
 import { SauceResponseDto } from 'src/modules/sauces/sauces.dto';
@@ -26,15 +21,12 @@ export const dtosInMetadata = {
   UserTypeResponseDto: UserTypeResponseDto,
   UserResponseDto: UserResponseDto,
   SauceResponseDto: SauceResponseDto,
-  DishResponseDto: DishResponseDto,
-  DishGetResponseDto: DishGetResponseDto,
   LocationResponseDto: LocationResponseDto,
   StaticPagesResponseDto: StaticPagesResponseDto,
   CompanyDetailsResponseDto: CompanyDetailsResponseDto,
   CompanyDetailsCreateDto: CompanyDetailsCreateDto,
   CompanyDetailsUpdateDto: CompanyDetailsUpdateDto,
   ThemeProviderResponseDto: ThemeProviderResponseDto,
-  DishDetailResponseDto: DishDetailResponseDto,
 };
 
 export const SEQUELIZE = 'SEQUELIZE';
@@ -55,6 +47,7 @@ export const LOGOPROVIDER_REPOSITORY = 'LOGOPROVIDER_REPOSITORY';
 export const THEMEPROVIDER_REPOSITORY = 'THEMEPROVIDER_REPOSITORY';
 export const BRANDSOCIALNETWORK_REPOSITORY = 'BRANDSOCIALNETWORK_REPOSITORY';
 
+export const DISH_MODEL = 'DISH_MODEL';
 export const DISH_REPOSITORY = 'DISH_REPOSITORY';
 export const DISH_SAUCE_REPOSITORY = 'DISH_SAUCE_REPOSITORY';
 export const DISH_DISH_REPOSITORY = 'DISH_DISH_REPOSITORY';

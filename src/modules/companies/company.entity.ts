@@ -4,7 +4,6 @@ import {
   Column,
   Model,
   DataType,
-  BelongsTo,
   PrimaryKey,
   BeforeCreate,
   Unique,
@@ -13,7 +12,6 @@ import {
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
 import { CategoryEntity } from '../categories/categories.entity';
-import { DishEntity } from '../dishes/entities/dishes.entity';
 import { LocationsEntity } from '../locations/locations.entity';
 import { NewEntity } from '../news/news.entity';
 import { SauceEntity } from '../sauces/sauces.entity';
@@ -21,6 +19,7 @@ import { UserEntity } from '../users/users.entity';
 import { StaticPagesEntity } from '../static-pages/static-pages.entity';
 import { BrandEntity } from './modules/brand/brand.entity';
 import { CombosEntity } from '../combos/combos.entity';
+import { DishModel } from '../dishes/infraestructure/db/dish.model';
 
 @Exclude()
 @Table({
@@ -64,6 +63,7 @@ export class CompanyEntity extends Model<CompanyEntity> {
   @Expose()
   @Type(() => BrandEntity)
   @HasOne(() => BrandEntity, {
+    foreignKey: 'companyId',
     as: 'brand',
   })
   brand: BrandEntity;
@@ -71,72 +71,66 @@ export class CompanyEntity extends Model<CompanyEntity> {
   @Expose()
   @Type(() => StaticPagesEntity)
   @HasMany(() => StaticPagesEntity, {
+    foreignKey: 'companyId',
     as: 'staticPages',
   })
   staticPages: StaticPagesEntity[];
 
   @Expose()
-  @Type(() => CategoryEntity)
-  @BelongsTo(() => CategoryEntity, {
-    targetKey: 'id',
-    foreignKey: 'companyId',
-    as: 'category',
-  })
-  category: CategoryEntity;
-
-  @Expose()
   @Type(() => UserEntity)
-  @BelongsTo(() => UserEntity, {
-    targetKey: 'id',
+  @HasMany(() => UserEntity, {
     foreignKey: 'companyId',
     as: 'user',
   })
-  user: UserEntity;
+  user: UserEntity[];
 
   @Expose()
   @Type(() => NewEntity)
-  @BelongsTo(() => NewEntity, {
-    targetKey: 'id',
+  @HasMany(() => NewEntity, {
     foreignKey: 'companyId',
     as: 'new',
   })
-  new: NewEntity;
+  new: NewEntity[];
 
   @Expose()
   @Type(() => LocationsEntity)
-  @BelongsTo(() => LocationsEntity, {
-    targetKey: 'id',
+  @HasMany(() => LocationsEntity, {
     foreignKey: 'companyId',
     as: 'location',
   })
-  location: LocationsEntity;
+  location: LocationsEntity[];
+
+  @Expose()
+  @Type(() => CategoryEntity)
+  @HasMany(() => CategoryEntity, {
+    foreignKey: 'companyId',
+    as: 'category',
+  })
+  category: CategoryEntity[];
 
   @Expose()
   @Type(() => CombosEntity)
-  @BelongsTo(() => CombosEntity, {
-    targetKey: 'id',
+  @HasMany(() => CombosEntity, {
     foreignKey: 'companyId',
-    as: 'combo',
+    as: 'combos',
   })
-  combo: CombosEntity;
+  combos: CombosEntity[];
 
   @Expose()
   @Type(() => SauceEntity)
-  @BelongsTo(() => SauceEntity, {
-    targetKey: 'id',
-    foreignKey: 'sauceId',
-    as: 'sauce',
+  @HasMany(() => SauceEntity, {
+    foreignKey: 'companyId',
+    as: 'sauces',
   })
-  sauce: SauceEntity;
+  sauces: SauceEntity[];
 
   @Expose()
-  @Type(() => DishEntity)
-  @BelongsTo(() => DishEntity, {
-    targetKey: 'id',
-    foreignKey: 'dishId',
-    as: 'dish',
+  @Type(() => DishModel)
+  @HasMany(() => DishModel, {
+    foreignKey: 'companyId',
+    as: 'dishes',
   })
-  dish: DishEntity;
+  dishes: DishModel[];
 
   @BeforeCreate
   static async setDefaultId(entity: CompanyEntity) {
