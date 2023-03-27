@@ -14,5 +14,6 @@ export class GetDishCollectionResponseDTO {
   description: string;
   priceByUnit: number;
   imageUrl: string;
+  slug: string;
   categoryId: number;
 }

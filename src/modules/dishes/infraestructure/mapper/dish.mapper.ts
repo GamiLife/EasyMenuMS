@@ -131,12 +131,13 @@ export class DishMapper extends ADishMapper {
     dishes: Dish[]
   ): GetDishCollectionResponseDTO[] {
     return dishes.map(
-      ({ id, title, description, priceByUnit, imageUrl, category }) => ({
+      ({ id, title, description, priceByUnit, imageUrl, slug, category }) => ({
         id,
         title,
         description,
         priceByUnit,
         imageUrl,
+        slug,
         categoryId: category?.id,
       })
     );
