@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 export class GetDishRequestDTO {
-  slug?: string;
   companyId: number;
 }
 

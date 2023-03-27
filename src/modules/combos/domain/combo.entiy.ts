@@ -50,7 +50,6 @@ export class Combo extends Entity<IComboProps> {
     const guardResult = Guard.againstNullOrUndefinedBulk([
       { argument: props.title, argumentName: 'title' },
       { argument: props.description, argumentName: 'description' },
-      { argument: props.maxItems, argumentName: 'maxItems' },
     ]);
 
     if (!guardResult.succeeded) {

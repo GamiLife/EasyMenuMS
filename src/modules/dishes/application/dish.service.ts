@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { MetaDomain } from 'src/core/domain';
+import { MetaFactory } from 'src/core/factories';
 import { DishRepository } from '../infraestructure/db/dish.repository';
 import { DishMapper } from '../infraestructure/mapper/dish.mapper';
 import {
@@ -16,14 +18,17 @@ import {
 } from './dtos/update-dish.dto';
 
 interface IDishService {
-  getDish: (
+  getDishById: (
     req: GetDishRequestDTO,
-    dishId: number
+    id: number
+  ) => Promise<GetDishResponseDTO>;
+  getDishBySlug: (
+    req: GetDishRequestDTO,
+    slug: string
   ) => Promise<GetDishResponseDTO>;
   geDishCollection: (
-    req: GetDishCollectionRequestDTO,
-    dishId: number
-  ) => Promise<GetDishCollectionResponseDTO[]>;
+    req: GetDishCollectionRequestDTO
+  ) => Promise<MetaDomain<GetDishCollectionResponseDTO[]>>;
   create: (req: CreateDishRequestDTO) => Promise<CreateDishResponseDTO>;
   update: (
     req: UpdateDishRequestDTO,
@@ -35,15 +40,17 @@ interface IDishService {
 export class DishService implements IDishService {
   constructor(private dishRepository: DishRepository) {}
 
-  async getDish(req: GetDishRequestDTO, dishId: number) {
-    const { slug, companyId } = req;
+  async getDishById(req: GetDishRequestDTO, id: number) {
+    const { companyId } = req;
 
-    if (!slug) {
-      const dish = await this.dishRepository.getDishById(dishId, companyId);
-      const res = DishMapper.toGetDishResponseDto(dish);
+    const dish = await this.dishRepository.getDishById(id, companyId);
+    const res = DishMapper.toGetDishResponseDto(dish);
 
-      return res;
-    }
+    return res;
+  }
+
+  async getDishBySlug(req: GetDishRequestDTO, slug: string) {
+    const { companyId } = req;
 
     const dish = await this.dishRepository.getDishBySlug(slug, companyId);
     const res = DishMapper.toGetDishResponseDto(dish);
@@ -54,14 +61,23 @@ export class DishService implements IDishService {
   async geDishCollection(req: GetDishCollectionRequestDTO) {
     const { categoryId, companyId, ...pagination } = req;
     const where = { categoryId, companyId };
+    const counter = await this.dishRepository.count(pagination.search, {
+      categoryId,
+      companyId,
+    });
 
     const dishCollection = await this.dishRepository.geDishCollection(
       pagination,
       where
     );
-    const res = DishMapper.toGetDishCollectionResponseDto(dishCollection);
 
-    return res;
+    const data = DishMapper.toGetDishCollectionResponseDto(dishCollection);
+    const metaResponse = MetaFactory.create<any[]>({
+      pagination,
+      totalItems: counter,
+      data,
+    });
+    return metaResponse;
   }
 
   //TODO: Better way to validate unique dish name

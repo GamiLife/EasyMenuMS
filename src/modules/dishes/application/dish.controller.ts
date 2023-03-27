@@ -24,9 +24,7 @@ export class DishesController {
     try {
       const response = await this.dishService.geDishCollection(query);
 
-      return {
-        finalResponse: response,
-      };
+      return response;
     } catch (error) {
       CatchControl(error);
     }
@@ -35,13 +33,28 @@ export class DishesController {
   //@Transform('DishDetailResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_DISH)
   @Get(':id')
-  async findById(@Param('id') id, @Query() query: GetDishRequestDTO) {
+  async findById(@Param('id') id: number, @Query() query: GetDishRequestDTO) {
     try {
-      const response = await this.dishService.getDish(query, id);
+      const response = await this.dishService.getDishById(query, id);
 
       return { data: response };
     } catch (error) {
-      console.log('test', error);
+      CatchControl(error);
+    }
+  }
+
+  //@Transform('DishDetailResponseDto')
+  @ResponseMessage(MESSAGE_RESPONSE_GET_DISH)
+  @Get('slug/:slug')
+  async findBySlug(
+    @Param('slug') slug: string,
+    @Query() query: GetDishRequestDTO
+  ) {
+    try {
+      const response = await this.dishService.getDishBySlug(query, slug);
+
+      return { data: response };
+    } catch (error) {
       CatchControl(error);
     }
   }

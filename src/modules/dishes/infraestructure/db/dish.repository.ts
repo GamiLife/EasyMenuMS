@@ -119,7 +119,7 @@ export class DishRepository implements IDishRepo {
     if (!instance) {
       return null;
     }
-    return DishMapper.toDomainWithDetail(instance);
+    return DishMapper.toDomainWithDetail(instance.dataValues);
   }
 
   async getDishBySlug(slug: string, companyId: number): Promise<Dish> {
@@ -189,7 +189,7 @@ export class DishRepository implements IDishRepo {
       searchColFilters: 'DishEntity.title',
     });
 
-    return DishMapper.toDomains(collection);
+    return DishMapper.toDomains(collection.map((item) => item.dataValues));
   }
 
   async exists(dishId: number): Promise<boolean> {

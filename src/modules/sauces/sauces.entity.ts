@@ -6,15 +6,14 @@ import {
   Model,
   DataType,
   PrimaryKey,
-  HasOne,
   BelongsToMany,
   BeforeCreate,
   BelongsTo,
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
 import { CombosEntity } from '../combos/combos.entity';
+import { ComboSauceEntity } from '../combos/entities/combo-sauces.entity';
 import { CompanyEntity } from '../companies/company.entity';
-import { ComboSauceEntity } from '../dishes/entities/combo-sauces.entity';
 
 @Exclude()
 @Table({
