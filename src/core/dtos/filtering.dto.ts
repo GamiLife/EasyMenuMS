@@ -4,9 +4,22 @@ import { Transform } from 'class-transformer';
 /**
  *  Filtering Request
  */
-export class FilteringPayload<T> {
+export class FilteringPayload<T = any> {
   @Expose()
   search: string;
+  @Expose()
+  @Transform(({ value }) => {
+    try {
+      const parseOrderValues = JSON.parse(`[${value}]`);
+      return parseOrderValues;
+    } catch (error) {
+      const isArray = Array.isArray(value);
+      return isArray ? value : [];
+    }
+  })
+  searchBy?: Array<[string, string]>;
+  @Expose()
+  searchOp?: 'AND' | 'OR';
   @Expose()
   @Transform(({ value }) => {
     try {

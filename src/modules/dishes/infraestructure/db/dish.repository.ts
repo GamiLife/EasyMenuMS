@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PaginationPayload } from 'src/core/dtos';
+import { FilteringPayload, PaginationPayload } from 'src/core/dtos';
 import { PaginationRepository } from 'src/core/infraestructure/db';
 import { Repo } from 'src/core/interfaces';
-import { CategoryEntity } from 'src/modules/categories/categories.entity';
 import { CombosEntity } from 'src/modules/combos/combos.entity';
 import { CompanyEntity } from 'src/modules/companies/company.entity';
 import { SauceEntity } from 'src/modules/sauces/sauces.entity';
@@ -130,30 +129,15 @@ export class DishRepository implements IDishRepo {
     return await this.getDish('id', id, companyId);
   }
 
-  async count(search: string, where: IDishCountWhere): Promise<number> {
-    const query = [
-      {
-        model: CategoryEntity,
-        attributes: ['id'],
-        required: true,
-        where: {
-          id: where?.categoryId,
-        },
-      },
-      {
-        model: CompanyEntity,
-        attributes: ['id'],
-        required: true,
-        where: {
-          id: where?.companyId,
-        },
-      },
-    ].filter(({ where: { id } }) => id !== undefined);
-
+  async count(
+    searchBy: FilteringPayload['searchBy'],
+    searchOp: FilteringPayload['searchOp'],
+    where: IDishCountWhere
+  ): Promise<number> {
     const counter = await this.paginationRepo.count({
-      query,
-      searchCol: 'title',
-      search,
+      where,
+      searchBy,
+      searchOp,
     });
 
     return counter;
@@ -163,30 +147,9 @@ export class DishRepository implements IDishRepo {
     pagination: PaginationPayload<any>,
     where: IDishCountWhere
   ): Promise<Dish[]> {
-    const query = [
-      {
-        model: CategoryEntity,
-        attributes: ['id'],
-        required: true,
-        where: {
-          id: where?.categoryId,
-        },
-      },
-      {
-        model: CompanyEntity,
-        attributes: ['id'],
-        required: true,
-        where: {
-          id: where?.companyId,
-        },
-      },
-    ].filter(({ where: { id } }) => id !== undefined);
-
     const collection: DishModel[] = await this.paginationRepo.pagination({
-      query,
+      where,
       pagination,
-      searchCol: 'title',
-      searchColFilters: 'DishEntity.title',
     });
 
     return DishMapper.toDomains(collection.map((item) => item.dataValues));

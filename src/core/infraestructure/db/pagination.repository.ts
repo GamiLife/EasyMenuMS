@@ -1,24 +1,22 @@
 import { HttpStatus } from '@nestjs/common';
 import sequelize from 'sequelize';
+import { Op } from 'sequelize';
 import { FindOptions } from 'sequelize';
-import { PaginationPayload } from 'src/core/dtos';
+import { FilteringPayload, PaginationPayload } from 'src/core/dtos';
 import { DBError, EmptyError } from 'src/core/exceptions';
 
 interface IRepositoryPagination<T, S> {
   attributes?: any[];
-  pagination: PaginationPayload<S>;
-  query: FindOptions<T>['include'];
-  searchCol: string;
-  searchColFilters?: string;
   where?: Record<string, any>;
   sort?: Array<[string, 'ASC' | 'DESC']>;
+  query?: FindOptions<T>['include'];
+  pagination: PaginationPayload<S>;
 }
 
 interface IRepositoryCount<T> {
-  search?: string;
-  query: FindOptions<T>['include'];
-  searchCol: string;
-  searchColFilters?: string;
+  searchBy?: FilteringPayload['searchBy'];
+  searchOp?: FilteringPayload['searchOp'];
+  query?: FindOptions<T>['include'];
   where?: Record<string, any>;
 }
 
@@ -29,27 +27,36 @@ export class PaginationRepository<E = any> {
     this.repository = repository;
   }
 
+  private chainningSearch(
+    searchBy: FilteringPayload['searchBy'],
+    searchOp: FilteringPayload['searchOp']
+  ) {
+    if (!searchBy.length) return {};
+    if (!searchOp) return {};
+
+    return {
+      [Op[searchOp.toLowerCase()]]: searchBy.map(([term, value]) =>
+        sequelize.where(sequelize.fn('LOWER', sequelize.col(term)), {
+          [Op.like]: `%${value.toLowerCase()}%`,
+        })
+      ),
+    };
+  }
+
   async count<T>({
-    query,
+    query = [],
     where,
-    searchCol,
-    searchColFilters,
-    search,
+    searchBy,
+    searchOp,
   }: IRepositoryCount<T>) {
     let filters: Record<string, any> = {
       include: query,
     };
 
-    if (search) {
+    if (searchBy) {
       filters = {
         ...filters,
-        where: {
-          [searchCol]: sequelize.where(
-            sequelize.fn('LOWER', sequelize.col(searchColFilters ?? searchCol)),
-            'LIKE',
-            `${search.toLowerCase()}%`
-          ),
-        },
+        where: this.chainningSearch(searchBy, searchOp),
       };
     }
 
@@ -79,10 +86,8 @@ export class PaginationRepository<E = any> {
 
   async pagination<T, S = any>({
     attributes,
-    pagination: { page, sizeByPage, search },
+    pagination: { page, sizeByPage, searchBy, searchOp },
     query,
-    searchCol,
-    searchColFilters,
     where,
     sort,
   }: IRepositoryPagination<T, S>): Promise<T> {
@@ -99,16 +104,10 @@ export class PaginationRepository<E = any> {
       };
     }
 
-    if (search) {
+    if (searchBy) {
       filters = {
         ...filters,
-        where: {
-          [searchCol]: sequelize.where(
-            sequelize.fn('LOWER', sequelize.col(searchColFilters ?? searchCol)),
-            'LIKE',
-            `${search.toLowerCase()}%`
-          ),
-        },
+        where: this.chainningSearch(searchBy, searchOp),
       };
     }
 

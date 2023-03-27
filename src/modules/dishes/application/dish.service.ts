@@ -61,10 +61,14 @@ export class DishService implements IDishService {
   async geDishCollection(req: GetDishCollectionRequestDTO) {
     const { categoryId, companyId, ...pagination } = req;
     const where = { categoryId, companyId };
-    const counter = await this.dishRepository.count(pagination.search, {
-      categoryId,
-      companyId,
-    });
+    const counter = await this.dishRepository.count(
+      pagination.searchBy,
+      pagination.searchOp,
+      {
+        categoryId,
+        companyId,
+      }
+    );
 
     const dishCollection = await this.dishRepository.geDishCollection(
       pagination,

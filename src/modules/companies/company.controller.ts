@@ -13,7 +13,10 @@ import {
 } from 'src/core/constants';
 import { ResponseMessage, Transform } from 'src/core/decorators';
 import { CatchControl } from 'src/core/exceptions';
-import { ThemeProviderUpdateBlockDto, ThemeProviderUpdateDto } from './modules/theme-provider/theme-provider.dto';
+import {
+  ThemeProviderUpdateBlockDto,
+  ThemeProviderUpdateDto,
+} from './modules/theme-provider/theme-provider.dto';
 
 @Controller('companies')
 export class CompaniesController {
@@ -80,7 +83,6 @@ export class CompaniesController {
 
       return { finalResponse: companyDomain };
     } catch (error) {
-      console.log('test', error);
       CatchControl(error);
     }
   }
@@ -101,7 +103,6 @@ export class CompaniesController {
 
       return { finalResponse: blockDomain };
     } catch (error) {
-      console.log('test', error);
       CatchControl(error);
     }
   }

@@ -37,7 +37,7 @@ export class DishMapper extends ADishMapper {
           imageUrl: entity.imageUrl,
           maxItems: entity.maxItems,
           slug: entity.slug,
-          category: entity.category.dataValues,
+          category: entity.category?.dataValues,
         },
         entity.id
       )
@@ -131,14 +131,14 @@ export class DishMapper extends ADishMapper {
     dishes: Dish[]
   ): GetDishCollectionResponseDTO[] {
     return dishes.map(
-      ({
+      ({ id, title, description, priceByUnit, imageUrl, category }) => ({
         id,
         title,
         description,
         priceByUnit,
         imageUrl,
-        category: { id: categoryId },
-      }) => ({ id, title, description, priceByUnit, imageUrl, categoryId })
+        categoryId: category?.id,
+      })
     );
   }
 
