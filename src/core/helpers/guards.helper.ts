@@ -38,4 +38,13 @@ export class Guard {
 
     return { succeeded: true };
   }
+
+  public static removeNullOrUndefined(object: Record<string, any>) {
+    return Object.entries(object).reduce((acc, [key, value]) => {
+      if (!value) {
+        return acc;
+      }
+      return { ...acc, [key]: value };
+    }, {});
+  }
 }

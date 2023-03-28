@@ -169,4 +169,46 @@ export class DishMapper extends ADishMapper {
   static toUpdateDishResponseDto({ title, description, id }: Dish) {
     return { title, description, id };
   }
+
+  static toGetShortInfoResponseDto({
+    id,
+    title,
+    description,
+    slug,
+    priceByUnit,
+    maxItems,
+    imageUrl,
+  }: Dish) {
+    return {
+      id,
+      title,
+      description,
+      slug,
+      priceByUnit,
+      maxItems,
+      imageUrl,
+    };
+  }
+
+  static toDomainWithShortInfo({
+    id,
+    title,
+    description,
+    slug,
+    priceByUnit,
+    maxItems,
+    imageUrl,
+  }: DishModel) {
+    return Dish.create(
+      {
+        title,
+        description,
+        slug,
+        priceByUnit,
+        maxItems,
+        imageUrl,
+      },
+      id
+    );
+  }
 }

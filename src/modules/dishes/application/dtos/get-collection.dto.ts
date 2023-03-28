@@ -3,7 +3,7 @@ import { PaginationPayload } from 'src/core/dtos';
 export class GetDishCollectionFilters {}
 
 export class GetDishCollectionRequestDTO extends PaginationPayload<GetDishCollectionFilters> {
-  categoryId: number;
+  categoryId?: number;
   companyId: number;
 }
 

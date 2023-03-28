@@ -13,11 +13,19 @@ import {
 } from './dtos/get-collection.dto';
 import { GetDishRequestDTO, GetDishResponseDTO } from './dtos/get-dish.dto';
 import {
+  GetShortInfoRequestDTO,
+  GetShortInfoResponseDTO,
+} from './dtos/get-short-dish-info.dto';
+import {
   UpdateDishRequestDTO,
   UpdateDishResponseDTO,
 } from './dtos/update-dish.dto';
 
 interface IDishService {
+  getShortDishInfoById: (
+    req: GetShortInfoRequestDTO,
+    id: number
+  ) => Promise<GetShortInfoResponseDTO>;
   getDishById: (
     req: GetDishRequestDTO,
     id: number
@@ -39,6 +47,15 @@ interface IDishService {
 @Injectable()
 export class DishService implements IDishService {
   constructor(private dishRepository: DishRepository) {}
+
+  async getShortDishInfoById(req: GetShortInfoRequestDTO, id: number) {
+    const { companyId } = req;
+
+    const dish = await this.dishRepository.getShortDishInfoById(id, companyId);
+    const res = DishMapper.toGetShortInfoResponseDto(dish);
+
+    return res;
+  }
 
   async getDishById(req: GetDishRequestDTO, id: number) {
     const { companyId } = req;

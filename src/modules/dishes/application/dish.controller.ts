@@ -11,6 +11,7 @@ import { DishService } from './dish.service';
 import { GetDishRequestDTO } from './dtos';
 import { CreateDishRequestDTO } from './dtos/create-dish.dto';
 import { GetDishCollectionRequestDTO } from './dtos/get-collection.dto';
+import { GetShortInfoRequestDTO } from './dtos/get-short-dish-info.dto';
 import { UpdateDishRequestDTO } from './dtos/update-dish.dto';
 
 @Controller('dishes')
@@ -32,8 +33,27 @@ export class DishesController {
 
   //@Transform('DishDetailResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_DISH)
+  @Get('/short/:id')
+  async getShortDishInfoById(
+    @Param('id') id: number,
+    @Query() query: GetShortInfoRequestDTO
+  ) {
+    try {
+      const response = await this.dishService.getShortDishInfoById(query, id);
+
+      return { data: response };
+    } catch (error) {
+      CatchControl(error);
+    }
+  }
+
+  //@Transform('DishDetailResponseDto')
+  @ResponseMessage(MESSAGE_RESPONSE_GET_DISH)
   @Get(':id')
-  async findById(@Param('id') id: number, @Query() query: GetDishRequestDTO) {
+  async getDishById(
+    @Param('id') id: number,
+    @Query() query: GetDishRequestDTO
+  ) {
     try {
       const response = await this.dishService.getDishById(query, id);
 
@@ -46,7 +66,7 @@ export class DishesController {
   //@Transform('DishDetailResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_DISH)
   @Get('slug/:slug')
-  async findBySlug(
+  async getDishBySlug(
     @Param('slug') slug: string,
     @Query() query: GetDishRequestDTO
   ) {

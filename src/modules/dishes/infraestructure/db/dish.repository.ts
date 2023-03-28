@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { FilteringPayload, PaginationPayload } from 'src/core/dtos';
+import { Guard } from 'src/core/helpers';
 import { PaginationRepository } from 'src/core/infraestructure/db';
 import { Repo } from 'src/core/interfaces';
 import { CombosEntity } from 'src/modules/combos/combos.entity';
@@ -16,6 +17,7 @@ interface IDishCountWhere {
 }
 
 export interface IDishRepo extends Repo<Dish, IDishCountWhere> {
+  getShortDishInfoById(id: number, companyId: number): Promise<Dish>;
   getDishById(id: number, companyId: number): Promise<Dish>;
   getDishBySlug(slug: string, companyId: number): Promise<Dish>;
   geDishCollection(
@@ -121,6 +123,17 @@ export class DishRepository implements IDishRepo {
     return DishMapper.toDomainWithDetail(instance.dataValues);
   }
 
+  async getShortDishInfoById(id: number, companyId: number): Promise<Dish> {
+    const instance: DishModel = await this.dishModel.findOne({
+      where: {
+        id,
+        companyId,
+      },
+    });
+
+    return DishMapper.toDomainWithShortInfo(instance.dataValues);
+  }
+
   async getDishBySlug(slug: string, companyId: number): Promise<Dish> {
     return await this.getDish('slug', slug, companyId);
   }
@@ -135,7 +148,7 @@ export class DishRepository implements IDishRepo {
     where: IDishCountWhere
   ): Promise<number> {
     const counter = await this.paginationRepo.count({
-      where,
+      where: Guard.removeNullOrUndefined(where),
       searchBy,
       searchOp,
     });
@@ -148,7 +161,7 @@ export class DishRepository implements IDishRepo {
     where: IDishCountWhere
   ): Promise<Dish[]> {
     const collection: DishModel[] = await this.paginationRepo.pagination({
-      where,
+      where: Guard.removeNullOrUndefined(where),
       pagination,
     });
 
