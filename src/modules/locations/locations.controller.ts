@@ -34,7 +34,7 @@ export class LocationsController {
 
       return {
         finalResponse: locationDomain.data,
-        metaData: locationDomain.metadata,
+        metaData: locationDomain.metaData,
       };
     } catch (error) {
       CatchControl(error);

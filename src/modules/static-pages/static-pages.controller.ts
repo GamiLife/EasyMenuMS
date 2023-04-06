@@ -33,7 +33,7 @@ export class StaticPagesController {
 
       return {
         finalResponse: locationDomain.data,
-        metaData: locationDomain.metadata,
+        metaData: locationDomain.metaData,
       };
     } catch (error) {
       CatchControl(error);

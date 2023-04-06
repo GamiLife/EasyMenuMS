@@ -3,17 +3,17 @@ import { MetaDto } from '../dtos/meta.dto';
 
 interface IMetaDomain<T> {
   data: T;
-  metadata?: MetaDto;
+  metaData?: MetaDto;
 }
 
 export class MetaDomain<T> {
   @Expose()
   readonly data: T;
   @Expose()
-  readonly metadata?: MetaDto;
+  readonly metaData?: MetaDto;
 
-  constructor({ data, metadata }: IMetaDomain<T>) {
+  constructor({ data, metaData }: IMetaDomain<T>) {
     this.data = data;
-    this.metadata = metadata;
+    this.metaData = metaData;
   }
 }

@@ -52,7 +52,7 @@ export class NewsController {
 
       return {
         finalResponse: newsDomain.data,
-        metaData: newsDomain.metadata,
+        metaData: newsDomain.metaData,
       };
     } catch (error) {
       CatchControl(error);

@@ -18,13 +18,13 @@ export class MetaFactory {
     const metaFilter = new FilterDto({
       search: pagination.search,
     });
-    const metadata = new MetaDto({
+    const metaData = new MetaDto({
       pagination: metaPagination,
       filters: metaFilter,
     });
     const metaResponse = new MetaDomain<T>({
       data,
-      metadata,
+      metaData,
     });
 
     return metaResponse;

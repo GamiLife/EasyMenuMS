@@ -64,7 +64,7 @@ export class CategoriesController {
 
       return {
         finalResponse: categoryDomain.data,
-        metaData: categoryDomain.metadata,
+        metaData: categoryDomain.metaData,
       };
     } catch (error) {
       CatchControl(error);

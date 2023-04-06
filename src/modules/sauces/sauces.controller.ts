@@ -45,7 +45,7 @@ export class SaucesController {
 
       return {
         finalResponse: saucesDomain.data,
-        metaData: saucesDomain.metadata,
+        metaData: saucesDomain.metaData,
       };
     } catch (error) {
       CatchControl(error);
