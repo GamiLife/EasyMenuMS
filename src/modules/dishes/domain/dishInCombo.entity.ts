@@ -3,7 +3,6 @@ import { Guard } from 'src/core/helpers';
 import { Dish } from './dish.entity';
 
 export interface IDishInComboProps {
-  id: number;
   maxItemsByRow: number;
   priceByUnit: number;
   dish: Dish;
@@ -15,15 +14,15 @@ export class DishInCombo extends Entity<IDishInComboProps> {
   }
 
   get dish() {
-    return this.dish;
+    return this.props.dish;
   }
 
   get maxItemsByRow() {
-    return this.maxItemsByRow;
+    return this.props.maxItemsByRow;
   }
 
   get priceByUnit() {
-    return this.priceByUnit;
+    return this.props.priceByUnit;
   }
 
   public constructor(props: IDishInComboProps, id?: number) {
@@ -32,7 +31,6 @@ export class DishInCombo extends Entity<IDishInComboProps> {
 
   public static create(props: IDishInComboProps, id?: number): DishInCombo {
     const guardResult = Guard.againstNullOrUndefinedBulk([
-      { argument: props.priceByUnit, argumentName: 'priceByUnit' },
       { argument: props.dish, argumentName: 'dish' },
     ]);
 

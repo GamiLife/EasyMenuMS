@@ -3,13 +3,13 @@ import { FilteringPayload, PaginationPayload } from 'src/core/dtos';
 import { Guard } from 'src/core/helpers';
 import { PaginationRepository } from 'src/core/infraestructure/db';
 import { Repo } from 'src/core/interfaces';
-import { CombosEntity } from 'src/modules/combos/combos.entity';
 import { CompanyEntity } from 'src/modules/companies/company.entity';
-import { SauceEntity } from 'src/modules/sauces/sauces.entity';
+import { SauceModel } from 'src/modules/sauces/sauces.entity';
 import { DishProviders } from '../../application/dish.constants';
 import { Dish } from '../../domain/dish.entity';
 import { DishMapper } from '../mapper/dish.mapper';
 import { DishModel } from './dish.model';
+import { CombosModel } from 'src/modules/combos/infraestructure/db/combos.model';
 
 interface IDishCountWhere {
   categoryId?: number;
@@ -53,7 +53,7 @@ export class DishRepository implements IDishRepo {
     query.where[fieldKey] = fieldValue;
     query.include = [
       {
-        model: CombosEntity,
+        model: CombosModel,
         as: 'combos',
         attributes: [
           'id',
@@ -65,7 +65,7 @@ export class DishRepository implements IDishRepo {
         ],
         include: [
           {
-            model: SauceEntity,
+            model: SauceModel,
             attributes: [
               'id',
               'title',
@@ -169,11 +169,15 @@ export class DishRepository implements IDishRepo {
   }
 
   async exists(dishId: number): Promise<boolean> {
-    const query = this.createBaseQuery();
-    query.where['id'] = dishId;
+    try {
+      const query = this.createBaseQuery();
+      query.where['id'] = dishId;
 
-    const instance = await this.dishModel.findOne(query);
-    return !!instance;
+      const instance = await this.dishModel.findOne(query);
+      return !!instance;
+    } catch (error) {
+      return false;
+    }
   }
 
   async save(dish: Dish): Promise<Dish> {

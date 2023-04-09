@@ -10,14 +10,14 @@ import {
   BeforeCreate,
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
-import { CombosEntity } from '../combos.entity';
-import { DishModel } from '../../dishes/infraestructure/db/dish.model';
+import { DishModel } from '../../../dishes/infraestructure/db/dish.model';
+import { CombosModel } from './combos.model';
 
 @Exclude()
 @Table({
   tableName: 'combo_dishes',
 })
-export class ComboDishesEntity extends Model<ComboDishesEntity> {
+export class ComboDishesModel extends Model<ComboDishesModel> {
   @Expose()
   @PrimaryKey
   @Column({
@@ -33,7 +33,7 @@ export class ComboDishesEntity extends Model<ComboDishesEntity> {
   priceByUnit: number;
 
   @Exclude()
-  @ForeignKey(() => CombosEntity)
+  @ForeignKey(() => CombosModel)
   @Column({
     type: DataType.BIGINT,
     comment: 'Combo assigned',
@@ -55,13 +55,13 @@ export class ComboDishesEntity extends Model<ComboDishesEntity> {
   maxItemsByRow: number;
 
   @Expose()
-  @Type(() => CombosEntity)
-  @HasMany(() => CombosEntity, {
+  @Type(() => CombosModel)
+  @HasMany(() => CombosModel, {
     sourceKey: 'comboId',
     foreignKey: 'id',
     as: 'comboDish',
   })
-  comboDish: CombosEntity;
+  comboDish: CombosModel;
 
   @Expose()
   @Type(() => DishModel)
@@ -73,7 +73,7 @@ export class ComboDishesEntity extends Model<ComboDishesEntity> {
   secondaryDish: DishModel;
 
   @BeforeCreate
-  static async setDefaultId(entity: ComboDishesEntity) {
+  static async setDefaultId(entity: ComboDishesModel) {
     const idNumber = await getNextId(entity.sequelize, 'combo_dishes_sequence');
 
     entity.id = idNumber;

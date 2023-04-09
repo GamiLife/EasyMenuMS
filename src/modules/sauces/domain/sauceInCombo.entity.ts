@@ -3,7 +3,6 @@ import { Guard } from 'src/core/helpers';
 import { Sauce } from './sauce.entity';
 
 export interface ISauceInComboProps {
-  id: number;
   maxItemsByRow: number;
   priceByUnit: number;
   sauce: Sauce;
@@ -15,15 +14,15 @@ export class SauceInCombo extends Entity<ISauceInComboProps> {
   }
 
   get sauce() {
-    return this.sauce;
+    return this.props.sauce;
   }
 
   get maxItemsByRow() {
-    return this.maxItemsByRow;
+    return this.props.maxItemsByRow;
   }
 
   get priceByUnit() {
-    return this.priceByUnit;
+    return this.props.priceByUnit;
   }
 
   public constructor(props: ISauceInComboProps, id?: number) {
@@ -32,7 +31,6 @@ export class SauceInCombo extends Entity<ISauceInComboProps> {
 
   public static create(props: ISauceInComboProps, id?: number): SauceInCombo {
     const guardResult = Guard.againstNullOrUndefinedBulk([
-      { argument: props.priceByUnit, argumentName: 'priceByUnit' },
       { argument: props.sauce, argumentName: 'sauce' },
     ]);
 

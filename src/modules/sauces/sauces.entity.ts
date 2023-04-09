@@ -11,15 +11,15 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
-import { CombosEntity } from '../combos/combos.entity';
-import { ComboSauceEntity } from '../combos/entities/combo-sauces.entity';
 import { CompanyEntity } from '../companies/company.entity';
+import { CombosModel } from '../combos/infraestructure/db/combos.model';
+import { ComboSauceModel } from '../combos/infraestructure/db/combo-sauces.model';
 
 @Exclude()
 @Table({
   tableName: 'sauces',
 })
-export class SauceEntity extends Model<SauceEntity> {
+export class SauceModel extends Model<SauceModel> {
   @Expose()
   @PrimaryKey
   @Column({
@@ -78,15 +78,15 @@ export class SauceEntity extends Model<SauceEntity> {
   company: CompanyEntity;
 
   @Expose()
-  @Type(() => CombosEntity)
-  @BelongsToMany(() => CombosEntity, {
-    through: { model: () => ComboSauceEntity },
+  @Type(() => CombosModel)
+  @BelongsToMany(() => CombosModel, {
+    through: { model: () => ComboSauceModel },
     as: 'comboSauce',
   })
-  comboSauce?: CombosEntity;
+  comboSauce?: CombosModel;
 
   @BeforeCreate
-  static async setDefaultId(entity: SauceEntity) {
+  static async setDefaultId(entity: SauceModel) {
     const idNumber = await getNextId(entity.sequelize, 'sauces_sequence');
 
     entity.id = idNumber;

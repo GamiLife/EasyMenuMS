@@ -11,16 +11,24 @@ import { DishInCombo } from '../../domain/dishInCombo.entity';
 import { DishModel } from '../db/dish.model';
 
 abstract class ADishMapper {
-  static toPersistence: (domain: Dish) => DishModel;
+  static toPersistence: (domain: Dish) => Partial<DishModel>;
   static toDomain: (entity: DishModel) => Dish;
   static toDomains: (entity: DishModel[]) => Dish[];
 }
 
 export class DishMapper extends ADishMapper {
-  static toPersistence(domain: Dish): DishModel {
-    return plainToClass(DishModel, domain, {
+  static toPersistence(domain: Dish): Partial<DishModel> {
+    const model = plainToClass(DishModel, domain, {
       excludeExtraneousValues: true,
     });
+    return {
+      title: model.title,
+      slug: model.slug,
+      description: model.description,
+      priceByUnit: model.priceByUnit,
+      maxItems: model.maxItems,
+      imageUrl: model.imageUrl,
+    };
   }
 
   static toDomain(entity: DishModel): Dish {
@@ -60,23 +68,23 @@ export class DishMapper extends ADishMapper {
             description,
             maxItems,
             dishes: dishesFromCombo.map(
-              ({ dataValues: { ComboDishesEntity, ...dish } }: any) =>
+              ({ dataValues: { ComboDishesModel, ...dish } }: any) =>
                 DishInCombo.create(
                   {
                     dish: Dish.create(dish, dish?.id),
-                    ...ComboDishesEntity?.dataValues,
+                    ...ComboDishesModel?.dataValues,
                   },
-                  ComboDishesEntity?.dataValues?.id
+                  ComboDishesModel?.dataValues?.id
                 )
             ),
             sauces: saucesFromCombo.map(
-              ({ dataValues: { ComboSauceEntity, ...sauce } }: any) =>
+              ({ dataValues: { ComboSauceModel, ...sauce } }: any) =>
                 SauceInCombo.create(
                   {
                     sauce: Sauce.create(sauce, sauce?.id),
-                    ...ComboSauceEntity?.dataValues,
+                    ...ComboSauceModel?.dataValues,
                   },
-                  ComboSauceEntity?.dataValues?.id
+                  ComboSauceModel?.dataValues?.id
                 )
             ),
           },
@@ -143,22 +151,27 @@ export class DishMapper extends ADishMapper {
     );
   }
 
-  static toDomainFromCreateDishRequestDto(dto: CreateDishRequestDTO) {
-    return plainToClass(Dish, dto, {
-      excludeExtraneousValues: true,
+  static toDomainFromCreateDishRequestDto(
+    dto: CreateDishRequestDTO,
+    imageUrl: string
+  ) {
+    return Dish.create({
+      ...dto,
+      imageUrl,
     });
   }
 
   static toDomainFromUpdateDishRequestDto(
     dto: UpdateDishRequestDTO,
+    imageUrl: string,
     id: number
   ) {
-    return plainToClass(
-      Dish,
-      { ...dto, id },
+    return Dish.create(
       {
-        excludeExtraneousValues: true,
-      }
+        ...dto,
+        imageUrl,
+      },
+      id
     );
   }
 

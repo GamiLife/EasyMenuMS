@@ -13,8 +13,8 @@ import {
 import { getNextId } from 'src/core/helpers';
 import { slugify } from 'src/core/helpers/slugify.helper';
 import { CategoryEntity } from 'src/modules/categories/categories.entity';
-import { CombosEntity } from 'src/modules/combos/combos.entity';
-import { ComboDishesEntity } from 'src/modules/combos/entities/combo-dishes.entity';
+import { ComboDishesModel } from 'src/modules/combos/infraestructure/db/combo-dishes.model';
+import { CombosModel } from 'src/modules/combos/infraestructure/db/combos.model';
 import { CompanyEntity } from 'src/modules/companies/company.entity';
 
 @Exclude()
@@ -100,20 +100,20 @@ export class DishModel extends Model<DishModel> {
   company: CompanyEntity;
 
   @Expose()
-  @Type(() => CombosEntity)
-  @HasMany(() => CombosEntity, {
+  @Type(() => CombosModel)
+  @HasMany(() => CombosModel, {
     foreignKey: 'dishId',
     as: 'combos',
   })
-  combos: CombosEntity[];
+  combos: CombosModel[];
 
   @Expose()
-  @Type(() => CombosEntity)
-  @BelongsToMany(() => CombosEntity, {
-    through: { model: () => ComboDishesEntity },
+  @Type(() => CombosModel)
+  @BelongsToMany(() => CombosModel, {
+    through: { model: () => ComboDishesModel },
     as: 'comboDish',
   })
-  comboDish?: CombosEntity;
+  comboDish?: CombosModel;
 
   @BeforeCreate
   static async setDefaultId(entity: DishModel) {

@@ -11,17 +11,18 @@ import {
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
 import { CompanyEntity } from 'src/modules/companies/company.entity';
-import { ComboDishesEntity } from './entities/combo-dishes.entity';
-import { DishModel } from '../dishes/infraestructure/db/dish.model';
-import { SauceEntity } from '../sauces/sauces.entity';
-import { ComboSauceEntity } from './entities/combo-sauces.entity';
+
+import { DishModel } from '../../../dishes/infraestructure/db/dish.model';
+import { ComboSauceModel } from './combo-sauces.model';
+import { ComboDishesModel } from './combo-dishes.model';
+import { SauceModel } from 'src/modules/sauces/sauces.entity';
 
 @Exclude()
 @Table({
   tableName: 'combos',
   comment: 'Combos for dishes to apply discount and custom prices',
 })
-export class CombosEntity extends Model<CombosEntity> {
+export class CombosModel extends Model<CombosModel> {
   @Expose()
   @PrimaryKey
   @Column({
@@ -83,21 +84,21 @@ export class CombosEntity extends Model<CombosEntity> {
   @Expose()
   @Type(() => DishModel)
   @BelongsToMany(() => DishModel, {
-    through: { model: () => ComboDishesEntity },
+    through: { model: () => ComboDishesModel },
     as: 'dishesFromCombo',
   })
   dishesFromCombo: DishModel[];
 
   @Expose()
-  @Type(() => SauceEntity)
-  @BelongsToMany(() => SauceEntity, {
-    through: { model: () => ComboSauceEntity },
+  @Type(() => SauceModel)
+  @BelongsToMany(() => SauceModel, {
+    through: { model: () => ComboSauceModel },
     as: 'saucesFromCombo',
   })
-  saucesFromCombo: SauceEntity[];
+  saucesFromCombo: SauceModel[];
 
   @BeforeCreate
-  static async setDefaultId(entity: CombosEntity) {
+  static async setDefaultId(entity: CombosModel) {
     const idNumber = await getNextId(entity.sequelize, 'combos_sequence');
 
     entity.id = idNumber;

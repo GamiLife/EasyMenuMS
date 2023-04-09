@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   MESSAGE_RESPONSE_CREATE_DISH,
   MESSAGE_RESPONSE_GET_DISH,
@@ -13,10 +23,12 @@ import { CreateDishRequestDTO } from './dtos/create-dish.dto';
 import { GetDishCollectionRequestDTO } from './dtos/get-collection.dto';
 import { GetShortInfoRequestDTO } from './dtos/get-short-dish-info.dto';
 import { UpdateDishRequestDTO } from './dtos/update-dish.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { S3Service } from 'src/core/services/S3.service';
 
 @Controller('dishes')
 export class DishesController {
-  constructor(private dishService: DishService) {}
+  constructor(private dishService: DishService, private s3Service: S3Service) {}
 
   //@Transform('DishResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_GET_DISH_ALL)
@@ -59,6 +71,7 @@ export class DishesController {
 
       return { data: response };
     } catch (error) {
+      console.log('test', error);
       CatchControl(error);
     }
   }
@@ -82,9 +95,17 @@ export class DishesController {
   //@Transform('DishResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_CREATE_DISH)
   @Post()
-  async create(@Body() request: CreateDishRequestDTO) {
+  @UseInterceptors(FileInterceptor('file'))
+  async create(@UploadedFile() file, @Body() request: CreateDishRequestDTO) {
     try {
-      const response = await this.dishService.create(request);
+      const fileResult = file?.originalname
+        ? await this.s3Service.uploadFile(file.buffer, file.originalname)
+        : null;
+
+      const response = await this.dishService.create(
+        request,
+        fileResult?.fileUrl
+      );
 
       return { data: response };
     } catch (error) {
@@ -95,9 +116,22 @@ export class DishesController {
   //@Transform('DishResponseDto')
   @ResponseMessage(MESSAGE_RESPONSE_UPDATE_DISH)
   @Put('/:id')
-  async update(@Param('id') id: number, @Body() request: UpdateDishRequestDTO) {
+  @UseInterceptors(FileInterceptor('file'))
+  async update(
+    @UploadedFile() file,
+    @Param('id') id: number,
+    @Body() request: UpdateDishRequestDTO
+  ) {
     try {
-      const response = await this.dishService.update(request, id);
+      const fileResult = file?.originalname
+        ? await this.s3Service.uploadFile(file.buffer, file.originalname)
+        : null;
+
+      const response = await this.dishService.update(
+        request,
+        id,
+        fileResult?.fileUrl
+      );
 
       return { data: response };
     } catch (error) {

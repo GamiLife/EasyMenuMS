@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Sequelize } from 'sequelize-typescript';
 import { CategoryEntity } from 'src/modules/categories/categories.entity';
-import { CombosEntity } from 'src/modules/combos/combos.entity';
-import { ComboDishesEntity } from 'src/modules/combos/entities/combo-dishes.entity';
-import { ComboSauceEntity } from 'src/modules/combos/entities/combo-sauces.entity';
 import { CompanyEntity } from 'src/modules/companies/company.entity';
 import { BrandSocialNetworkEntity } from 'src/modules/companies/modules/brand-social-networks/brand-social-network.entity';
 import { BrandEntity } from 'src/modules/companies/modules/brand/brand.entity';
@@ -14,11 +11,14 @@ import { ThemeProviderEntity } from 'src/modules/companies/modules/theme-provide
 import { DishModel } from 'src/modules/dishes/infraestructure/db/dish.model';
 import { LocationsEntity } from 'src/modules/locations/locations.entity';
 import { NewEntity } from 'src/modules/news/news.entity';
-import { SauceEntity } from 'src/modules/sauces/sauces.entity';
 import { StaticPagesEntity } from 'src/modules/static-pages/static-pages.entity';
 import { UserTypeEntity } from 'src/modules/user-types/user-type.entity';
 import { UserEntity } from 'src/modules/users/users.entity';
 import { SEQUELIZE } from '../../core/constants';
+import { SauceModel } from 'src/modules/sauces/sauces.entity';
+import { CombosModel } from 'src/modules/combos/infraestructure/db/combos.model';
+import { ComboDishesModel } from 'src/modules/combos/infraestructure/db/combo-dishes.model';
+import { ComboSauceModel } from 'src/modules/combos/infraestructure/db/combo-sauces.model';
 const config = require('./database.config');
 
 export const databaseProviders = [
@@ -32,11 +32,11 @@ export const databaseProviders = [
         UserEntity,
         NewEntity,
         CategoryEntity,
-        SauceEntity,
+        SauceModel,
         DishModel,
-        CombosEntity,
-        ComboDishesEntity,
-        ComboSauceEntity,
+        CombosModel,
+        ComboDishesModel,
+        ComboSauceModel,
         LocationsEntity,
         StaticPagesEntity,
         BrandEntity,

@@ -14,12 +14,12 @@ import { getNextId } from 'src/core/helpers';
 import { CategoryEntity } from '../categories/categories.entity';
 import { LocationsEntity } from '../locations/locations.entity';
 import { NewEntity } from '../news/news.entity';
-import { SauceEntity } from '../sauces/sauces.entity';
 import { UserEntity } from '../users/users.entity';
 import { StaticPagesEntity } from '../static-pages/static-pages.entity';
 import { BrandEntity } from './modules/brand/brand.entity';
-import { CombosEntity } from '../combos/combos.entity';
 import { DishModel } from '../dishes/infraestructure/db/dish.model';
+import { CombosModel } from '../combos/infraestructure/db/combos.model';
+import { SauceModel } from '../sauces/sauces.entity';
 
 @Exclude()
 @Table({
@@ -109,20 +109,20 @@ export class CompanyEntity extends Model<CompanyEntity> {
   category: CategoryEntity[];
 
   @Expose()
-  @Type(() => CombosEntity)
-  @HasMany(() => CombosEntity, {
+  @Type(() => CombosModel)
+  @HasMany(() => CombosModel, {
     foreignKey: 'companyId',
     as: 'combos',
   })
-  combos: CombosEntity[];
+  combos: CombosModel[];
 
   @Expose()
-  @Type(() => SauceEntity)
-  @HasMany(() => SauceEntity, {
+  @Type(() => SauceModel)
+  @HasMany(() => SauceModel, {
     foreignKey: 'companyId',
     as: 'sauces',
   })
-  sauces: SauceEntity[];
+  sauces: SauceModel[];
 
   @Expose()
   @Type(() => DishModel)

@@ -7,7 +7,7 @@ export class GetDishResponseDTO {
   id: number;
   title: string;
   description: string;
-  slug: string;
+  slug?: string;
   priceByUnit: number;
   maxItems: number;
   imageUrl: string;

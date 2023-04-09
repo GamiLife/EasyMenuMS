@@ -13,13 +13,13 @@ import {
   SauceCreateDto,
   SauceUpdateDto,
 } from './sauces.dto';
-import { SauceEntity } from './sauces.entity';
+import { SauceModel } from './sauces.entity';
 
 @Injectable()
 export class SaucesService extends BaseService {
   constructor(
     @Inject(SAUCE_REPOSITORY)
-    private readonly sauceRepository: typeof SauceEntity,
+    private readonly sauceRepository: typeof SauceModel,
     private readonly companyService: CompaniesService
   ) {
     super(sauceRepository);
@@ -33,7 +33,7 @@ export class SaucesService extends BaseService {
 
     const entity = { ...sauce, imageUrl };
     const sauceEntity = await this.sauceRepository
-      .create<SauceEntity>(entity)
+      .create<SauceModel>(entity)
       .catch((reason) => {
         throw new DBError(
           `Category query failed: ${reason}`,
@@ -76,7 +76,7 @@ export class SaucesService extends BaseService {
       search: pagination.search,
     });
 
-    const saucesEntity = await this.pagination<SauceEntity[]>({
+    const saucesEntity = await this.pagination<SauceModel[]>({
       filtersRepo,
       pagination,
       searchCol: 'title',
@@ -99,7 +99,7 @@ export class SaucesService extends BaseService {
   }
 
   async findOneById(id: number): Promise<SauceDomainV2> {
-    const sauceGetEntity = await this.sauceRepository.findOne<SauceEntity>({
+    const sauceGetEntity = await this.sauceRepository.findOne<SauceModel>({
       where: { id },
       include: [
         {
@@ -150,7 +150,7 @@ export class SaucesService extends BaseService {
 
     const entity = { ...sauceToUpdate, imageUrl };
     await this.sauceRepository
-      .update<SauceEntity>(entity, {
+      .update<SauceModel>(entity, {
         where: { id },
       })
       .catch((reason) => {

@@ -8,8 +8,9 @@ export interface IDishProps {
   priceByUnit: number;
   maxItems: number;
 
-  slug: string;
   imageUrl: string;
+
+  slug?: string;
 
   category?: any;
   company?: any;
@@ -43,6 +44,10 @@ export class Dish extends Entity<IDishProps> {
 
   get imageUrl(): string {
     return this.props.imageUrl;
+  }
+
+  set imageUrl(imageUrlProp: string) {
+    this.props['imageUrl'] = imageUrlProp;
   }
 
   get category(): any {

@@ -1,5 +1,6 @@
 import { Entity } from 'src/core/domain';
 import { Guard } from 'src/core/helpers';
+import { Dish } from 'src/modules/dishes/domain/dish.entity';
 import { DishInCombo } from 'src/modules/dishes/domain/dishInCombo.entity';
 import { SauceInCombo } from 'src/modules/sauces/domain/sauceInCombo.entity';
 
@@ -7,6 +8,8 @@ export interface IComboProps {
   title: string;
   description: string;
   maxItems: number;
+
+  principalDish?: Dish;
 
   company?: any;
   dishes?: DishInCombo[];
@@ -18,20 +21,28 @@ export class Combo extends Entity<IComboProps> {
     return this._id;
   }
 
+  set id(id: number) {
+    this._id = id;
+  }
+
   get title(): string {
     return this.props.title;
   }
 
   get description(): string {
-    return this.description;
+    return this.props.description;
   }
 
   get maxItems(): number {
-    return this.maxItems;
+    return this.props.maxItems;
   }
 
   get company(): any {
     return this.props.company;
+  }
+
+  get principalDish(): Dish {
+    return this.props.principalDish;
   }
 
   get dishes(): any[] {

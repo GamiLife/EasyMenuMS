@@ -11,8 +11,8 @@ import {
   BeforeCreate,
 } from 'sequelize-typescript';
 import { getNextId } from 'src/core/helpers';
-import { SauceEntity } from '../../sauces/sauces.entity';
-import { CombosEntity } from '../../combos/combos.entity';
+import { CombosModel } from './combos.model';
+import { SauceModel } from 'src/modules/sauces/sauces.entity';
 
 @Exclude()
 @Table({
@@ -20,7 +20,7 @@ import { CombosEntity } from '../../combos/combos.entity';
   comment: `Table detail for sauces by dish, in this case we are going to find
             price detail and maxSauces to add in dish`,
 })
-export class ComboSauceEntity extends Model<ComboSauceEntity> {
+export class ComboSauceModel extends Model<ComboSauceModel> {
   @Exclude()
   @PrimaryKey
   @Column({
@@ -38,7 +38,7 @@ export class ComboSauceEntity extends Model<ComboSauceEntity> {
   priceByUnit: number;
 
   @Exclude()
-  @ForeignKey(() => CombosEntity)
+  @ForeignKey(() => CombosModel)
   @Column({
     type: DataType.BIGINT,
     comment: 'Combo assigned',
@@ -46,7 +46,7 @@ export class ComboSauceEntity extends Model<ComboSauceEntity> {
   comboId: number;
 
   @Exclude()
-  @ForeignKey(() => SauceEntity)
+  @ForeignKey(() => SauceModel)
   @Column({
     type: DataType.BIGINT,
     comment: 'Sauce assigned with dish',
@@ -62,25 +62,25 @@ export class ComboSauceEntity extends Model<ComboSauceEntity> {
   maxItemsByRow: number;
 
   @Expose()
-  @Type(() => SauceEntity)
-  @HasMany(() => SauceEntity, {
+  @Type(() => SauceModel)
+  @HasMany(() => SauceModel, {
     sourceKey: 'sauceId',
     foreignKey: 'id',
     as: 'sauce',
   })
-  sauce: SauceEntity;
+  sauce: SauceModel;
 
   @Expose()
-  @Type(() => CombosEntity)
-  @HasMany(() => CombosEntity, {
+  @Type(() => CombosModel)
+  @HasMany(() => CombosModel, {
     sourceKey: 'comboId',
     foreignKey: 'id',
     as: 'comboSauce',
   })
-  comboSauce: CombosEntity;
+  comboSauce: CombosModel;
 
   @BeforeCreate
-  static async setDefaultId(entity: ComboSauceEntity) {
+  static async setDefaultId(entity: ComboSauceModel) {
     const idNumber = await getNextId(entity.sequelize, 'combo_sauces_sequence');
 
     entity.id = idNumber;

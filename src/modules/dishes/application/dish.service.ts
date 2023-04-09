@@ -37,10 +37,14 @@ interface IDishService {
   geDishCollection: (
     req: GetDishCollectionRequestDTO
   ) => Promise<MetaDomain<GetDishCollectionResponseDTO[]>>;
-  create: (req: CreateDishRequestDTO) => Promise<CreateDishResponseDTO>;
+  create: (
+    req: CreateDishRequestDTO,
+    imageUrl: string
+  ) => Promise<CreateDishResponseDTO>;
   update: (
     req: UpdateDishRequestDTO,
-    id: number
+    id: number,
+    imageUrl: string
   ) => Promise<UpdateDishResponseDTO>;
 }
 
@@ -102,15 +106,15 @@ export class DishService implements IDishService {
   }
 
   //TODO: Better way to validate unique dish name
-  async create(req: CreateDishRequestDTO) {
-    const dish = DishMapper.toDomainFromCreateDishRequestDto(req);
+  async create(req: CreateDishRequestDTO, imageUrl: string) {
+    const dish = DishMapper.toDomainFromCreateDishRequestDto(req, imageUrl);
     const creation = await this.dishRepository.save(dish);
     const res = DishMapper.toCreateDishResponseDto(creation);
     return res;
   }
 
-  async update(req: UpdateDishRequestDTO, id: number) {
-    const dish = DishMapper.toDomainFromUpdateDishRequestDto(req, id);
+  async update(req: UpdateDishRequestDTO, id: number, imageUrl: string) {
+    const dish = DishMapper.toDomainFromUpdateDishRequestDto(req, imageUrl, id);
     const upsert = await this.dishRepository.save(dish);
     const res = DishMapper.toUpdateDishResponseDto(upsert);
     return res;
