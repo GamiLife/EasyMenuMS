@@ -28,9 +28,9 @@ export class CombosController {
   @Get()
   async geComboCollection(@Query() query: GetComboCollectionRequestDTO) {
     try {
-      const data = await this.comboService.geComboCollection(query);
+      const response = await this.comboService.geComboCollection(query);
 
-      return { data };
+      return response;
     } catch (error) {
       console.log('test', error);
       //CatchControl(error);
