@@ -16,7 +16,7 @@ services:
     image: dpage/pgadmin4
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: marce1996hr@gmail.com
+      PGADMIN_DEFAULT_EMAIL: gami@gmail.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - '8080:80'
