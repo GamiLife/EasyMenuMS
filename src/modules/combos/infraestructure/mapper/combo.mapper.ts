@@ -1,5 +1,5 @@
 import { Dish } from 'src/modules/dishes/domain/dish.entity';
-import { Combo } from '../../domain/Combo.entiy';
+import { Combo } from '../../domain/combo.entiy';
 import { CombosModel } from '../db/combos.model';
 import { DishInCombo } from 'src/modules/dishes/domain/dishInCombo.entity';
 import { SauceInCombo } from 'src/modules/sauces/domain/sauceInCombo.entity';

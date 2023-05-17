@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const dotenv = require("dotenv");
 
-dotenv.config();
+dotenv.config({path: ".env.local"});
 
 const databaseConfig = {
   development: {

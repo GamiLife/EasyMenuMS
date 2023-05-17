@@ -1,5 +1,5 @@
 import { plainToClass } from '@nestjs/class-transformer';
-import { Combo } from 'src/modules/combos/domain/Combo.entiy';
+import { Combo } from 'src/modules/combos/domain/combo.entiy';
 import { Sauce } from 'src/modules/sauces/domain/sauce.entity';
 import { SauceInCombo } from 'src/modules/sauces/domain/sauceInCombo.entity';
 import { GetDishResponseDTO } from '../../application/dtos';

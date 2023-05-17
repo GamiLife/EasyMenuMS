@@ -1,5 +1,5 @@
 import { Repo } from 'src/core/interfaces';
-import { Combo } from '../../domain/Combo.entiy';
+import { Combo } from '../../domain/combo.entiy';
 import { FilteringPayload, PaginationPayload } from 'src/core/dtos';
 import { Inject, Injectable } from '@nestjs/common';
 import { ComboProviders } from '../../application/combo.constants';

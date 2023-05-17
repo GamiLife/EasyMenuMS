@@ -1,6 +1,6 @@
 import { Entity } from 'src/core/domain';
 import { Guard } from 'src/core/helpers';
-import { Combo } from 'src/modules/combos/domain/Combo.entiy';
+import { Combo } from 'src/modules/combos/domain/combo.entiy';
 
 export interface IDishProps {
   title: string;
