@@ -85,6 +85,11 @@ export class UserEntity extends Model<UserEntity> {
   })
   company: CompanyEntity;
 
+  @Column({
+    type: DataType.STRING
+  })
+  sub: string;
+
   @BeforeCreate
   static async setDefaultId(entity: UserEntity) {
     const idNumber = await getNextId(entity.sequelize, 'users_sequence');

@@ -30,6 +30,8 @@ export class UserCreateDto {
   readonly email: string;
   @IsString()
   readonly phone: string;
+  @IsString()
+  readonly sub: string;
   @IsNotEmpty({ message: 'UserTypeId required' })
   @IsNumber()
   readonly userTypeId: number;

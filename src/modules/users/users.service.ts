@@ -9,6 +9,9 @@ import { UserTypesService } from '../user-types/user-types.service';
 import { UserDomainV2 } from './users.domain';
 import { UserCreateDto, UserUpdateDto } from './users.dto';
 import { UserEntity } from './users.entity';
+import { FirebaseTokenValidator } from '../../core/firebase';
+import { parseAuthenticationHeader } from 'src/core/helpers/auth-header.helper';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class UsersService {
@@ -68,6 +71,66 @@ export class UsersService {
     });
 
     return userDomain;
+  }
+
+  async findOneByIdToken(idToken: string): Promise<UserDomainV2> {
+
+    const token = parseAuthenticationHeader(idToken);
+
+    const { sub, email, email_verified, name, displayName, phone_number } = await FirebaseTokenValidator(token);
+
+    if (email_verified === undefined || email_verified === false) {
+      throw new EmptyError("Email not verified", HttpStatus.FORBIDDEN)
+    }
+
+    const userGetSubEntity = await this.userRepository.findOne<UserEntity>({
+      where: {
+        [Op.or]: [
+          { email }, 
+          {
+            email,
+            sub
+          }
+        ]
+      },
+      include: [
+        {
+          model: UserTypeEntity,
+        },
+        {
+          model: CompanyEntity,
+        },
+      ],
+    });
+
+    if (!userGetSubEntity) {
+
+
+      const [ names, last_name] = name?.split(" ") ?? displayName?.split(" ");
+
+      return this.create({
+        names,
+        lastnames: last_name ?? "",
+        email,
+        phone: phone_number ?? "",
+        userTypeId: 2,
+        companyId: 2,
+        sub
+      })
+    }
+
+    // verify if user has the same sub, can´t have two accounts with the same email
+    if (userGetSubEntity.sub !== sub) {
+      throw new EmptyError("Email already registered", HttpStatus.CONFLICT)
+    }
+
+    const userDomain = plainToClass(UserDomainV2, userGetSubEntity, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true,
+    });
+
+    return userDomain;
+
   }
 
   async findAll(): Promise<UserDomainV2[]> {
