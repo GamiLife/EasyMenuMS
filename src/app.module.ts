@@ -13,6 +13,7 @@ import { CustomValidatorField } from './core/validations';
 import { LocationsModule } from './modules/locations/locations.module';
 import { StaticPagesModule } from './modules/static-pages/static-pages.module';
 import { CombosModule } from './modules/combos/combos.module';
+import { ReportModule } from './modules/report/report.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CombosModule } from './modules/combos/combos.module';
     LocationsModule,
     StaticPagesModule,
     CombosModule,
+    ReportModule,
   ],
   providers: [CustomValidatorField],
   controllers: [],

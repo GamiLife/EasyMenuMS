@@ -121,6 +121,13 @@ module.exports = {
     await queryInterface.sequelize.query(
       "ALTER TABLE theme_provider ALTER id SET DEFAULT nextval('theme_provider_sequence')"
     );
+
+    await queryInterface.sequelize.query(
+      'CREATE SEQUENCE histories_sequence start 1'
+    );
+    await queryInterface.sequelize.query(
+      "ALTER TABLE histories ALTER id SET DEFAULT nextval('histories_sequence')"
+    );
   },
 
   async down(queryInterface, Sequelize) {
@@ -148,5 +155,6 @@ module.exports = {
     await queryInterface.sequelize.query(
       'DROP SEQUENCE theme_provider_sequence'
     );
+    await queryInterface.sequelize.query('DROP SEQUENCE histories_sequence');
   },
 };
