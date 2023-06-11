@@ -1,3 +1,4 @@
+import { AuthResponseDto } from 'src/modules/auth/auth.dto';
 import { CategoryResponseDto } from 'src/modules/categories/categories.dto';
 import {
   CompanyDetailsCreateDto,
@@ -27,6 +28,7 @@ export const dtosInMetadata = {
   CompanyDetailsCreateDto: CompanyDetailsCreateDto,
   CompanyDetailsUpdateDto: CompanyDetailsUpdateDto,
   ThemeProviderResponseDto: ThemeProviderResponseDto,
+  AuthResponseDto: AuthResponseDto,
 };
 
 export const SEQUELIZE = 'SEQUELIZE';
@@ -59,5 +61,11 @@ export const DISH_DISH_SERVICE = 'DISH_DISH_SERVICE';
 export const COMPANY_SERVICE = 'COMPANY_SERVICE';
 export const BASE_SERVICE = 'BASE_SERVICE';
 
-export const AUTH_REPOSITORY = "AUTH_REPOSITORY"
-export const AUTH_AUTHORIZATION_HEADER = "Bearer"
+export const AUTH_REPOSITORY = "AUTH_REPOSITORY";
+export const AUTH_AUTHORIZATION_HEADER = "Bearer";
+
+export const IS_PUBLIC = "IsPublic";
+
+export const ARGON_HANDLER = "ARGON_HANDLER";
+export const JWT_HANDLER = "JWT_HANDLER";
+export const INJECT_JWT = "INJECT_JWT";

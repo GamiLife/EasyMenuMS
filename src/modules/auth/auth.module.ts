@@ -1,15 +1,28 @@
 import { Module } from '@nestjs/common';
-import { UserTypesModule } from '../user-types/user-types.module';
-import { CoreModule } from 'src/core/core.module';
-import { CompaniesModule } from '../companies/company.module';
-import { UsersService } from '../users/users.service';
 import { AuthController } from './auth.controller';
+import { UsersModule } from '../users/users.module';
+import { AuthService } from './auth.service';
 import { usersProviders } from '../users/users.provider';
+import { authProviders } from './auth.provider';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { AuthGuard } from 'src/core/guards';
 
 @Module({
-  imports: [CoreModule, UserTypesModule, CompaniesModule],
-  providers: [UsersService, ...usersProviders],
-  exports: [UsersService],
-  controllers: [AuthController],
+	imports: [
+		UsersModule, 
+		JwtModule.register({
+			secret: process.env.JWTKEY,
+			signOptions: {
+				expiresIn: process.env.TOKEN_EXPIRATION
+			}
+		}),
+	],
+	providers: [
+		AuthService, 
+		AuthGuard,
+		...usersProviders, 
+		...authProviders],
+	exports: [AuthService],
+	controllers: [AuthController],
 })
 export class AuthModule {}

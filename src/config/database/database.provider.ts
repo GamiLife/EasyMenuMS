@@ -19,6 +19,7 @@ import { SauceModel } from 'src/modules/sauces/sauces.entity';
 import { CombosModel } from 'src/modules/combos/infraestructure/db/combos.model';
 import { ComboDishesModel } from 'src/modules/combos/infraestructure/db/combo-dishes.model';
 import { ComboSauceModel } from 'src/modules/combos/infraestructure/db/combo-sauces.model';
+import { AuthEntity } from 'src/modules/auth/auth.entity';
 const config = require('./database.config');
 
 export const databaseProviders = [
@@ -30,6 +31,7 @@ export const databaseProviders = [
         CompanyEntity,
         UserTypeEntity,
         UserEntity,
+        AuthEntity,
         NewEntity,
         CategoryEntity,
         SauceModel,

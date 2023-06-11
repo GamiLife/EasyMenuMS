@@ -6,6 +6,7 @@ import {
   IsNotEmpty,
   MinLength,
   IsEmail,
+  IsOptional
 } from 'class-validator';
 import { CompanyResponseDto } from '../companies/company.dto';
 import { UserTypeResponseDto } from '../user-types/user-type.dto';
@@ -30,6 +31,7 @@ export class UserCreateDto {
   readonly email: string;
   @IsString()
   readonly phone: string;
+  @IsOptional()
   @IsString()
   readonly sub: string;
   @IsNotEmpty({ message: 'UserTypeId required' })

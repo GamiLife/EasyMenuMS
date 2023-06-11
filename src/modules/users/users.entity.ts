@@ -5,14 +5,15 @@ import {
   Model,
   DataType,
   Validate,
-  HasOne,
   PrimaryKey,
   BeforeCreate,
   BelongsTo,
+  HasMany,
 } from 'sequelize-typescript';
-import { getNextId } from 'src/core/helpers';
+import { createUid, getNextId } from 'src/core/helpers';
 import { CompanyEntity } from '../companies/company.entity';
 import { UserTypeEntity } from '../user-types/user-type.entity';
+import { AuthEntity } from '../auth/auth.entity';
 
 @Exclude()
 @Table({
@@ -86,9 +87,22 @@ export class UserEntity extends Model<UserEntity> {
   company: CompanyEntity;
 
   @Column({
-    type: DataType.STRING
+    type: DataType.STRING,
+    allowNull: false,
+    defaultValue: function(){
+      return createUid()
+    }
   })
   sub: string;
+    
+  @Expose()
+  @Type(() => AuthEntity)
+  @HasMany(() => AuthEntity, {
+    foreignKey: "userId",
+    as: 'auth',
+    onDelete: "CASCADE"
+  })
+  auth: AuthEntity;
 
   @BeforeCreate
   static async setDefaultId(entity: UserEntity) {

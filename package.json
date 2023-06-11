@@ -29,7 +29,9 @@
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/jwt": "^10.0.3",
     "@nestjs/platform-express": "^9.0.0",
+    "argon2": "^0.30.3",
     "aws-sdk": "^2.1291.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
@@ -43,7 +45,8 @@
     "rxjs": "^7.2.0",
     "sequelize": "^6.25.6",
     "sequelize-cli": "^6.2.0",
-    "sequelize-typescript": "^2.1.5"
+    "sequelize-typescript": "^2.1.5",
+    "short-unique-id": "^4.4.4"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
@@ -89,7 +92,9 @@
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/src/$1"
     },
-    "setupFiles": ["./jest.setup.ts"],
+    "setupFiles": [
+      "./jest.setup.ts"
+    ],
     "testTimeout": 10000
   }
 }

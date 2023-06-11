@@ -13,6 +13,7 @@ module.exports = {
         companyId: 1,
         createdAt: '2022-11-11 00:00:00',
         updatedAt: '2022-11-11 00:00:00',
+        sub: "TQYt8k"
       },
       {
         names: 'Erick',
@@ -23,6 +24,7 @@ module.exports = {
         companyId: 1,
         createdAt: '2022-11-11 00:00:00',
         updatedAt: '2022-11-11 00:00:00',
+        sub: "WA3ebg"
       },
     ];
     await queryInterface.bulkInsert('users', rows, {});
